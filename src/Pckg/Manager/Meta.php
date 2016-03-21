@@ -15,19 +15,19 @@ class Meta
         return $this;
     }
 
+    public function add($meta)
+    {
+        $this->metas[] = $meta;
+
+        return $this;
+    }
+
     public function addContentType()
     {
         $this->add([
             'http-equiv' => 'Content-Type',
             'content'    => 'text/html; charset=utf-8',
         ]);
-
-        return $this;
-    }
-
-    public function add($meta)
-    {
-        $this->metas[] = $meta;
 
         return $this;
     }

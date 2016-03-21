@@ -26,19 +26,63 @@ trait BaseAssets
         $this->datatables();
     }
 
-    public function executeCore()
+    public function jQuery()
     {
-        // dependencies
-        $this->jQuery();
-        $this->jQueryDatetimePicker();
-        $this->angularJS();
+        $this->addAssets([
+            "components/jquery/jquery.min.js",
+        ]);
 
-        // front framework
-        $this->bootstrap();
+        return $this;
+    }
 
-        // decoration
-        $this->fontAwesome();
-        $this->chosen();
+    public function jQueryDatetimePicker()
+    {
+        $this->addAssets([
+            "vendor/lfw/admin/src/Weblab/Admin/public/js/bootstrap-datetimepicker/v1/min.js",
+            "vendor/lfw/admin/src/Weblab/Admin/public/css/bootstrap-datetimepicker/v1/dev.css",
+        ]);
+
+        return $this;
+    }
+
+    public function angularJS()
+    {
+        /*$this->addAssets([
+            "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.5/angular.min.js",
+        ]);*/
+
+        return $this;
+    }
+
+    public function vueJS()
+    {
+        $this->addAssets([
+            "vendor/yyx990803/vue/dist/vue.js",
+            "vendor/vuejs/vue-resource/dist/vue-resource.js",
+        ]);
+
+        return $this;
+    }
+
+    public function bootstrap()
+    {
+        $this->addAssets([
+            "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
+            "vendor/bootstrap-select/bootstrap-select/js/bootstrap-select.js",
+            "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
+            "vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
+            "vendor/bootstrap-select/bootstrap-select/dist/css/bootstrap-select.css",
+        ]);
+
+        return $this;
+    }
+
+    public function app()
+    {
+        $this->addAssets(['js/app.js']);
+
+        return $this;
+
     }
 
     public function maestro()
@@ -111,36 +155,19 @@ trait BaseAssets
         return $this;
     }
 
-    public function jQueryDatetimePicker()
+    public function executeCore()
     {
-        $this->addAssets([
-            "vendor/lfw/admin/src/Weblab/Admin/public/js/bootstrap-datetimepicker/v1/min.js",
-            "vendor/lfw/admin/src/Weblab/Admin/public/css/bootstrap-datetimepicker/v1/dev.css",
-        ]);
+        // dependencies
+        $this->jQuery();
+        $this->jQueryDatetimePicker();
+        $this->angularJS();
 
-        return $this;
-    }
+        // front framework
+        $this->bootstrap();
 
-    public function jQuery()
-    {
-        $this->addAssets([
-            "components/jquery/jquery.min.js",
-        ]);
-
-        return $this;
-    }
-
-    public function bootstrap()
-    {
-        $this->addAssets([
-            "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
-            "vendor/bootstrap-select/bootstrap-select/js/bootstrap-select.js",
-            "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
-            "vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
-            "vendor/bootstrap-select/bootstrap-select/dist/css/bootstrap-select.css",
-        ]);
-
-        return $this;
+        // decoration
+        $this->fontAwesome();
+        $this->chosen();
     }
 
     public function foundation()
@@ -151,33 +178,6 @@ trait BaseAssets
             "bower_components/foundation/js/foundation.min.js",
             "bower_components/foundation/css/foundation.min.css",
         ]);
-    }
-
-    public function angularJS()
-    {
-        /*$this->addAssets([
-            "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.5/angular.min.js",
-        ]);*/
-
-        return $this;
-    }
-
-    public function vueJS()
-    {
-        $this->addAssets([
-            "vendor/yyx990803/vue/dist/vue.js",
-            "vendor/vuejs/vue-resource/dist/vue-resource.js",
-        ]);
-
-        return $this;
-    }
-
-    public function app()
-    {
-        $this->addAssets(['js/app.js']);
-
-        return $this;
-
     }
 
 }

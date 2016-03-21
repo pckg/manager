@@ -64,7 +64,7 @@ class Asset
             $onlyTypes = array_keys($this->collections);
         }
 
-        foreach ($onlyTypes  as $type) {
+        foreach ($onlyTypes as $type) {
             if (!isset($this->collections[$type])) {
                 continue;
             }
