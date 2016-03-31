@@ -4,6 +4,7 @@ use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
 use Exception;
 use Pckg\Manager\Asset\BaseAssets;
+use ReflectionClass;
 
 class Asset
 {
@@ -32,7 +33,7 @@ class Asset
         return $this->collections[$type][$section];
     }
 
-    public function addAssets($assets, $section = 'main')
+    public function addAssets($assets, $section = 'main', $path = '')
     {
         if (!is_array($assets)) {
             $assets = [$assets];
@@ -49,11 +50,65 @@ class Asset
             }
 
             if (!$collection) {
-                throw new Exception('Cannot find asset ' . $asset);
+                throw new Exception('Cannot touch collection');
             }
 
-            $collection->add(new FileAsset(path('root') . $asset));
+            if (!$path) {
+                $path = path('root');
+            }
+
+            $collection->add(new FileAsset($path . $asset));
         }
+    }
+
+    public function addAppAssets($assets, $section = 'main', $app)
+    {
+        if (is_object($app)) {
+            $app = strtolower(get_class($app));
+        }
+
+        $appPath = 'app' . path('ds') . $app . path('ds');
+        $publicPath = 'public' . path('ds');
+
+        $this->addAssets($assets, $section, $appPath . $publicPath);
+    }
+
+    public function addProviderAssets($assets, $section = 'main', $provider)
+    {
+        $reflector = new ReflectionClass(is_object($provider) ? get_class($provider) : $provider);
+        $file = $reflector->getFileName();
+
+        $providerPath = realpath(substr($file, 0, strrpos($file, path('ds'))) . path('ds') . '..') . path('ds');
+        $publicPath = 'public' . path('ds');
+
+        $this->addAssets($assets, $section, $providerPath . $publicPath);
+    }
+
+    public function addAppProviderAssets($assets, $section = 'main', $app, $provider)
+    {
+        if (is_object($app)) {
+            $app = strtolower(get_class($app));
+        }
+
+        if (is_object($provider)) {
+            $provider = get_class($provider);
+        }
+
+        $appPath = 'app' . path('ds') . $app . path('ds') . 'src' . path('ds');
+        $providerPath = implode(path('ds'), array_slice(explode('\\', $provider), 0, -2)) . path('ds');
+        $publicPath = 'public' . path('ds');
+
+        $this->addAssets($assets, $section, $appPath . $providerPath . $publicPath);
+    }
+
+    public function addVendorProviderAsset($assets, $section = 'main', $vendor, $relative = '')
+    {
+        $vendorPath = 'vendor' . path('ds') . $vendor . path('ds');
+        $relativePath = $relative
+            ? $relative . path('ds')
+            : '';
+
+        $this->addAssets($assets, $section, $vendorPath . $relativePath);
     }
 
     public function getMeta($onlyTypes = [], $onlySections = [])
