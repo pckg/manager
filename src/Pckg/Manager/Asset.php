@@ -10,7 +10,7 @@ class Asset
 
     use BaseAssets;
 
-    protected $collections;
+    protected $collections = [];
 
     protected $types = [
         "css" => '<link rel="stylesheet" type="text/css" href="##LINK##" />',
@@ -101,7 +101,11 @@ class Asset
 
     public function __toString()
     {
-        return $this->getMeta();
+        try {
+            return $this->getMeta();
+        } catch (Exception $e) {
+            return exception($e);
+        }
     }
 
 }

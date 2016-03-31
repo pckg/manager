@@ -3,4 +3,9 @@
 class Seo
 {
 
+    public function __toString()
+    {
+        return '';
+    }
+
 }
