@@ -150,7 +150,7 @@ class Asset
 
         foreach ($this->googleFonts as $font) {
             $return[] = '<link href="//fonts.googleapis.com/css?family=' .
-                htmlspecialchars($font['family']) . ':' .
+                urlencode($font['family']) . ':' .
                 implode(',', $font['sets']) . '&subset=' .
                 implode(',', $font['subset']) . '" rel="stylesheet" type="text/css" />';
         }
