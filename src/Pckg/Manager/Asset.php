@@ -20,6 +20,8 @@ class Asset
 
     protected $googleFonts = [];
 
+    protected $assets = [];
+
     public function touchCollection($type, $section = 'main', $priority = 0)
     {
         if (!isset($this->collections[$type])) {
@@ -30,10 +32,20 @@ class Asset
         }
         if (!isset($this->collections[$type][$section][$priority])) {
             $this->collections[$type][$section][$priority] = new AssetCollection([], [], path('cache'));
-            $this->collections[$type][$section][$priority]->setTargetPath(path('www') . 'cache/' . $type . '/' . $priority . $section . '.' . $type);
+            $this->collections[$type][$section][$priority]->setTargetPath(path('www') . 'cache/' . $type . '/' . $priority . '-' . $section . '.' . $type);
         }
 
         return $this->collections[$type][$section][$priority];
+    }
+
+    public function touchAssetCollection($section = 'main', $priority = 0)
+    {
+        if (!isset($this->assets[$section])) {
+            $this->assets[$section] = [];
+        }
+        if (!isset($this->assets[$section][$priority])) {
+            $this->assets[$section][$priority] = [];
+        }
     }
 
     public function addAssets($assets, $section = 'main', $path = '', $priority = 0)
@@ -44,7 +56,14 @@ class Asset
 
         foreach ($assets as $asset) {
             $collection = null;
-            if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
+            if (is_callable($asset)) {
+                if ($asset = $asset()) {
+                    $this->touchAssetCollection($section, $priority);
+                    $this->assets[$section][$priority][] = $asset;
+                }
+                continue;
+
+            } else if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
                 $collection = $this->touchCollection('js', $section, $priority);
 
             } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
@@ -141,20 +160,33 @@ class Asset
 
     public function getMeta($onlyTypes = [], $onlySections = [])
     {
+        return implode(
+            "\n",
+            array_merge($this->getAsseticAssets($onlyTypes, $onlySections), $this->getAssets($onlySections))
+        );
+    }
+
+    private function getKeysIfEmpty($array, $filled)
+    {
+        if (!$filled) {
+            return array_keys($array);
+        }
+
+        return $filled;
+    }
+
+    protected function getAsseticAssets($onlyTypes = [], $onlySections = [])
+    {
         $return = [];
 
-        if (!$onlyTypes) {
-            $onlyTypes = array_keys($this->collections);
-        }
+        $onlyTypes = $this->getKeysIfEmpty($this->collections, $onlyTypes);
 
         foreach ($onlyTypes as $type) {
             if (!isset($this->collections[$type])) {
                 continue;
             }
 
-            if (!$onlySections) {
-                $onlySections = array_keys($this->collections[$type]);
-            }
+            $onlySections = $this->getKeysIfEmpty($this->collections[$type], $onlySections);
 
             foreach ($onlySections as $section) {
                 if (!isset($this->collections[$type][$section])) {
@@ -163,7 +195,6 @@ class Asset
                 } else {
                     $collections = $this->collections[$type][$section];
                 }
-
 
                 ksort($collections);
 
@@ -182,7 +213,33 @@ class Asset
             }
         }
 
-        return implode("\n", $return);
+        return $return;
+    }
+
+    protected function getAssets($onlySections = [])
+    {
+        $return = [];
+
+        $onlySections = $this->getKeysIfEmpty($this->assets, $onlySections);
+
+        foreach ($onlySections as $section) {
+            if (!isset($this->assets[$section])) {
+                continue;
+
+            } else {
+                $assets = $this->assets[$section];
+            }
+
+            ksort($assets);
+
+            foreach ($assets as $priority => $realAssets) {
+                foreach ($realAssets as $asset) {
+                    $return[] = $asset;
+                }
+            }
+        }
+
+        return $return;
     }
 
     public function __toString()
