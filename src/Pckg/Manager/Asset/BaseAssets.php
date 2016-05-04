@@ -37,10 +37,10 @@ trait BaseAssets
 
     public function jQueryDatetimePicker()
     {
-        $this->addAssets([
+        /*$this->addAssets([
             "vendor/lfw/admin/src/Weblab/Admin/public/js/bootstrap-datetimepicker/v1/min.js",
             "vendor/lfw/admin/src/Weblab/Admin/public/css/bootstrap-datetimepicker/v1/dev.css",
-        ]);
+        ]);*/
 
         return $this;
     }
@@ -135,11 +135,11 @@ trait BaseAssets
 
     public function chosen()
     {
-        $this->addAssets([
+        /*$this->addAssets([
             "vendor/lfw/admin/src/Weblab/Admin/public/js/chosen/v1.0.0/dev.js",
             "vendor/lfw/admin/src/Weblab/Admin/public/js/chosen/v1.0.0/conf.js",
             "vendor/lfw/admin/src/Weblab/Admin/public/css/chosen/v1.0.0/dev.css",
-        ]);
+        ]);*/
 
         return $this;
     }
