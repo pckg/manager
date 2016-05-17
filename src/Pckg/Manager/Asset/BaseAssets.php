@@ -112,7 +112,8 @@ trait BaseAssets
     public function fontAwesome()
     {
         $this->addAssets([
-            "vendor/fortawesome/font-awesome/css/font-awesome.min.css",
+            //'https://use.fontawesome.com/90d4cc6ef0.js',
+            //"vendor/fortawesome/font-awesome/css/font-awesome.min.css",
         ]);
 
         return $this;
