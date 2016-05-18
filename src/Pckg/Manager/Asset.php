@@ -20,6 +20,8 @@ class Asset
 
     protected $googleFonts = [];
 
+    protected $externals = [];
+
     protected $assets = [];
 
     public function touchCollection($type, $section = 'main', $priority = 0)
@@ -56,14 +58,29 @@ class Asset
 
         foreach ($assets as $asset) {
             $collection = null;
+            /**
+             * Callable asset.
+             */
             if (is_callable($asset)) {
                 if ($asset = $asset()) {
                     $this->touchAssetCollection($section, $priority);
                     $this->assets[$section][$priority][] = $asset;
                 }
                 continue;
+            }
 
-            } else if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
+            /**
+             * External asset.
+             */
+            if (strpos($asset, 'https://') === 0 || strpos($asset, 'http://') === 0 || strpos($asset, '//') === 0) {
+                $this->externals[] = $asset;
+                continue;
+            }
+
+            /**
+             * Internal asset.
+             */
+            if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
                 $collection = $this->touchCollection('js', $section, $priority);
 
             } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
@@ -153,6 +170,21 @@ class Asset
                 urlencode($font['family']) . ':' .
                 implode(',', $font['sets']) . '&subset=' .
                 implode(',', $font['subset']) . '" rel="stylesheet" type="text/css" />';
+        }
+
+        return implode("\n", $return);
+    }
+
+    public function getExternals()
+    {
+        $return = [];
+
+        foreach ($this->types as $type => $html) {
+            foreach ($this->externals as $external) {
+                if (mb_strrpos($external, '.' . $type) == strlen($external) - strlen('.' . $type)) {
+                    $return[] = str_replace('##LINK##', $external, $html);
+                }
+            }
         }
 
         return implode("\n", $return);
