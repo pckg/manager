@@ -13,6 +13,7 @@ trait BaseAssets
 
         // front framework
         $this->bootstrap();
+        $this->magnific();
 
         // needed
         $this->app();
@@ -26,11 +27,27 @@ trait BaseAssets
         $this->datatables();
     }
 
+    public function executeCore()
+    {
+        // dependencies
+        $this->jQuery();
+        $this->jQueryDatetimePicker();
+        $this->angularJS();
+
+        // front framework
+        $this->bootstrap();
+        $this->magnific();
+
+        // decoration
+        $this->fontAwesome();
+        $this->chosen();
+    }
+
     public function jQuery()
     {
         $this->addAssets([
             "components/jquery/jquery.min.js",
-        ]);
+        ], 'libraries');
 
         return $this;
     }
@@ -59,7 +76,7 @@ trait BaseAssets
         $this->addAssets([
             "vendor/yyx990803/vue/dist/vue.js",
             "vendor/vuejs/vue-resource/dist/vue-resource.js",
-        ]);
+        ], 'libraries');
 
         return $this;
     }
@@ -72,9 +89,17 @@ trait BaseAssets
             "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
             "vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
             "vendor/bootstrap-select/bootstrap-select/dist/css/bootstrap-select.css",
-        ]);
+        ], 'libraries');
 
         return $this;
+    }
+
+    public function magnific()
+    {
+        $this->addAssets([
+            'vendor/dimsemenov/magnific-popup/dist/jquery.magnific-popup.min.js',
+            'vendor/dimsemenov/magnific-popup/dist/magnific-popup.css',
+        ], 'libraries');
     }
 
     public function app()
@@ -154,21 +179,6 @@ trait BaseAssets
         ]);
 
         return $this;
-    }
-
-    public function executeCore()
-    {
-        // dependencies
-        $this->jQuery();
-        $this->jQueryDatetimePicker();
-        $this->angularJS();
-
-        // front framework
-        $this->bootstrap();
-
-        // decoration
-        $this->fontAwesome();
-        $this->chosen();
     }
 
     public function foundation()
