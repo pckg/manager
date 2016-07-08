@@ -6,7 +6,7 @@ use Pckg\Manager\Meta;
 use Pckg\Manager\Seo;
 use Pckg\Manager\Vue;
 
-class Config extends Provider
+class Manager extends Provider
 {
 
     public function viewObjects() {
