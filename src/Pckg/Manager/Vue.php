@@ -5,7 +5,8 @@ class Vue
 
     protected $components = [];
 
-    public function addVueComponent($components) {
+    public function addVueComponent($components)
+    {
         if (!is_array($components)) {
             $components = [$components];
         }
@@ -17,7 +18,8 @@ class Vue
         return $this;
     }
 
-    public function getComponents() {
+    public function getComponents()
+    {
         $html = [];
         foreach ($this->components as $component) {
             $html[] = view($component);

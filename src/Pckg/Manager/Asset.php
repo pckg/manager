@@ -24,7 +24,8 @@ class Asset
 
     protected $assets = [];
 
-    public function touchCollection($type, $section = 'main', $priority = 0) {
+    public function touchCollection($type, $section = 'main', $priority = 0)
+    {
         if (!isset($this->collections[$type][$section][$priority])) {
             $this->collections[$type][$section][$priority] = new AssetCollection([], [], path('cache'));
             $this->collections[$type][$section][$priority]->setTargetPath(
@@ -35,7 +36,8 @@ class Asset
         return $this->collections[$type][$section][$priority];
     }
 
-    public function touchAssetCollection($section = 'main', $priority = 0) {
+    public function touchAssetCollection($section = 'main', $priority = 0)
+    {
         if (!isset($this->assets[$section])) {
             $this->assets[$section] = [];
         }
@@ -44,7 +46,8 @@ class Asset
         }
     }
 
-    public function addAssets($assets, $section = 'main', $path = '', $priority = 0) {
+    public function addAssets($assets, $section = 'main', $path = '', $priority = 0)
+    {
         if (!is_array($assets)) {
             $assets = [$assets];
         }
@@ -93,7 +96,8 @@ class Asset
         }
     }
 
-    public function addAppAssets($assets, $section = 'main', $app, $priority = 90) {
+    public function addAppAssets($assets, $section = 'main', $app, $priority = 90)
+    {
         if (is_object($app)) {
             $app = strtolower(get_class($app));
         }
@@ -104,7 +108,8 @@ class Asset
         $this->addAssets($assets, $section, $appPath . $publicPath, $priority);
     }
 
-    public function addAppProviderAssets($assets, $section = 'main', $app, $provider, $priority = 80) {
+    public function addAppProviderAssets($assets, $section = 'main', $app, $provider, $priority = 80)
+    {
         if (is_object($app)) {
             $app = strtolower(get_class($app));
         }
@@ -120,7 +125,8 @@ class Asset
         $this->addAssets($assets, $section, $appPath . $providerPath . $publicPath, $priority);
     }
 
-    public function addProviderAssets($assets, $section = 'main', $provider, $priority = 70) {
+    public function addProviderAssets($assets, $section = 'main', $provider, $priority = 70)
+    {
         $reflector = new ReflectionClass(is_object($provider) ? get_class($provider) : $provider);
         $file = $reflector->getFileName();
 
@@ -130,7 +136,8 @@ class Asset
         $this->addAssets($assets, $section, $providerPath . $publicPath, $priority);
     }
 
-    public function addVendorProviderAsset($assets, $section = 'main', $vendor, $relative = '', $priority = 60) {
+    public function addVendorProviderAsset($assets, $section = 'main', $vendor, $relative = '', $priority = 60)
+    {
         $vendorPath = 'vendor' . path('ds') . $vendor . path('ds');
         $relativePath = $relative
             ? $relative . path('ds')
@@ -139,7 +146,8 @@ class Asset
         $this->addAssets($assets, $section, $vendorPath . $relativePath, $priority);
     }
 
-    public function addGoogleFont($family, $sets, $subset) {
+    public function addGoogleFont($family, $sets, $subset)
+    {
         $this->googleFonts[] = [
             'family' => $family,
             'sets'   => $sets,
@@ -149,7 +157,8 @@ class Asset
         return $this;
     }
 
-    public function getGoogleFonts() {
+    public function getGoogleFonts()
+    {
         $return = [];
 
         foreach ($this->googleFonts as $font) {
@@ -162,7 +171,8 @@ class Asset
         return implode("\n", $return);
     }
 
-    public function getExternals() {
+    public function getExternals()
+    {
         $return = [];
 
         foreach ($this->types as $type => $html) {
@@ -176,14 +186,16 @@ class Asset
         return implode("\n", $return);
     }
 
-    public function getMeta($onlyTypes = [], $onlySections = []) {
+    public function getMeta($onlyTypes = [], $onlySections = [])
+    {
         return implode(
             "\n",
             array_merge($this->getAsseticAssets($onlyTypes, $onlySections), $this->getAssets($onlySections))
         );
     }
 
-    private function getKeysIfEmpty($array, $filled) {
+    private function getKeysIfEmpty($array, $filled)
+    {
         if (!$filled) {
             return array_keys($array);
         }
@@ -191,7 +203,8 @@ class Asset
         return $filled;
     }
 
-    protected function getAsseticAssets($onlyTypes = [], $onlySections = []) {
+    protected function getAsseticAssets($onlyTypes = [], $onlySections = [])
+    {
         $return = [];
 
         $onlyTypes = $this->getKeysIfEmpty($this->collections, $onlyTypes);
@@ -231,7 +244,8 @@ class Asset
         return $return;
     }
 
-    protected function getAssets($onlySections = []) {
+    protected function getAssets($onlySections = [])
+    {
         $return = [];
 
         $onlySections = $this->getKeysIfEmpty($this->assets, $onlySections);
@@ -256,7 +270,8 @@ class Asset
         return $return;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         try {
             return $this->getMeta();
         } catch (Exception $e) {

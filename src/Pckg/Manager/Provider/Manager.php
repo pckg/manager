@@ -9,7 +9,8 @@ use Pckg\Manager\Vue;
 class Manager extends Provider
 {
 
-    public function viewObjects() {
+    public function viewObjects()
+    {
         return [
             '_assetManager' => Asset::class,
             '_vueManager'   => Vue::class,
