@@ -236,7 +236,7 @@ class Asset
                         file_put_contents($cachePath, $collection->dump());
                     }
 
-                    $return[] = str_replace('##LINK##', str_replace(path('www'), '/', $cachePath), $this->types[$type]);
+                    $return[] = str_replace('##LINK##', '//' . conf('defaults.domain') . str_replace(path('www'), '/', $cachePath), $this->types[$type]);
                 }
             }
         }
