@@ -26,6 +26,14 @@ class Asset
 
     public function touchCollection($type, $section = 'main', $priority = 0)
     {
+        /*if (!isset($this->collections[$type])) {
+            $this->collections[$type] = [];
+        }
+
+        if (!isset($this->collections[$type][$section])) {
+            $this->collections[$type][$section] = [];
+        }
+        */
         if (!isset($this->collections[$type][$section][$priority])) {
             $this->collections[$type][$section][$priority] = new AssetCollection([], [], path('cache'));
             $this->collections[$type][$section][$priority]->setTargetPath(
@@ -85,7 +93,7 @@ class Asset
             }
 
             if (!$collection) {
-                throw new Exception('Cannot touch collection');
+                throw new Exception('Cannot touch collection (' . $asset . ')');
             }
 
             if (!$path) {
@@ -228,6 +236,7 @@ class Asset
 
                 foreach ($collections as $collection) {
                     $lastModified = $collection->getLastModified();
+                    $lastModified = date('YmdHis');
                     $targetPath = $collection->getTargetPath();
                     $cachePath = str_lreplace('.', '-' . $lastModified . '.', $targetPath);
 

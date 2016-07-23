@@ -60,10 +60,17 @@ trait BaseAssets
 
     public function vueJS()
     {
-        $this->addAssets(
+        /*$this->addAssets(
             [
                 "vendor/yyx990803/vue/dist/vue.js",
                 "vendor/vuejs/vue-resource/dist/vue-resource.js",
+            ],
+            'libraries'
+        );*/
+        $this->addAssets(
+            [
+                'https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js',
+                'https://cdn.jsdelivr.net/vue.resource/0.9.0/vue-resource.min.js',
             ],
             'libraries'
         );
@@ -194,7 +201,8 @@ trait BaseAssets
         // dependencies
         $this->jQuery();
         $this->jQueryDatetimePicker();
-        $this->angularJS();
+        // $this->angularJS();
+        $this->vueJS();
 
         // front framework
         $this->bootstrap();
