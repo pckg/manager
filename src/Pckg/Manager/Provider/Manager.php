@@ -16,7 +16,22 @@ class Manager extends Provider
             '_vueManager'   => Vue::class,
             '_metaManager'  => Meta::class,
             '_seoManager'   => Seo::class,
+            '_pckg'         => Pckg::class,
         ];
+    }
+
+}
+
+class Pckg
+{
+
+    public function chain($chain)
+    {
+        if (!is_array($chain)) {
+            $chain = [$chain];
+        }
+        
+        return chain($chain);
     }
 
 }

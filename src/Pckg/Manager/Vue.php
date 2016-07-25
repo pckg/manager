@@ -25,7 +25,9 @@ class Vue
             $html[] = view($component);
         }
 
-        return implode($html);
+        $html = implode($html);
+
+        return $html;
     }
 
 }
