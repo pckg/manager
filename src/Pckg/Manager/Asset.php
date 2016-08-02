@@ -74,25 +74,22 @@ class Asset
             }
 
             /**
-             * Internal asset.
+             * Set default path.
              */
-            if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
-                $collection = $this->touchCollection('js', $section, $priority);
-
-            } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
-                $collection = $this->touchCollection('css', $section, $priority);
-
-            }
-
-            if (!$collection) {
-                throw new Exception('Cannot touch collection (' . $asset . ')');
-            }
-
             if (!$path) {
                 $path = path('root');
             }
 
-            $collection->add(new FileAsset($path . $asset));
+            /**
+             * Internal asset.
+             */
+            if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
+                $this->collections['js'][$section][$priority][] = $path . $asset;
+
+            } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
+                $this->collections['css'][$section][$priority][] = $path . $asset;
+
+            }
         }
     }
 
@@ -224,18 +221,28 @@ class Asset
                     $collections = $this->collections[$type][$section];
                 }
 
+                /**
+                 * Sort collections by priority.
+                 */
                 ksort($collections);
 
-                foreach ($collections as $collection) {
-                    $lastModified = $collection->getLastModified();
-                    $lastModified = date('YmdHis');
-                    $targetPath = $collection->getTargetPath();
-                    $cachePath = str_lreplace('.', '-' . $lastModified . '.', $targetPath);
-
-                    if (!is_file($cachePath)) {
-                        $collection->setTargetPath($cachePath);
-                        file_put_contents($cachePath, $collection->dump());
+                foreach ($collections as $priority => $collection) {
+                    $assetCollection = new AssetCollection([], [], path('cache'));
+                    foreach ($collection as $asset) {
+                        $assetCollection->add(new FileAsset($asset));
                     }
+                    /*$assetCollection->setTargetPath(
+                        path('www') . 'cache/' . $type . '/' . $priority . '-' . $section . '.' . $type
+                    );*/
+
+                    $lastModified = $assetCollection->getLastModified();
+                    // $lastModified = date('YmdHis');
+                    $cachePath = path('www') . 'cache/' . $type . '/' . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
+
+                    //if (!is_file($cachePath)) {
+                        $assetCollection->setTargetPath($cachePath);
+                        file_put_contents($cachePath, $assetCollection->dump());
+                    //}
 
                     $return[] = str_replace('##LINK##', '//' . conf('defaults.domain') . str_replace(path('www'), '/', $cachePath), $this->types[$type]);
                 }
