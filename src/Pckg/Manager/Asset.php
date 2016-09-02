@@ -46,6 +46,11 @@ class Asset
         }
     }
 
+    public function addWwwAssets($assets, $section, $priority = 0)
+    {
+        return $this->addAssets($assets, $section, path('www'), $priority);
+    }
+
     public function addAssets($assets, $section = 'main', $path = '', $priority = 0)
     {
         if (!is_array($assets)) {
@@ -237,14 +242,20 @@ class Asset
 
                     $lastModified = $assetCollection->getLastModified();
                     // $lastModified = date('YmdHis');
-                    $cachePath = path('www') . 'cache/' . $type . '/' . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
+                    $cachePath = path(
+                                     'www'
+                                 ) . 'cache/' . $type . '/' . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
 
                     //if (!is_file($cachePath)) {
-                        $assetCollection->setTargetPath($cachePath);
-                        file_put_contents($cachePath, $assetCollection->dump());
+                    $assetCollection->setTargetPath($cachePath);
+                    file_put_contents($cachePath, $assetCollection->dump());
                     //}
 
-                    $return[] = str_replace('##LINK##', '//' . conf('defaults.domain') . str_replace(path('www'), '/', $cachePath), $this->types[$type]);
+                    $return[] = str_replace(
+                        '##LINK##',
+                        '//' . conf('defaults.domain') . str_replace(path('www'), '/', $cachePath),
+                        $this->types[$type]
+                    );
                 }
             }
         }
