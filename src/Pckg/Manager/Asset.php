@@ -244,7 +244,7 @@ class Asset
                     // $lastModified = date('YmdHis');
                     $cachePath = path(
                                      'storage'
-                                 ) . 'framework' . path('ds') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds') . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
+                                 ) . cache' . path('ds') . 'www' . path('ds') . $type . path('ds') . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
 
                     //if (!is_file($cachePath)) {
                     $assetCollection->setTargetPath($cachePath);
