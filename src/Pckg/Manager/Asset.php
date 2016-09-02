@@ -243,8 +243,8 @@ class Asset
                     $lastModified = $assetCollection->getLastModified();
                     // $lastModified = date('YmdHis');
                     $cachePath = path(
-                                     'www'
-                                 ) . 'cache/' . $type . '/' . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
+                                     'storage'
+                                 ) . 'framework' . path('ds') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds') . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
 
                     //if (!is_file($cachePath)) {
                     $assetCollection->setTargetPath($cachePath);
