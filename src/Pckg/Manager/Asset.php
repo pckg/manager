@@ -29,7 +29,7 @@ class Asset
         if (!isset($this->collections[$type][$section][$priority])) {
             $this->collections[$type][$section][$priority] = new AssetCollection([], [], path('cache'));
             $this->collections[$type][$section][$priority]->setTargetPath(
-                path('www') . 'cache/' . $type . '/' . $priority . '-' . $section . '.' . $type
+                path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . '/' . $priority . '-' . $section . '.' . $type
             );
         }
 
