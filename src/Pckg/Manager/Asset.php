@@ -242,9 +242,7 @@ class Asset
 
                     $lastModified = $assetCollection->getLastModified();
                     // $lastModified = date('YmdHis');
-                    $cachePath = path(
-                                     'storage'
-                                 ) . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds') . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
+                    $cachePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds') . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
 
                     //if (!is_file($cachePath)) {
                     $assetCollection->setTargetPath($cachePath);
@@ -253,7 +251,7 @@ class Asset
 
                     $return[] = str_replace(
                         '##LINK##',
-                        '//' . conf('defaults.domain') . str_replace(path('www'), '/', $cachePath),
+                        '//' . conf('defaults.domain') . str_replace(path('root'), path('ds'), $cachePath),
                         $this->types[$type]
                     );
                 }
