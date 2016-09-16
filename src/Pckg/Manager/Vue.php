@@ -30,4 +30,9 @@ class Vue
         return $html;
     }
 
+    public function getFilters()
+    {
+        return '';
+    }
+
 }
