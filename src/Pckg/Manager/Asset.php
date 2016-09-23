@@ -251,7 +251,7 @@ class Asset
 
                     $return[] = str_replace(
                         '##LINK##',
-                        '//' . config('defaults.domain') . str_replace(path('root'), path('ds'), $cachePath),
+                        '//' . config('domain') . str_replace(path('root'), path('ds'), $cachePath),
                         $this->types[$type]
                     );
                 }
