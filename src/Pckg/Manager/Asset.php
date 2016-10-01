@@ -2,8 +2,12 @@
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
+use Assetic\Filter\CssRewriteFilter;
+use Assetic\Filter\LessFilter;
+use Assetic\Filter\LessphpFilter;
 use Exception;
 use Pckg\Manager\Asset\BaseAssets;
+use Pckg\Manager\Asset\LessPckgFilter;
 use ReflectionClass;
 
 class Asset
@@ -14,8 +18,9 @@ class Asset
     protected $collections = [];
 
     protected $types = [
-        "css" => '<link rel="stylesheet" type="text/css" href="##LINK##" />',
-        "js"  => '<script type="text/javascript" src="##LINK##"></script>',
+        "css"  => '<link rel="stylesheet" type="text/css" href="##LINK##" />',
+        "less" => '<link rel="stylesheet" type="text/css" href="##LINK##" />',
+        "js"   => '<script type="text/javascript" src="##LINK##"></script>',
     ];
 
     protected $googleFonts = [];
@@ -29,7 +34,9 @@ class Asset
         if (!isset($this->collections[$type][$section][$priority])) {
             $this->collections[$type][$section][$priority] = new AssetCollection([], [], path('cache'));
             $this->collections[$type][$section][$priority]->setTargetPath(
-                path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds') . $priority . '-' . $section . '.' . $type
+                path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path(
+                    'ds'
+                ) . $priority . '-' . $section . '.' . $type
             );
         }
 
@@ -93,6 +100,9 @@ class Asset
 
             } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
                 $this->collections['css'][$section][$priority][] = $path . $asset;
+
+            } else if (mb_strrpos($asset, '.less') == strlen($asset) - strlen('.less')) {
+                $this->collections['less'][$section][$priority][] = $path . $asset;
 
             }
         }
@@ -232,22 +242,30 @@ class Asset
                 ksort($collections);
 
                 foreach ($collections as $priority => $collection) {
-                    $assetCollection = new AssetCollection([], [], path('cache'));
+                    $typePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds');
+                    $assetCollection = new AssetCollection([], [], $typePath);
+
                     foreach ($collection as $asset) {
-                        $assetCollection->add(new FileAsset($asset));
+                        $filters = [];
+                        if ($type == 'less') {
+                            /*$filters[] = new LessFilter(
+                                '/usr/bin/node',
+                                ['/usr/share/npm/node_modules/', path('root') . 'bower_components' . path('ds'), ]
+                            );*/
+                            //$filters[] = new LessphpFilter();
+                            $filters[] = new LessPckgFilter();
+                        }
+                        if (in_array($type, ['css', 'less'])) {
+                            $filters[] = new CssRewriteFilter();
+                        }
+                        $assetCollection->add(new FileAsset($asset, $filters));
                     }
-                    /*$assetCollection->setTargetPath(
-                        path('www') . 'cache/' . $type . '/' . $priority . '-' . $section . '.' . $type
-                    );*/
 
                     $lastModified = $assetCollection->getLastModified();
-                    // $lastModified = date('YmdHis');
-                    $cachePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds') . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
-
-                    //if (!is_file($cachePath)) {
+                    $cachePath = $typePath . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
                     $assetCollection->setTargetPath($cachePath);
+
                     file_put_contents($cachePath, $assetCollection->dump());
-                    //}
 
                     $return[] = str_replace(
                         '##LINK##',

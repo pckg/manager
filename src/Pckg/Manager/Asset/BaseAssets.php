@@ -60,20 +60,20 @@ trait BaseAssets
 
     public function vueJS()
     {
-        /*$this->addAssets(
+        $this->addAssets(
             [
-                "vendor/yyx990803/vue/dist/vue.js",
-                "vendor/vuejs/vue-resource/dist/vue-resource.js",
+                "bower_components/vue/dist/vue." . (dev() ? 'min.' : '') . "js",
             ],
             'libraries'
-        );*/
-        $this->addAssets(
+        );
+
+        /*$this->addAssets(
             [
                 'https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js',
                 'https://cdn.jsdelivr.net/vue.resource/0.9.0/vue-resource.min.js',
             ],
             'libraries'
-        );
+        );*/
 
         return $this;
     }
@@ -146,26 +146,7 @@ trait BaseAssets
         $this->addAssets(
             [
                 //'https://use.fontawesome.com/90d4cc6ef0.js',
-                //"vendor/fortawesome/font-awesome/css/font-awesome.min.css",
-            ]
-        );
-
-        return $this;
-    }
-
-    public function redactor()
-    {
-        $this->addAssets(
-            [
-                "app/door/src/Door/Layout/public/assets/css/style-blue-redactor.css",
-            ]
-        );
-
-        $this->addAssets(
-            [
-                "js/redactor/redactor.js",
-                "js/redactor/redactor.conf.js",
-                "js/redactor/redactor.css",
+                "vendor/fortawesome/font-awesome/css/font-awesome.min.css",
             ]
         );
 
