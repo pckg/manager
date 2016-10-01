@@ -1,14 +1,12 @@
 <?php namespace Pckg\Manager\Asset;
 
 use Assetic\Asset\AssetInterface;
-use Assetic\Exception\FilterException;
 use Assetic\Factory\AssetFactory;
 use Assetic\Filter\BaseNodeFilter;
 use Assetic\Filter\DependencyExtractorInterface;
 use Assetic\Util\LessUtils;
-use Symfony\Component\Process\Process;
 
-class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterface
+class PathPckgFilter extends BaseNodeFilter implements DependencyExtractorInterface
 {
 
     private $nodeBin;
@@ -94,16 +92,75 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         $input = path('tmp') . $sourceHash . '.less.tmp';
 
         if (!is_file($input)) {
-            $proc = new Process('lessc ' . $source . ' > ' . $input);
-            $code = $proc->run();
+            $content = $asset->getContent();
 
-            if (0 !== $code) {
-                throw FilterException::fromProcess($proc)->setInput($asset->getContent());
-            }
+            /**
+             * Fix ../ and similar urls.
+             */
+            $sourceDir = $asset->getSourceDirectory();
+            $rootDir = path('root');
+
+            /**
+             * Source dir is always longer than root dir.
+             * Dir diff will be prepended to urls.
+             */
+            $dirDiff = str_replace($rootDir, path('ds'), $sourceDir);
+
+            /**
+             * Make replacement.
+             */
+            $content = preg_replace_callback(
+                '/url\(([\s])?([\"|\'])?(.*?)([\"|\'])?([\s])?\)/i',
+                function($matches) use ($sourceDir, $rootDir, $dirDiff) {
+                    $value = $matches[0];
+
+                    /**
+                     * We have to move $dots times towards root.
+                     */
+                    if ($dots = substr_count($value, '../')) {
+                        /**
+                         * We have to move $dots times towards root.
+                         */
+
+                        $resourcePath = realpath($sourceDir . path('ds') . str_repeat('..' . path('ds'), $dots));
+                        $relativeDir = str_replace($rootDir, path('ds'), $resourcePath) . path('ds');
+                        $urlPart = strpos($value, 'url("') !== false
+                            ? 'url("'
+                            : (strpos($value, 'url(\'') !== false
+                                ? 'url(\'' : 'url(');
+                        $value = str_replace(
+                            $urlPart,
+                            $urlPart . $relativeDir,
+                            str_replace('../', '', $value)
+                        );
+                    }
+
+                    /**
+                     * We have to simply prepend path.
+                     */
+                    /*$value = preg_replace_callback(
+                        '#url\([a-zA-Z0-9-_]{1}(.)*\)#',
+                        function($matches) use ($sourceDir, $rootDir, $dirDiff) {
+                            dd($matches[0]);
+                            return $matches[0];
+                            $value = $matches[0];
+                            $value = str_replace('url(', 'url(' . $dirDiff . path('ds'), $value);
+
+                            //d($matches[0] . ' => ' . $value);
+
+                            return $value;
+                        },
+                        $value
+                    );*/
+
+                    return $value;
+                },
+                $content
+            );
+        } else {
+            $content = file_get_contents($input);
         }
-
-        $content = file_get_contents($input);
-
+        
         $asset->setContent($content);
     }
 

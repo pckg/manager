@@ -2,12 +2,10 @@
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
-use Assetic\Filter\CssRewriteFilter;
-use Assetic\Filter\LessFilter;
-use Assetic\Filter\LessphpFilter;
 use Exception;
 use Pckg\Manager\Asset\BaseAssets;
 use Pckg\Manager\Asset\LessPckgFilter;
+use Pckg\Manager\Asset\PathPckgFilter;
 use ReflectionClass;
 
 class Asset
@@ -248,15 +246,11 @@ class Asset
                     foreach ($collection as $asset) {
                         $filters = [];
                         if ($type == 'less') {
-                            /*$filters[] = new LessFilter(
-                                '/usr/bin/node',
-                                ['/usr/share/npm/node_modules/', path('root') . 'bower_components' . path('ds'), ]
-                            );*/
-                            //$filters[] = new LessphpFilter();
                             $filters[] = new LessPckgFilter();
+                            $filters[] = new PathPckgFilter();
                         }
                         if (in_array($type, ['css', 'less'])) {
-                            $filters[] = new CssRewriteFilter();
+                            $filters[] = new PathPckgFilter();
                         }
                         $assetCollection->add(new FileAsset($asset, $filters));
                     }
