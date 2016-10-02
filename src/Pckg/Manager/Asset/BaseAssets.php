@@ -39,12 +39,21 @@ trait BaseAssets
         return $this;
     }
 
+    /**
+     * @return $this
+     *
+     * bower install eonasdan-bootstrap-datetimepicker#latest --save
+     */
     public function jQueryDatetimePicker()
     {
-        /*$this->addAssets([
-            "vendor/lfw/admin/src/Weblab/Admin/public/js/bootstrap-datetimepicker/v1/min.js",
-            "vendor/lfw/admin/src/Weblab/Admin/public/css/bootstrap-datetimepicker/v1/dev.css",
-        ]);*/
+        $this->addAssets(
+            [
+                'www/js/moment.js',
+                'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+            ],
+            'libraries'
+        );
 
         return $this;
     }
