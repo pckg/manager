@@ -138,20 +138,16 @@ class PathPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
                     /**
                      * We have to simply prepend path.
                      */
-                    /*$value = preg_replace_callback(
-                        '#url\([a-zA-Z0-9-_]{1}(.)*\)#',
-                        function($matches) use ($sourceDir, $rootDir, $dirDiff) {
-                            dd($matches[0]);
-                            return $matches[0];
-                            $value = $matches[0];
-                            $value = str_replace('url(', 'url(' . $dirDiff . path('ds'), $value);
-
-                            //d($matches[0] . ' => ' . $value);
-
-                            return $value;
-                        },
-                        $value
-                    );*/
+                    if (
+                        (strpos($value, 'url("') !== false && strpos($value, 'url("/)') === false) ||
+                        (strpos($value, 'url(\'') !== false && strpos($value, 'url(\'/') === false)
+                    ) {
+                        $value = str_replace(
+                            ['url("', 'url(\''],
+                            ['url("' . $dirDiff . '/', 'url(\'' . $dirDiff . '/'],
+                            $value
+                        );
+                    }
 
                     return $value;
                 },
@@ -160,7 +156,7 @@ class PathPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         } else {
             $content = file_get_contents($input);
         }
-        
+
         $asset->setContent($content);
     }
 

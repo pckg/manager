@@ -204,6 +204,9 @@ trait BaseAssets
 
         // file upload
         $this->dropzone();
+
+        // editor
+        $this->summernote();
     }
 
     public function dropzone()
@@ -212,7 +215,19 @@ trait BaseAssets
             [
                 'bower_components/dropzone/dist/min/dropzone.min.css',
                 'bower_components/dropzone/dist/min/dropzone.min.js',
-            ]
+            ],
+            'libraries'
+        );
+    }
+
+    public function summernote()
+    {
+        $this->addAssets(
+            [
+                'bower_components/summernote/dist/summernote.min.js',
+                'bower_components/summernote/dist/summernote.css',
+            ],
+            'libraries'
         );
     }
 
