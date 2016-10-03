@@ -201,6 +201,19 @@ trait BaseAssets
         // decoration
         $this->fontAwesome();
         $this->chosen();
+
+        // file upload
+        $this->dropzone();
+    }
+
+    public function dropzone()
+    {
+        $this->addAssets(
+            [
+                'bower_components/dropzone/dist/min/dropzone.min.css',
+                'bower_components/dropzone/dist/min/dropzone.min.js',
+            ]
+        );
     }
 
     public function foundation()
