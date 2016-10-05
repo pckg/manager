@@ -8,7 +8,6 @@ trait BaseAssets
         // dependencies
         $this->jQuery();
         $this->jQueryDatetimePicker();
-        $this->angularJS();
         $this->vueJS();
 
         // front framework
@@ -54,15 +53,6 @@ trait BaseAssets
             ],
             'libraries'
         );
-
-        return $this;
-    }
-
-    public function angularJS()
-    {
-        /*$this->addAssets([
-            "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.5/angular.min.js",
-        ]);*/
 
         return $this;
     }
@@ -228,18 +218,6 @@ trait BaseAssets
                 'bower_components/summernote/dist/summernote.css',
             ],
             'libraries'
-        );
-    }
-
-    public function foundation()
-    {
-        $this->addAssets(
-            [
-                "bower_components/modernizr/nodernizr.js",
-                "bower_components/fastclick/lib/fastclick.js",
-                "bower_components/foundation/js/foundation.min.js",
-                "bower_components/foundation/css/foundation.min.css",
-            ]
         );
     }
 
