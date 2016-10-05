@@ -1,5 +1,6 @@
 <?php namespace Pckg\Manager\Provider;
 
+use Locale;
 use Pckg\Framework\Provider;
 use Pckg\Manager\Asset;
 use Pckg\Manager\Meta;
@@ -12,11 +13,12 @@ class Manager extends Provider
     public function viewObjects()
     {
         return [
-            '_assetManager' => Asset::class,
-            '_vueManager'   => Vue::class,
-            '_metaManager'  => Meta::class,
-            '_seoManager'   => Seo::class,
-            '_pckg'         => Pckg::class,
+            '_assetManager'  => Asset::class,
+            '_vueManager'    => Vue::class,
+            '_metaManager'   => Meta::class,
+            '_seoManager'    => Seo::class,
+            '_pckg'          => Pckg::class,
+            '_localeManager' => Locale::class,
         ];
     }
 
@@ -30,7 +32,7 @@ class Pckg
         if (!is_array($chain)) {
             $chain = [$chain];
         }
-        
+
         return chain($chain);
     }
 
