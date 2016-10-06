@@ -9,7 +9,7 @@ class Meta
     {
         $this->add(
             [
-                'name' => 'viewport',
+                'name'    => 'viewport',
                 'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
             ]
         );
@@ -17,9 +17,9 @@ class Meta
         return $this;
     }
 
-    public function add($meta)
+    public function add($meta, $section = 'header')
     {
-        $this->metas[] = $meta;
+        $this->metas[$section][] = $meta;
 
         return $this;
     }
@@ -52,7 +52,8 @@ class Meta
   ga(\'create\', \'' . $trackingId . '\', \'auto\');
   ga(\'send\', \'pageview\');
 
-</script>'
+</script>',
+            'footer'
         );
     }
 
@@ -73,7 +74,8 @@ s1.charset=\'UTF-8\';
 s1.setAttribute(\'crossorigin\',\'*\');
 s0.parentNode.insertBefore(s1,s0);
 })();
-</script>'
+</script>',
+            'footer'
         );
     }
 
@@ -83,27 +85,42 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add('<script src="//load.sumome.com/" data-sumo-site-id="' . $id . '" async="async"></script>');
+        $this->add(
+            '<script src="//load.sumome.com/" data-sumo-site-id="' . $id . '" async="async"></script>',
+            'footer'
+        );
     }
 
-    public function __toString()
+    public function getMeta($onlySections = [])
     {
+        if (!is_array($onlySections)) {
+            $onlySections = [$onlySections];
+        }
+
+        $onlySections = $onlySections ?? array_keys($this->metas);
         $build = [];
-        foreach ($this->metas as $meta) {
-            if (is_string($meta)) {
-                $build[] = $meta;
+        foreach ($onlySections as $section) {
+            foreach ($this->metas[$section] ?? [] as $meta) {
+                if (is_string($meta)) {
+                    $build[] = $meta;
 
-            } else {
-                $partial = [];
-                foreach ($meta as $key => $value) {
-                    $partial[] = $key . '="' . htmlspecialchars($value) . '"';
+                } else {
+                    $partial = [];
+                    foreach ($meta as $key => $value) {
+                        $partial[] = $key . '="' . htmlspecialchars($value) . '"';
+                    }
+                    $build[] = '<meta ' . implode(' ', $partial) . ' />';
+
                 }
-                $build[] = '<meta ' . implode(' ', $partial) . ' />';
-
             }
         }
 
         return implode("\n", $build);
+    }
+
+    public function __toString()
+    {
+        return $this->getMeta();
     }
 
 }

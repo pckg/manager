@@ -107,7 +107,6 @@ class Asset
 
                 } else {
                     $this->collections['less'][$section][$priority][] = $path . $asset;
-                    
                 }
 
             }

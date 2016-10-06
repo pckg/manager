@@ -21,15 +21,15 @@ class Seo
     {
         return (
                $this->title
-                   ? str_replace('##', trim(strip_tags($this->title)), $this->templates['title'])
+                   ? str_replace('##', trim(strip_tags($this->title)), $this->templates['title']) . "\n"
                    : ''
                ) . (
                $this->description
-                   ? str_replace('##', trim(strip_tags($this->description)), $this->templates['description'])
+                   ? str_replace('##', trim(strip_tags($this->description)), $this->templates['description']) . "\n"
                    : ''
                ) . (
                $this->keywords
-                   ? str_replace('##', trim(strip_tags($this->keywords)), $this->templates['keywords'])
+                   ? str_replace('##', trim(strip_tags($this->keywords)), $this->templates['keywords']) . "\n"
                    : ''
                ) . $this->getOgTags();
     }

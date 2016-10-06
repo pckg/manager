@@ -105,7 +105,7 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
 
         $input = path('tmp') . $sourceHash . '.less.tmp';
 
-        if (true || !is_file($input)) {
+        if (!is_file($input)) {
             $content = '';
             foreach ($variableFiles as $file) {
                 $content .= file_get_contents($file);
@@ -124,7 +124,7 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         $output = path('tmp') . $sourceHash . '.less.tmp';
         $input = path('tmp') . $sourceHash . '.merged.less.tmp';
 
-        if (true || !is_file($output)) {
+        if (!is_file($output)) {
             file_put_contents(
                 $input,
                 file_get_contents($source) . ($variablesPath ? file_get_contents($variablesPath) : '')
