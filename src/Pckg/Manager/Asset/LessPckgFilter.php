@@ -6,6 +6,7 @@ use Assetic\Factory\AssetFactory;
 use Assetic\Filter\BaseNodeFilter;
 use Assetic\Filter\DependencyExtractorInterface;
 use Assetic\Util\LessUtils;
+use Pckg\Manager\Asset;
 use Symfony\Component\Process\Process;
 
 class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterface
@@ -87,14 +88,51 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         $this->parserOptions[$code] = $value;
     }
 
+    private function getVarsPath()
+    {
+        $lessVars = context()->get(Asset::class);
+        $variableFiles = $lessVars->getLessVariableFiles();
+
+        if (!$variableFiles) {
+            return null;
+        }
+
+        $filemtimes = [];
+        foreach ($variableFiles as $file) {
+            $filemtimes[] = filemtime($file);
+        }
+        $sourceHash = sha1(json_encode($variableFiles) . json_encode($filemtimes));
+
+        $input = path('tmp') . $sourceHash . '.less.tmp';
+
+        if (true || !is_file($input)) {
+            $content = '';
+            foreach ($variableFiles as $file) {
+                $content .= file_get_contents($file);
+            }
+            file_put_contents($input, $content);
+        }
+
+        return $input;
+    }
+
     public function filterLoad(AssetInterface $asset)
     {
         $source = $asset->getSourceDirectory() . path('ds') . $asset->getSourcePath();
-        $sourceHash = sha1($source . filemtime($source));
-        $input = path('tmp') . $sourceHash . '.less.tmp';
+        $variablesPath = $this->getVarsPath();
+        $sourceHash = sha1($source . filemtime($source) . $variablesPath);
+        $output = path('tmp') . $sourceHash . '.less.tmp';
+        $input = path('tmp') . $sourceHash . '.merged.less.tmp';
 
-        if (!is_file($input)) {
-            $proc = new Process('lessc ' . $source . ' > ' . $input);
+        if (true || !is_file($output)) {
+            file_put_contents(
+                $input,
+                file_get_contents($source) . ($variablesPath ? file_get_contents($variablesPath) : '')
+            );
+
+            $proc = new Process(
+                'lessc ' . $input . ' > ' . $output
+            );
             $code = $proc->run();
 
             if (0 !== $code) {
@@ -102,7 +140,7 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
             }
         }
 
-        $content = file_get_contents($input);
+        $content = file_get_contents($output);
 
         $asset->setContent($content);
     }

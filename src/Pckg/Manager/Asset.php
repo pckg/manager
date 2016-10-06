@@ -27,6 +27,8 @@ class Asset
 
     protected $assets = [];
 
+    protected $lessVariableFiles = [];
+
     public function touchCollection($type, $section = 'main', $priority = 0)
     {
         if (!isset($this->collections[$type][$section][$priority])) {
@@ -100,10 +102,21 @@ class Asset
                 $this->collections['css'][$section][$priority][] = $path . $asset;
 
             } else if (mb_strrpos($asset, '.less') == strlen($asset) - strlen('.less')) {
-                $this->collections['less'][$section][$priority][] = $path . $asset;
+                if (strpos($asset, '@') === 0) {
+                    $this->lessVariableFiles[] = substr($asset, 1);
+
+                } else {
+                    $this->collections['less'][$section][$priority][] = $path . $asset;
+                    
+                }
 
             }
         }
+    }
+
+    public function getLessVariableFiles()
+    {
+        return $this->lessVariableFiles;
     }
 
     public function addAppAssets($assets, $section = 'main', $app, $priority = 90)
