@@ -14,16 +14,29 @@ trait BaseAssets
         $this->bootstrap();
         $this->magnific();
 
-        // needed
-        $this->app();
-        $this->maestro();
-        $this->theme();
+        // decoration
+        $this->fontAwesome();
+    }
+
+    public function executeCore()
+    {
+        // dependencies
+        $this->jQuery();
+        $this->jQueryDatetimePicker();
+        $this->vueJS();
+
+        // front framework
+        $this->bootstrap();
+        $this->magnific();
 
         // decoration
         $this->fontAwesome();
-        $this->redactor();
-        $this->chosen();
-        $this->datatables();
+
+        // file upload
+        $this->dropzone();
+
+        // editor
+        $this->summernote();
     }
 
     public function jQuery()
@@ -66,14 +79,6 @@ trait BaseAssets
             'libraries'
         );
 
-        /*$this->addAssets(
-            [
-                'https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js',
-                'https://cdn.jsdelivr.net/vue.resource/0.9.0/vue-resource.min.js',
-            ],
-            'libraries'
-        );*/
-
         return $this;
     }
 
@@ -84,7 +89,7 @@ trait BaseAssets
                 "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
                 "vendor/bootstrap-select/bootstrap-select/js/bootstrap-select.js",
                 "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
-                "vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
+                // "vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
                 "vendor/bootstrap-select/bootstrap-select/dist/css/bootstrap-select.css",
             ],
             'libraries'
@@ -104,99 +109,15 @@ trait BaseAssets
         );
     }
 
-    public function app()
-    {
-        $this->addAssets(['js/app.js']);
-
-        return $this;
-
-    }
-
-    public function maestro()
-    {
-        $this->addAssets(
-            [
-                "js/maestro.js", // should it be on the end?
-                "css/maestro.css", // should it be on the end?
-            ]
-        );
-    }
-
-    public function theme()
-    {
-        $this->addAssets(
-            [
-                // sb-admin-2.js
-                "js/sb-admin-2.js",
-                "js/plugins/metisMenu/metisMenu.min.js",
-                "js/jquery-bootstrap-validation/v1.3.6/min.js",
-                // sb-admin2
-                "css/sb-admin-2.css",
-                "css/plugins/dataTables.bootstrap.css",
-                "css/plugins/metisMenu/metisMenu.min.css",
-                "css/jquery-file-upload/v8.8.5/jquery.fileupload-ui.css",
-            ]
-        );
-
-    }
-
     public function fontAwesome()
     {
         $this->addAssets(
             [
-                //'https://use.fontawesome.com/90d4cc6ef0.js',
                 "vendor/fortawesome/font-awesome/css/font-awesome.min.css",
             ]
         );
 
         return $this;
-    }
-
-    public function chosen()
-    {
-        /*$this->addAssets([
-            "vendor/lfw/admin/src/Weblab/Admin/public/js/chosen/v1.0.0/dev.js",
-            "vendor/lfw/admin/src/Weblab/Admin/public/js/chosen/v1.0.0/conf.js",
-            "vendor/lfw/admin/src/Weblab/Admin/public/css/chosen/v1.0.0/dev.css",
-        ]);*/
-
-        return $this;
-    }
-
-    public function datatables()
-    {
-        $this->addAssets(
-            [
-                "js/datatables/v1.9.4/dev.js",
-                "js/datatables/v1.9.4/conf.js",
-                "css/datatables/v1.9.4/conf.css",
-            ]
-        );
-
-        return $this;
-    }
-
-    public function executeCore()
-    {
-        // dependencies
-        $this->jQuery();
-        $this->jQueryDatetimePicker();
-        // $this->angularJS();
-        $this->vueJS();
-
-        // front framework
-        $this->bootstrap();
-        $this->magnific();
-
-        // decoration
-        $this->fontAwesome();
-        $this->chosen();
-
-        // file upload
-        $this->dropzone();
-
-        // editor
-        $this->summernote();
     }
 
     public function dropzone()
