@@ -88,8 +88,15 @@ class Asset
             /**
              * Set default path.
              */
-            if (!$path) {
+            if (strpos($asset, path('root')) === 0) {
+                $path = '';
+
+            } elseif (strpos($asset, '/') === 0) {
+                $path = substr(path('root'), 0, -1);
+
+            } elseif (!$path) {
                 $path = path('root');
+
             }
 
             /**
@@ -273,9 +280,13 @@ class Asset
 
                     file_put_contents($cachePath, $assetCollection->dump());
 
+                    $url = config('domain')
+                        ? '//' . config('domain')
+                        : '';
+
                     $return[] = str_replace(
                         '##LINK##',
-                        '//' . config('domain') . str_replace(path('root'), path('ds'), $cachePath),
+                        $url . str_replace(path('root'), path('ds'), $cachePath),
                         $this->types[$type]
                     );
                 }
