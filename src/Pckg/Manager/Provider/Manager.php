@@ -1,8 +1,8 @@
 <?php namespace Pckg\Manager\Provider;
 
-use Locale;
 use Pckg\Framework\Provider;
 use Pckg\Manager\Asset;
+use Pckg\Manager\Locale;
 use Pckg\Manager\Meta;
 use Pckg\Manager\Seo;
 use Pckg\Manager\Vue;
