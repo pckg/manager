@@ -5,7 +5,7 @@ class Vue
 
     protected $components = [];
 
-    public function addVueComponent($components)
+    public function addComponent($components)
     {
         if (!is_array($components)) {
             $components = [$components];
@@ -26,6 +26,10 @@ class Vue
         }
 
         $html = implode($html);
+
+        /**
+         * @T00D00 - we should parse output and cache javascript.
+         */
 
         return $html;
     }
