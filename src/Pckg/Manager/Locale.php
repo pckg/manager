@@ -32,4 +32,19 @@ class Locale
         return $this;
     }
 
+    public function getDateFormat()
+    {
+        return 'd.m.Y';
+    }
+
+    public function getTimeFormat()
+    {
+        return 'H:i';
+    }
+
+    public function getDatetimeFormat()
+    {
+        return $this->getDateFormat() . ' ' . $this->getTimeFormat();
+    }
+
 }
