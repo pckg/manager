@@ -175,12 +175,12 @@ class Asset
         $this->addAssets($assets, $section, $vendorPath . $relativePath, $priority);
     }
 
-    public function addGoogleFont($family, $sets, $subset)
+    public function addGoogleFont($family, $sets = null, $subset = null)
     {
         $this->googleFonts[] = [
             'family' => $family,
-            'sets'   => $sets,
-            'subset' => $subset,
+            'sets'   => (array)$sets,
+            'subset' => (array)$subset,
         ];
 
         return $this;
@@ -193,8 +193,9 @@ class Asset
         foreach ($this->googleFonts as $font) {
             $return[] = '<link href="//fonts.googleapis.com/css?family=' .
                         urlencode($font['family']) . ':' .
-                        implode(',', $font['sets']) . '&subset=' .
-                        implode(',', $font['subset']) . '" rel="stylesheet" type="text/css" />';
+                        implode(',', $font['sets']) .
+                        ($font['subset'] ? '&subset=' . implode(',', $font['subset']) : '')
+                        . '" rel="stylesheet" type="text/css" />';
         }
 
         return implode("\n", $return);
