@@ -36,7 +36,7 @@ trait BaseAssets
         $this->dropzone();
 
         // editor
-        $this->summernote();
+        $this->tinymce();
     }
 
     public function jQuery()
@@ -131,12 +131,11 @@ trait BaseAssets
         );
     }
 
-    public function summernote()
+    public function tinymce()
     {
         $this->addAssets(
             [
-                'bower_components/summernote/dist/summernote.min.js',
-                'bower_components/summernote/dist/summernote.css',
+                'https://cdn.tinymce.com/4/tinymce.min.js',
             ],
             'libraries'
         );
