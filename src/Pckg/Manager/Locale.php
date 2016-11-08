@@ -1,28 +1,30 @@
 <?php namespace Pckg\Manager;
 
-use Locale as BaseLocale;
+use Locale as PhpLocale;
 
 class Locale
 {
 
     /**
-     * @var BaseLocale
+     * @var PhpLocale
      */
     protected $locale;
 
     public function __construct()
     {
-        $this->locale = new BaseLocale();
+        $this->locale = new PhpLocale();
     }
 
     public function getCurrent()
     {
+        return $_GET['locale'] ?? 'en_GB';
+
         return $this->locale->getDefault();
     }
 
     public function getDefault()
     {
-        return BaseLocale::getDefault();
+        return PhpLocale::getDefault();
     }
 
     public function setCurrent($locale)
