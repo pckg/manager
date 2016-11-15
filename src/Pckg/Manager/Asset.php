@@ -281,13 +281,9 @@ class Asset
 
                     file_put_contents($cachePath, $assetCollection->dump());
 
-                    $url = config('domain')
-                        ? '//' . config('domain')
-                        : '';
-
                     $return[] = str_replace(
                         '##LINK##',
-                        $url . str_replace(path('root'), path('ds'), $cachePath),
+                        str_replace(path('root'), path('ds'), $cachePath),
                         $this->types[$type]
                     );
                 }
