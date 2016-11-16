@@ -1,6 +1,7 @@
 <?php namespace Pckg\Manager;
 
 use Locale as PhpLocale;
+use Pckg\Framework\Locale\Lang;
 
 class Locale
 {
@@ -10,8 +11,14 @@ class Locale
      */
     protected $locale;
 
-    public function __construct()
+    /**
+     * @var Lang
+     */
+    protected $lang;
+
+    public function __construct(Lang $lang)
     {
+        $this->lang = $lang;
         $this->locale = new PhpLocale();
     }
 
@@ -20,6 +27,7 @@ class Locale
         setlocale(LC_ALL, $locale);
         setlocale(LC_TIME, $locale);
         PhpLocale::setDefault($locale);
+        $this->lang->setLangId(explode('_', $locale)[0]);
     }
 
     public function setTimezone($timezone)
