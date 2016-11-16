@@ -17,6 +17,11 @@ class Seo
 
     protected $image;
 
+    public function __construct()
+    {
+        $this->setTitle(config('site.title'));
+    }
+
     public function __toString()
     {
         return (
