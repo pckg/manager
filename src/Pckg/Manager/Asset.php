@@ -2,11 +2,11 @@
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
-use Exception;
 use Pckg\Manager\Asset\BaseAssets;
 use Pckg\Manager\Asset\LessPckgFilter;
 use Pckg\Manager\Asset\PathPckgFilter;
 use ReflectionClass;
+use Throwable;
 
 class Asset
 {
@@ -323,7 +323,7 @@ class Asset
     {
         try {
             return $this->getMeta();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return exception($e);
         }
     }
