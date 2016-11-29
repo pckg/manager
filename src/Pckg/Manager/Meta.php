@@ -137,12 +137,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         $this->add(
-            '<!-- Google Tag Manager -->
-    <noscript>
-        <iframe src="//www.googletagmanager.com/ns.html?id=' . $id . '"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <script>(function (w, d, s, l, i) {
+            '<script>(function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({
                 \'gtm.start\': new Date().getTime(), event: \'gtm.js\'
@@ -153,18 +148,27 @@ s0.parentNode.insertBefore(s1,s0);
             j.src =
                     \'//www.googletagmanager.com/gtm.js?id=\' + i + dl;
             f.parentNode.insertBefore(j, f);
-        })(window, document, \'script\', \'dataLayer\', \'' . $id . '\');</script>
-    <!-- End Google Tag Manager -->',
-            'footer'
+        })(window, document, \'script\', \'dataLayer\', \'' . $id . '\');</script>',
+            'header.first'
+        );
+
+        $this->add(
+            '<noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=' . $id . '"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>',
+            'body.first'
         );
     }
 
-    public function addGoogleRemarketingTag($id) {
+    public function addGoogleRemarketingTag($id)
+    {
         if (!$id) {
             return;
         }
 
-        $this->add('<!-- Google Code for Remarketing Tag -->
+        $this->add(
+            '<!-- Google Code for Remarketing Tag -->
 <script type="text/javascript">
     /* <![CDATA[ */
     var google_conversion_id = ' . $id . ';
@@ -180,7 +184,9 @@ s0.parentNode.insertBefore(s1,s0);
              src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/' . $id . '/?value=0&amp;guid=ON&amp;script=0"/>
     </div>
 </noscript>
-', 'footer');
+',
+            'footer'
+        );
     }
 
     public function getMeta($onlySections = [])

@@ -2,6 +2,7 @@
 
 use Pckg\Framework\Provider;
 use Pckg\Manager\Asset;
+use Pckg\Manager\Gtm;
 use Pckg\Manager\Locale;
 use Pckg\Manager\Meta;
 use Pckg\Manager\Page;
@@ -21,6 +22,7 @@ class Manager extends Provider
             '_pckg'          => Pckg::class,
             '_localeManager' => Locale::class,
             '_pageManager'   => Page::class,
+            '_gtmManager'    => Gtm::class,
         ];
     }
 
