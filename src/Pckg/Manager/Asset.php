@@ -2,6 +2,7 @@
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
+use Pckg\Collection;
 use Pckg\Manager\Asset\BaseAssets;
 use Pckg\Manager\Asset\LessPckgFilter;
 use Pckg\Manager\Asset\PathPckgFilter;
@@ -276,7 +277,12 @@ class Asset
                     }
 
                     $lastModified = $assetCollection->getLastModified();
-                    $cachePath = $typePath . $priority . '-' . $section . '-' . $lastModified . '.' . $type;
+                    $hash = (new Collection($assetCollection->all()))->map(
+                        function($item) {
+                            return $item->getSourcePath();
+                        }
+                    )->implode(':')->sha1();
+                    $cachePath = $typePath . $priority . '-' . $section . '-' . $lastModified . '-' . $hash . '.' . $type;
                     $assetCollection->setTargetPath($cachePath);
 
                     file_put_contents($cachePath, $assetCollection->dump());
