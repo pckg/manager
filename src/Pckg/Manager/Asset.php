@@ -277,11 +277,11 @@ class Asset
                     }
 
                     $lastModified = $assetCollection->getLastModified();
-                    $hash = (new Collection($assetCollection->all()))->map(
+                    $hash = sha1((new Collection($assetCollection->all()))->map(
                         function($item) {
                             return $item->getSourcePath();
                         }
-                    )->implode(':')->sha1();
+                    )->implode(':'));
                     $cachePath = $typePath . $priority . '-' . $section . '-' . $lastModified . '-' . $hash . '.' . $type;
                     $assetCollection->setTargetPath($cachePath);
 
