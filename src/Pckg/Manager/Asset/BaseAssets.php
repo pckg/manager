@@ -37,6 +37,9 @@ trait BaseAssets
 
         // editor
         $this->tinymce();
+
+        // gmaps
+        $this->gmaps();
     }
 
     public function jQuery()
@@ -136,6 +139,16 @@ trait BaseAssets
         $this->addAssets(
             [
                 'https://cdn.tinymce.com/4/tinymce.min.js',
+            ],
+            'libraries'
+        );
+    }
+
+    public function gmaps()
+    {
+        $this->addAssets(
+            [
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyBCHbpY1ILUr8UxuXHVILfXbjXQ1fX7-fA&sensor=false&libraries=places',
             ],
             'libraries'
         );

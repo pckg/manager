@@ -208,7 +208,7 @@ class Asset
 
         foreach ($this->types as $type => $html) {
             foreach ($this->externals as $external) {
-                if (mb_strrpos($external, '.' . $type) == strlen($external) - strlen('.' . $type)) {
+                if (mb_strrpos($external, '.' . $type) == strlen($external) - strlen('.' . $type) || strpos($external, '.' . $type . '?') || strpos($external, '/' . $type . '?')) {
                     $return[] = str_replace('##LINK##', $external, $html);
                 }
             }
