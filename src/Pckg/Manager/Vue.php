@@ -22,7 +22,7 @@ class Vue
     {
         $html = [];
         foreach ($this->components as $component) {
-            $html[] = view($component);
+            $html[] = view($component)->autoparse();
         }
 
         $html = implode($html);
