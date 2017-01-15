@@ -1,5 +1,7 @@
 <?php namespace Pckg\Manager;
 
+use Pckg\Manager\Seo\SeoOptimized;
+
 class Seo
 {
 
@@ -16,6 +18,8 @@ class Seo
     protected $keywords;
 
     protected $image;
+
+    protected $objects = [];
 
     public function __construct()
     {
@@ -82,6 +86,21 @@ class Seo
     {
         $this->image = $image;
 
+        return $this;
+    }
+
+    public function addObject(SeoOptimized $object)
+    {
+        $this->objects[] = $object;
+
+        $data = ['title', 'description', 'image'];
+        foreach ($data as $key) {
+            $value = $object->{'getSeo' . ucfirst($key)}();
+            if ($value) {
+                $this->{'set' . ucfirst($key)}($value);
+            }
+        }
+        
         return $this;
     }
 
