@@ -24,8 +24,11 @@ class Locale
 
     public function setLocale($locale)
     {
-        setlocale(LC_ALL, $locale);
-        setlocale(LC_TIME, $locale);
+        $utf8Suffix = strpos($locale, '.utf8')
+            ? ''
+            : '.utf8';
+        setlocale(LC_ALL, $locale . $utf8Suffix);
+        setlocale(LC_TIME, $locale . $utf8Suffix);
         PhpLocale::setDefault($locale);
         $this->lang->setLangId(explode('_', $locale)[0]);
     }
