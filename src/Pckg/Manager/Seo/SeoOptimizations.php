@@ -5,7 +5,7 @@ trait SeoOptimizations
 
     public function getSeoTitle()
     {
-        return $this->title;
+        return $this->title . ' @ ' . config('site.title');
     }
 
     public function getSeoDescription()
