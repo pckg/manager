@@ -5,6 +5,15 @@ class Vue
 
     protected $components = [];
 
+    protected $views = [];
+
+    public function addView($view, $data = [])
+    {
+        $this->views[$view] = view($view, $data)->autoparse();
+
+        return $this;
+    }
+
     public function addComponent($components)
     {
         if (!is_array($components)) {
@@ -30,6 +39,13 @@ class Vue
         /**
          * @T00D00 - we should parse output and cache javascript.
          */
+
+        return $html;
+    }
+
+    public function getViews()
+    {
+        $html = implode($this->views);
 
         return $html;
     }
