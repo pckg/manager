@@ -9,7 +9,16 @@ class Vue
 
     public function addView($view, $data = [])
     {
-        $this->views[$view] = view($view, $data)->autoparse();
+        return $this->addStringView(view($view, $data)->autoparse(), $view);
+    }
+
+    public function addStringView($html, $index = null)
+    {
+        if ($index) {
+            $this->views[$index] = $html;
+        } else {
+            $this->views[] = $html;
+        }
 
         return $this;
     }
