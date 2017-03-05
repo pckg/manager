@@ -189,6 +189,36 @@ s0.parentNode.insertBefore(s1,s0);
         );
     }
 
+    public function addGoogleConversionPage($id)
+    {
+        if (!$id) {
+            return;
+        }
+
+        return '<!-- Google Code for rezervacija Conversion Page -->
+<script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = ' . $id . ';
+    var google_conversion_language = "sl";
+
+    var google_conversion_format = "2";
+    var google_conversion_color = "ffffff";
+    var google_conversion_label = "Yj6qCJLQtwUQkub-8QM";
+
+    var google_conversion_value = 0;
+    /* ]]> */
+</script>
+<script type="text/javascript"
+        src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+    <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt=""
+             src="//www.googleadservices.com/pagead/conversion/' . $id . '/?value=0&amp;label=Yj6qCJLQtwUQkub-8QM&amp;guid=ON&amp;script=0"/>
+    </div>
+</noscript>';
+    }
+
     public function getMeta($onlySections = [])
     {
         if (!is_array($onlySections)) {
@@ -201,14 +231,12 @@ s0.parentNode.insertBefore(s1,s0);
             foreach ($this->metas[$section] ?? [] as $meta) {
                 if (is_string($meta)) {
                     $build[] = $meta;
-
                 } else {
                     $partial = [];
                     foreach ($meta as $key => $value) {
                         $partial[] = $key . '="' . htmlspecialchars($value) . '"';
                     }
                     $build[] = '<meta ' . implode(' ', $partial) . ' />';
-
                 }
             }
         }
