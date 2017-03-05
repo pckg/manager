@@ -138,7 +138,7 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                'https://cdn.tinymce.com/4/tinymce.min.js',
+                'bower_components/tinymce/tinymce.min.js',
             ],
             'libraries'
         );
