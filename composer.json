@@ -1,6 +1,6 @@
 {
   "name": "pckg/manager",
-  "description": "SEO, meta and asset manager",
+  "description": "Asset management, meta / seo, locale, vue.js and everything else that projects need to manage",
   "homepage": "https://github.com/pckg/manager",
   "license": "MIT",
   "authors": [
