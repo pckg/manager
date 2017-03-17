@@ -21,7 +21,7 @@ class Page
          * Check for table listing.
          */
         if ($table = router()->resolved('table')) {
-            $breadcrumbs['/dynamic/tables/list/' . $table->id] = $table->title;
+            $breadcrumbs['/dynamic/tables/list/' . $table->id] = $table->title ?? $table->table;
         }
 
         /**
