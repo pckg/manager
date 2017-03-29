@@ -91,13 +91,10 @@ class Asset
              */
             if (strpos($asset, path('root')) === 0) {
                 $path = '';
-
             } elseif (strpos($asset, '/') === 0) {
                 $path = substr(path('root'), 0, -1);
-
             } elseif (!$path) {
                 $path = path('root');
-
             }
 
             /**
@@ -105,18 +102,14 @@ class Asset
              */
             if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
                 $this->collections['js'][$section][$priority][] = $path . $asset;
-
             } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
                 $this->collections['css'][$section][$priority][] = $path . $asset;
-
             } else if (mb_strrpos($asset, '.less') == strlen($asset) - strlen('.less')) {
                 if (strpos($asset, '@') === 0) {
                     $this->lessVariableFiles[] = substr($asset, 1);
-
                 } else {
                     $this->collections['less'][$section][$priority][] = $path . $asset;
                 }
-
             }
         }
     }
@@ -166,6 +159,16 @@ class Asset
         $this->addAssets($assets, $section, $providerPath . $publicPath, $priority);
     }
 
+    public function addRelativeAssets($assets, $section = 'main', $priority = 70)
+    {
+        $file = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0]['file'];
+
+        $providerPath = realpath(substr($file, 0, strrpos($file, path('ds'))) . path('ds') . '..') . path('ds');
+        $publicPath = 'public' . path('ds');
+
+        $this->addAssets($assets, $section, $providerPath . $publicPath, $priority);
+    }
+
     public function addVendorProviderAsset($assets, $section = 'main', $vendor, $relative = '', $priority = 60)
     {
         $vendorPath = 'vendor' . path('ds') . $vendor . path('ds');
@@ -208,7 +211,9 @@ class Asset
 
         foreach ($this->types as $type => $html) {
             foreach ($this->externals as $external) {
-                if (mb_strrpos($external, '.' . $type) == strlen($external) - strlen('.' . $type) || strpos($external, '.' . $type . '?') || strpos($external, '/' . $type . '?')) {
+                if (mb_strrpos($external, '.' . $type) == strlen($external) - strlen('.' . $type) ||
+                    strpos($external, '.' . $type . '?') || strpos($external, '/' . $type . '?')
+                ) {
                     $return[] = str_replace('##LINK##', $external, $html);
                 }
             }
@@ -250,7 +255,6 @@ class Asset
             foreach ($onlySections as $section) {
                 if (!isset($this->collections[$type][$section])) {
                     continue;
-
                 } else {
                     $collections = $this->collections[$type][$section];
                 }
@@ -282,7 +286,8 @@ class Asset
                             return $item->getSourcePath();
                         }
                     )->implode(':'));
-                    $cachePath = $typePath . $priority . '-' . $section . '-' . $lastModified . '-' . $hash . '.' . $type;
+                    $cachePath = $typePath . $priority . '-' . $section . '-' . $lastModified . '-' . $hash . '.' .
+                                 $type;
                     $assetCollection->setTargetPath($cachePath);
 
                     file_put_contents($cachePath, $assetCollection->dump());
@@ -308,7 +313,6 @@ class Asset
         foreach ($onlySections as $section) {
             if (!isset($this->assets[$section])) {
                 continue;
-
             } else {
                 $assets = $this->assets[$section];
             }
