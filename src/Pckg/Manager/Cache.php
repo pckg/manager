@@ -48,9 +48,9 @@ class Cache
     {
         $cache = $this->handlers[$type];
 
-        if (!$cache->contains($key)) {
+        if (true || !$cache->contains($key)) {
             $value = $val();
-            $cache->save($key, $value);
+            // $cache->save($key, $value);
 
             return $value;
         }
