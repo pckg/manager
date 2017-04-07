@@ -15,9 +15,11 @@ class RegisterCoreAssets
         $this->asset = $asset;
     }
 
-    public function execute()
+    public function execute(callable $next)
     {
         $this->asset->executeCore();
+
+        return $next();
     }
 
 }
