@@ -77,7 +77,7 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                "bower_components/vue/dist/vue." . (dev() ? 'min.' : '') . "js",
+                "bower_components/vue/dist/vue." . (!dev() ? 'min.' : '') . "js",
             ],
             'libraries'
         );
