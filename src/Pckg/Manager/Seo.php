@@ -23,7 +23,7 @@ class Seo
 
     public function __construct()
     {
-        $this->setTitle(config('site.title'));
+        $this->setTitle(config('site.contact.name'));
     }
 
     public function __toString()
