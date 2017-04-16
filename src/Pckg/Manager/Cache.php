@@ -15,7 +15,15 @@ class Cache
     protected function registerHandler($type, $config)
     {
         $handler = (new $config['handler']);
-        $handler->setNamespace($type . '*');
+        $namespace = $type . '*';
+        if ($type == 'app') {
+            $namespace .= config('app') . '*';
+        } else if ($type == 'request') {
+            $namespace .= microtime() . '*';
+        } else if ($type == 'session') {
+            $namespace .= session_id() . '*';
+        }
+        $handler->setNamespace($namespace);
 
         return $this->handlers[$type] = $handler;
     }
@@ -48,9 +56,13 @@ class Cache
     {
         $cache = $this->handlers[$type];
 
-        if (true || !$cache->contains($key)) {
+        if (is_object($key)) {
+            $key = get_class($key) . '.' . $key->id . '.';
+        }
+
+        if (!$cache->contains($key)) {
             $value = $val();
-            // $cache->save($key, $value);
+            $cache->save($key, $value);
 
             return $value;
         }
