@@ -70,7 +70,7 @@ class Asset
             /**
              * Callable asset.
              */
-            if (is_callable($asset)) {
+            if (is_only_callable($asset)) {
                 if ($asset = $asset()) {
                     $this->touchAssetCollection($section, $priority);
                     $this->assets[$section][$priority][] = $asset;
