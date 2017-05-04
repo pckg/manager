@@ -130,9 +130,7 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
                 file_get_contents($source) . ($variablesPath ? file_get_contents($variablesPath) : '')
             );
 
-            $proc = new Process(
-                'lessc ' . $input . ' > ' . $output
-            );
+            $proc = new Process('lessc ' . $input . ' > ' . $output);
             $code = $proc->run();
 
             if (0 !== $code) {
