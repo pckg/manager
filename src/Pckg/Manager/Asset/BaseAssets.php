@@ -79,6 +79,8 @@ trait BaseAssets
         $this->addAssets(
             [
                 "bower_components/vue/dist/vue." . (!dev() ? 'min.' : '') . "js",
+                'bower_components/Sortable/Sortable.js',
+                'bower_components/vue.draggable/dist/vuedraggable.js',
             ],
             'libraries'
         );
