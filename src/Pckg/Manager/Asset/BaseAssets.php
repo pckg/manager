@@ -81,6 +81,7 @@ trait BaseAssets
                 "bower_components/vue/dist/vue." . (!dev() ? 'min.' : '') . "js",
                 'bower_components/Sortable/Sortable.js',
                 'bower_components/vue.draggable/dist/vuedraggable.js',
+                'node_modules/vuex/dist/vuex.js',
             ],
             'libraries'
         );
@@ -95,7 +96,7 @@ trait BaseAssets
                 "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
                 "vendor/bootstrap-select/bootstrap-select/js/bootstrap-select.js",
                 "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
-                // "vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
+                //"vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
                 "vendor/bootstrap-select/bootstrap-select/dist/css/bootstrap-select.css",
             ],
             'libraries'
