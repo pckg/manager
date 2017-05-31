@@ -7,9 +7,9 @@ class Vue
 
     protected $views = [];
 
-    public function addView($view, $data = [])
+    public function addView($view, $data = [], $unique = false)
     {
-        return $this->addStringView(view($view, $data)->autoparse(), $view);
+        return $this->addStringView(view($view, $data)->autoparse(), $view . ($unique ? microtime() : ''));
     }
 
     public function addStringView($html, $index = null)
