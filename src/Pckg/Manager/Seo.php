@@ -19,6 +19,8 @@ class Seo
 
     protected $image;
 
+    protected $favicon;
+
     protected $objects = [];
 
     public function __construct()
@@ -40,7 +42,19 @@ class Seo
                $this->keywords
                    ? str_replace('##', trim(strip_tags($this->keywords)), $this->templates['keywords']) . "\n"
                    : ''
-               ) . $this->getOgTags();
+               )
+               . $this->getOgTags()
+               . $this->getFaviconTags();
+    }
+
+    public function getFaviconTags()
+    {
+        if (!$this->favicon) {
+            return null;
+        }
+
+        return '<link rel="icon" type="image/png" href="' . $this->favicon . '" />
+    <link rel="shortcut icon" href="' . $this->favicon . '" />';
     }
 
     public function getOgTags()
@@ -89,6 +103,13 @@ class Seo
         return $this;
     }
 
+    public function setFavicon($favicon)
+    {
+        $this->favicon = $favicon;
+
+        return $this;
+    }
+
     public function addObject(SeoOptimized $object)
     {
         $this->objects[] = $object;
@@ -100,7 +121,7 @@ class Seo
                 $this->{'set' . ucfirst($key)}($value);
             }
         }
-        
+
         return $this;
     }
 
