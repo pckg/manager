@@ -71,8 +71,8 @@ class Seo
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content="' . router()->getUri(false) . '" />
 		<meta property="fb:admins" content="1197210626" />
-		<meta property="fb:app_id" content="' . config('pckg.manager.seo.app_id') . '" />
-		<meta property="og:image" content="' . $image . '" />';
+		<meta property="fb:app_id" content="' . config('pckg.auth.provider.facebook.config.app_id') . '" />
+		' . ($image ? '<meta property="og:image" content="' . $image . '" />' : '');
     }
 
     public function setTitle($title)
