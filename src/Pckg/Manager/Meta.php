@@ -91,6 +91,15 @@ s0.parentNode.insertBefore(s1,s0);
         );
     }
 
+    public function addFbPages($id)
+    {
+        if (!$id) {
+            return;
+        }
+
+        $this->add('<meta property="fb:pages" content="' . $id . '" />', 'headerLast');
+    }
+
     public function addFbConversionPixel($id)
     {
         if (!$id) {
