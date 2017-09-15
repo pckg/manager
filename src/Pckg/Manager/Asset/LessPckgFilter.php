@@ -8,6 +8,7 @@ use Assetic\Filter\DependencyExtractorInterface;
 use Assetic\Util\LessUtils;
 use Pckg\Manager\Asset;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterface
 {
@@ -123,6 +124,7 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         $sourceHash = sha1($source . filemtime($source) . $variablesPath);
         $output = path('tmp') . $sourceHash . '.less.tmp';
         $input = path('tmp') . $sourceHash . '.merged.less.tmp';
+        $failed = false;
 
         if (!is_file($output)) {
             file_put_contents(
@@ -131,14 +133,20 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
             );
 
             $proc = new Process('lessc ' . $input . ' > ' . $output);
-            $code = $proc->run();
+            try {
+                $code = $proc->run();
 
-            if (0 !== $code) {
-                throw FilterException::fromProcess($proc)->setInput($asset->getContent());
+                if (0 !== $code) {
+                    throw FilterException::fromProcess($proc)->setInput($asset->getContent());
+                }
+            } catch (Throwable $e) {
+                unlink($output);
+                unlink($input);
+                $failed = true;
             }
         }
 
-        $content = file_get_contents($output);
+        $content = $failed ? null : file_get_contents($output);
 
         $asset->setContent($content);
     }
