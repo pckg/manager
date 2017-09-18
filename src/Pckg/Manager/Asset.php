@@ -100,16 +100,14 @@ class Asset
             /**
              * Internal asset.
              */
-            if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
+            if (strpos($asset, '@') === 0) {
+                $this->lessVariableFiles[] = substr($asset, 1);
+            } else if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
                 $this->collections['js'][$section][$priority][] = $path . $asset;
             } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
                 $this->collections['css'][$section][$priority][] = $path . $asset;
             } else if (mb_strrpos($asset, '.less') == strlen($asset) - strlen('.less')) {
-                if (strpos($asset, '@') === 0) {
-                    $this->lessVariableFiles[] = substr($asset, 1);
-                } else {
-                    $this->collections['less'][$section][$priority][] = $path . $asset;
-                }
+                $this->collections['less'][$section][$priority][] = $path . $asset;
             }
         }
     }
@@ -245,6 +243,9 @@ class Asset
 
         $onlyTypes = $this->getKeysIfEmpty($this->collections, $onlyTypes);
 
+        $lessPckgFilter = new LessPckgFilter();
+        $pathPckgFilter = new PathPckgFilter();
+
         foreach ($onlyTypes as $type) {
             if (!isset($this->collections[$type])) {
                 continue;
@@ -271,21 +272,21 @@ class Asset
                     foreach ($collection as $asset) {
                         $filters = [];
                         if ($type == 'less') {
-                            $filters[] = new LessPckgFilter();
-                            $filters[] = new PathPckgFilter();
+                            $filters[] = $lessPckgFilter;//new LessPckgFilter();
+                            //$filters[] = new PathPckgFilter();
                         }
                         if (in_array($type, ['css', 'less'])) {
-                            $filters[] = new PathPckgFilter();
+                            $filters[] = $pathPckgFilter;//new PathPckgFilter();
                         }
                         $assetCollection->add(new FileAsset($asset, $filters));
                     }
 
                     $lastModified = $assetCollection->getLastModified();
                     $hash = sha1((new Collection($assetCollection->all()))->map(
-                        function($item) {
-                            return $item->getSourcePath();
-                        }
-                    )->implode(':'));
+                                     function($item) {
+                                         return $item->getSourcePath();
+                                     }
+                                 )->implode(':') . '-' . $lessPckgFilter->getVarsHash());
                     $cachePath = $typePath . $priority . '-' . $section . '-' . $lastModified . '-' . $hash . '.' .
                                  $type;
                     $assetCollection->setTargetPath($cachePath);

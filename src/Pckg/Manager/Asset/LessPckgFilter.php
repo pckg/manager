@@ -6,6 +6,7 @@ use Assetic\Factory\AssetFactory;
 use Assetic\Filter\BaseNodeFilter;
 use Assetic\Filter\DependencyExtractorInterface;
 use Assetic\Util\LessUtils;
+use Pckg\Concept\Reflect;
 use Pckg\Manager\Asset;
 use Symfony\Component\Process\Process;
 use Throwable;
@@ -33,6 +34,10 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
      * @var array
      */
     protected $loadPaths = [];
+
+    protected $varsHash = null;
+
+    protected $varsPath = null;
 
     /**
      * Constructor.
@@ -89,8 +94,34 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         $this->parserOptions[$code] = $value;
     }
 
+    public function getVarsHash()
+    {
+        if (!$this->varsHash) {
+            $filemtimes = [];
+            $lessVars = context()->get(Asset::class);
+            $variableFiles = $lessVars->getLessVariableFiles();
+            foreach ($variableFiles as $file) {
+                if (strpos($file, '@', 1)) {
+                    $explode = explode('@', $file);
+                    $result = Reflect::method(Reflect::create($explode[0]), $explode[1]);
+                    $filemtimes[] = sha1($result);
+                } else {
+                    $filemtimes[] = filemtime($file);
+                }
+            }
+
+            $this->varsHash = sha1(json_encode($variableFiles) . json_encode($filemtimes));
+        }
+
+        return $this->varsHash;
+    }
+
     private function getVarsPath()
     {
+        if ($this->varsPath) {
+            return $this->varsPath;
+        }
+
         $lessVars = context()->get(Asset::class);
         $variableFiles = $lessVars->getLessVariableFiles();
 
@@ -98,23 +129,26 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
             return null;
         }
 
-        $filemtimes = [];
-        foreach ($variableFiles as $file) {
-            $filemtimes[] = filemtime($file);
-        }
-        $sourceHash = sha1(json_encode($variableFiles) . json_encode($filemtimes));
+        $sourceHash = $this->getVarsHash();
 
-        $input = path('tmp') . $sourceHash . '.less.tmp';
+        $input = path('tmp') . $sourceHash . '.lessVars.tmp';
 
         if (!is_file($input)) {
             $content = '';
             foreach ($variableFiles as $file) {
-                $content .= file_get_contents($file);
+                if (strpos($file, '@', 1)) {
+                    $explode = explode('@', $file);
+                    $content .= Reflect::method(Reflect::create($explode[0]), $explode[1]);
+                } else {
+                    $content .= file_get_contents($file);
+                }
             }
             file_put_contents($input, $content);
         }
 
-        return $input;
+        $this->varsPath = $input;
+
+        return $this->varsPath;
     }
 
     public function filterLoad(AssetInterface $asset)
@@ -122,7 +156,7 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         $source = $asset->getSourceDirectory() . path('ds') . $asset->getSourcePath();
         $variablesPath = $this->getVarsPath();
         $sourceHash = sha1($source . filemtime($source) . $variablesPath);
-        $output = path('tmp') . $sourceHash . '.less.tmp';
+        $output = path('tmp') . $sourceHash . '.lessVars.tmp';
         $input = path('tmp') . $sourceHash . '.merged.less.tmp';
         $failed = false;
 
@@ -140,6 +174,9 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
                     throw FilterException::fromProcess($proc)->setInput($asset->getContent());
                 }
             } catch (Throwable $e) {
+                if (dev()) {
+                    throw $e;
+                }
                 unlink($output);
                 unlink($input);
                 $failed = true;
