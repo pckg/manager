@@ -1,7 +1,7 @@
 <?php namespace Pckg\Manager;
 
 use Locale as PhpLocale;
-use Pckg\Framework\Locale\Lang;
+use Pckg\Locale\Lang;
 
 class Locale
 {
