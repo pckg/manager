@@ -1,7 +1,7 @@
 <?php namespace Pckg\Manager;
 
 use Locale as PhpLocale;
-use Pckg\Locale\Lang;
+use Pckg\Locale\LangInterface;
 
 class Locale
 {
@@ -12,11 +12,11 @@ class Locale
     protected $locale;
 
     /**
-     * @var Lang
+     * @var LangInterface
      */
     protected $lang;
 
-    public function __construct(Lang $lang)
+    public function __construct(LangInterface $lang)
     {
         $this->lang = $lang;
         $this->locale = new PhpLocale();
