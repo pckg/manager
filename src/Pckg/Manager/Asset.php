@@ -265,9 +265,10 @@ class Asset
                  */
                 ksort($collections);
 
+                $typePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds');
+                $assetCollection = new AssetCollection([], [], $typePath);
+
                 foreach ($collections as $priority => $collection) {
-                    $typePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds');
-                    $assetCollection = new AssetCollection([], [], $typePath);
 
                     foreach ($collection as $asset) {
                         $filters = [];
@@ -280,25 +281,25 @@ class Asset
                         }
                         $assetCollection->add(new FileAsset($asset, $filters));
                     }
-
-                    $lastModified = $assetCollection->getLastModified();
-                    $hash = sha1((new Collection($assetCollection->all()))->map(
-                                     function($item) {
-                                         return $item->getSourcePath();
-                                     }
-                                 )->implode(':') . '-' . $lessPckgFilter->getVarsHash());
-                    $cachePath = $typePath . $priority . '-' . $section . '-' . $lastModified . '-' . $hash . '.' .
-                                 $type;
-                    $assetCollection->setTargetPath($cachePath);
-
-                    file_put_contents($cachePath, $assetCollection->dump());
-
-                    $return[] = str_replace(
-                        '##LINK##',
-                        str_replace(path('root'), path('ds'), $cachePath),
-                        $this->types[$type]
-                    );
                 }
+
+                $lastModified = $assetCollection->getLastModified();
+                $hash = sha1((new Collection($assetCollection->all()))->map(
+                                 function($item) {
+                                     return $item->getSourcePath();
+                                 }
+                             )->implode(':') . '-' . $lessPckgFilter->getVarsHash());
+                $cachePath = $typePath . $section . '-' . $lastModified . '-' . $hash . '.' .
+                             $type;
+                $assetCollection->setTargetPath($cachePath);
+
+                file_put_contents($cachePath, $assetCollection->dump());
+
+                $return[] = str_replace(
+                    '##LINK##',
+                    str_replace(path('root'), path('ds'), $cachePath),
+                    $this->types[$type]
+                );
             }
         }
 
