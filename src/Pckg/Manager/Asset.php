@@ -272,12 +272,8 @@ class Asset
 
                     foreach ($collection as $asset) {
                         $filters = [];
-                        if ($type == 'less') {
-                            $filters[] = $lessPckgFilter;//new LessPckgFilter();
-                            //$filters[] = new PathPckgFilter();
-                        }
                         if (in_array($type, ['css', 'less'])) {
-                            $filters[] = $pathPckgFilter;//new PathPckgFilter();
+                            $filters[] = $pathPckgFilter;
                         }
                         $assetCollection->add(new FileAsset($asset, $filters));
                     }
@@ -293,7 +289,21 @@ class Asset
                              $type;
                 $assetCollection->setTargetPath($cachePath);
 
-                file_put_contents($cachePath, $assetCollection->dump());
+                if (!file_exists($cachePath)) {
+                    $dump = $assetCollection->dump();
+                    file_put_contents($cachePath, $dump);
+
+                    /**
+                     * We don't want to process each files separately.
+                     */
+                    if ($type == 'less') {
+                        $assetCollection = new AssetCollection([], [], $typePath);
+                        $assetCollection->add(new FileAsset($cachePath, [$lessPckgFilter]));
+                        $assetCollection->setTargetPath($cachePath);
+                        $dump = $assetCollection->dump();
+                        file_put_contents($cachePath, $dump);
+                    }
+                }
 
                 $return[] = str_replace(
                     '##LINK##',

@@ -156,19 +156,21 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         $source = $asset->getSourceDirectory() . path('ds') . $asset->getSourcePath();
         $variablesPath = $this->getVarsPath();
         $sourceHash = sha1($source . filemtime($source) . $variablesPath);
-        $output = path('tmp') . $sourceHash . '.lessVars.tmp';
-        $input = path('tmp') . $sourceHash . '.merged.less.tmp';
+        $output = path('tmp') . $sourceHash . '.lessVarsProcessed.tmp';
         $failed = false;
 
         if (!is_file($output)) {
+            $input = path('tmp') . $sourceHash . '.merged.less.tmp';
             file_put_contents(
                 $input,
-                file_get_contents($source) . ($variablesPath ? file_get_contents($variablesPath) : '')
+                ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source)
             );
 
             $proc = new Process('lessc ' . $input . ' > ' . $output);
             try {
+                startMeasure('lessc');
                 $code = $proc->run();
+                stopMeasure('lessc');
 
                 if (0 !== $code) {
                     throw FilterException::fromProcess($proc)->setInput($asset->getContent());
