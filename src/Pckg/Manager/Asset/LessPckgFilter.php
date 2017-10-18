@@ -131,7 +131,7 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
 
         $sourceHash = $this->getVarsHash();
 
-        $input = path('tmp') . $sourceHash . '.lessVars.tmp';
+        $input = path('tmp') . $sourceHash . '.vars.less';
 
         if (!is_file($input)) {
             $content = '';
@@ -155,18 +155,17 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
     {
         $source = $asset->getSourceDirectory() . path('ds') . $asset->getSourcePath();
         $variablesPath = $this->getVarsPath();
-        $sourceHash = sha1($source . filemtime($source) . $variablesPath);
-        $output = path('tmp') . $sourceHash . '.lessVarsProcessed.tmp';
+        $data = $source . filemtime($source) . $variablesPath;
+        $sourceHash = sha1($data);
+        $css = path('tmp') . $sourceHash . '.output.css';
         $failed = false;
 
-        if (!is_file($output)) {
-            $input = path('tmp') . $sourceHash . '.merged.less.tmp';
-            file_put_contents(
-                $input,
-                ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source)
-            );
+        if (!is_file($css)) {
+            $merged = path('tmp') . $sourceHash . '.merged.less';
+            $mergedContent = ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source);
+            file_put_contents($merged, $mergedContent);
 
-            $proc = new Process('lessc ' . $input . ' > ' . $output);
+            $proc = new Process('lessc ' . $merged . ' > ' . $css);
             try {
                 startMeasure('lessc');
                 $code = $proc->run();
@@ -179,13 +178,13 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
                 if (dev()) {
                     throw $e;
                 }
-                unlink($output);
-                unlink($input);
+                unlink($css);
+                unlink($merged);
                 $failed = true;
             }
         }
 
-        $content = $failed ? null : file_get_contents($output);
+        $content = $failed ? null : file_get_contents($css);
 
         $asset->setContent($content);
     }
