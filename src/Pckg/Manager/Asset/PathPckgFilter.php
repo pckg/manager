@@ -89,9 +89,9 @@ class PathPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
     {
         $source = $asset->getSourceDirectory() . path('ds') . $asset->getSourcePath();
         $sourceHash = sha1($source . filemtime($source));
-        $input = path('tmp') . $sourceHash . '.less.tmp';
+        $input = path('tmp') . $sourceHash . '.pathfilter.tmp';
 
-        if (!is_file($input)) {
+        if (dev() || !is_file($input)) {
             $content = $asset->getContent();
 
             /**

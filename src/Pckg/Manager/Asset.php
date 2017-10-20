@@ -287,7 +287,7 @@ class Asset
                 $cachePath = $typePath . $section . '-' . $lastModified . '-' . $hash . '.' . $type;
                 $assetCollection->setTargetPath($cachePath);
 
-                if (!file_exists($cachePath)) {
+                if (dev() || !file_exists($cachePath)) {
                     try {
                         $dump = $assetCollection->dump();
                         file_put_contents($cachePath, $dump);
@@ -304,7 +304,7 @@ class Asset
                  */
                 if ($type == 'less') {
                     $lessPath = $cachePath . '.css';
-                    if (!file_exists($lessPath)) {
+                    if (dev() || !file_exists($lessPath)) {
                         try {
                             $assetCollection = new AssetCollection([], [], $typePath);
                             $assetCollection->add(new FileAsset($cachePath, [$lessPckgFilter]));
