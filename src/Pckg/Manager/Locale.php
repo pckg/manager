@@ -30,7 +30,8 @@ class Locale
         setlocale(LC_ALL, $locale . $utf8Suffix);
         setlocale(LC_TIME, $locale . $utf8Suffix);
         PhpLocale::setDefault($locale);
-        $this->lang->setLangId(explode('_', $locale)[0]);
+        $langId = explode('_', $locale)[0];
+        $this->lang->setLangId($langId);
     }
 
     public function setTimezone($timezone)
