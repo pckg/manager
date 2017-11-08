@@ -64,9 +64,9 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                'bower_components/moment/min/moment-with-locales.min.js',
-                'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-                'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+                'node_modules/moment/min/moment-with-locales.min.js',
+                'node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                'node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
             ],
             'libraries'
         );
@@ -78,9 +78,9 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                "bower_components/vue/dist/vue." . (!dev() ? 'min.' : '') . "js",
-                'bower_components/Sortable/Sortable.js',
-                'bower_components/vue.draggable/dist/vuedraggable.js',
+                "node_modules/vue/dist/vue." . (!dev() ? 'min.' : '') . "js",
+                'node_modules/sortablejs/Sortable.js',
+                'node_modules/vuedraggable/dist/vuedraggable.js',
                 'node_modules/vuex/dist/vuex.js',
             ],
             'libraries'
@@ -131,8 +131,8 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                'bower_components/dropzone/dist/min/dropzone.min.css',
-                'bower_components/dropzone/dist/min/dropzone.min.js',
+                'node_modules/dropzone/dist/min/dropzone.min.css',
+                'node_modules/dropzone/dist/min/dropzone.min.js',
             ],
             'libraries'
         );
@@ -142,7 +142,7 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                'bower_components/tinymce/tinymce.min.js',
+                'node_modules/tinymce/tinymce.min.js',
             ],
             'libraries'
         );
