@@ -18,6 +18,23 @@ class Page
         $breadcrumbs['/maestro'] = __('breadcrumbs.dashboard');
 
         /**
+         * Check for related table.
+         */
+        if ($relation = router()->resolved('relation')) {
+            $relatedTable = $relation->onTable;
+            $breadcrumbs['/dynamic/tables/list/' . $relatedTable->id] = $relatedTable->title ?? $relatedTable->table;
+
+            /**
+             * Check for foreign record.
+             */
+            if ($foreign = router()->resolved('foreign')) {
+                $breadcrumbs['/dynamic/records/view/' . $relatedTable->id . '/' . $foreign->id] = ($relatedTable->title ??
+                                                                                               $relatedTable->table) .
+                                                                                              ' #' . $foreign->id;
+            }
+        }
+
+        /**
          * Check for table listing.
          */
         if ($table = router()->resolved('table')) {
