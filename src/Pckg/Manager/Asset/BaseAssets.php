@@ -152,7 +152,7 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                'https://maps.googleapis.com/maps/api/js?key=AIzaSyBCHbpY1ILUr8UxuXHVILfXbjXQ1fX7-fA&sensor=false&libraries=places',
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyBCHbpY1ILUr8UxuXHVILfXbjXQ1fX7-fA&libraries=places',
             ],
             'libraries'
         );

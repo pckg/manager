@@ -40,7 +40,8 @@ class Vue
     {
         $html = [];
         foreach ($this->components as $component) {
-            $html[] = view($component)->autoparse();
+            //$html[] = ;
+            $html[] = $this->parseComponent($component);
         }
 
         $html = implode($html);
@@ -50,6 +51,39 @@ class Vue
          */
 
         return $html;
+    }
+
+    private function parseComponent($component)
+    {
+        $parsed = view($component)->autoparse();
+        return $parsed;
+
+        $exploded = explode('<script type="text/javascript">', $parsed);
+        if (count($exploded) === 2) {
+            /**
+             * We cannot dynamically load component, but we can cache them in separate js file for logic
+             * and manually resolve template via xhr request.
+             */
+            $js = substr($exploded[1], 0, strpos($exploded[1], '</script>'));
+            $explodedJs = explode("\n", trim($js));
+            $explodedJs[0] = preg_replace('/{/', 'function(resolve) {
+            http.getJSON(\'something.twig.xtemplate\', function (data) {
+             * $(\'body\').append(data.vue);
+             resolve({', $explodedJs[0], 1);
+            foreach ($explodedJs as &$e) {
+                if (strpos($e, 'template:') === false) {
+                    continue;
+                }
+                $e = 'template: data.html, /* Pckg Vue Manager */';
+            }
+            $last = $explodedJs[count($exploded) - 1];
+            $explodedJs[count($exploded) - 1] = '});}' . "\n" . $last;
+            $js = implode("\n", $explodedJs);
+
+            return $exploded[0];
+        }
+
+        return $parsed;
     }
 
     public function getViews()
