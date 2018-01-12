@@ -287,7 +287,7 @@ class Asset
                 $cachePath = $typePath . $section . '-' . $lastModified . '-' . $hash . '.' . $type;
                 $assetCollection->setTargetPath($cachePath);
 
-                if (dev() || !file_exists($cachePath)) {
+                if (!file_exists($cachePath)) {
                     try {
                         $dump = $assetCollection->dump();
                         file_put_contents($cachePath, $dump);
