@@ -132,7 +132,7 @@ trait BaseAssets
         $this->addAssets(
             [
                 'node_modules/dropzone/dist/min/dropzone.min.css',
-                'node_modules/dropzone/dist/min/dropzone.min.js',
+                'node_modules/dropzone/dist/dropzone.js',
             ],
             'libraries'
         );
