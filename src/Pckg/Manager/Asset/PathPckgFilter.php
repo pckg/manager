@@ -121,9 +121,12 @@ class PathPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
                         /**
                          * We have to move $dots times towards root.
                          */
+                        //$resourcePathResolved = realpath($sourceDir . path('ds') . str_repeat('..' . path('ds'), $dots));
+                        $resourcePathUnresolved = implode(path('ds'), array_slice(explode(path('ds'), $sourceDir), 0,
+                                                                                  substr_count($sourceDir, path('ds')) -
+                                                                                  $dots + 1));
+                        $relativeDir = str_replace($rootDir, path('ds'), $resourcePathUnresolved) . path('ds');
 
-                        $resourcePath = realpath($sourceDir . path('ds') . str_repeat('..' . path('ds'), $dots));
-                        $relativeDir = str_replace($rootDir, path('ds'), $resourcePath) . path('ds');
                         $urlPart = strpos($value, 'url("') !== false
                             ? 'url("'
                             : (strpos($value, 'url(\'') !== false
