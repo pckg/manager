@@ -151,7 +151,7 @@ class Asset
         $reflector = new ReflectionClass(is_object($provider) ? get_class($provider) : $provider);
         $file = $reflector->getFileName();
 
-        $providerPath = realpath(substr($file, 0, strrpos($file, path('ds'))) . path('ds') . '..') . path('ds');
+        $providerPath = kaorealpath(substr($file, 0, strrpos($file, path('ds'))) . path('ds') . '..') . path('ds');
         $publicPath = 'public' . path('ds');
 
         $this->addAssets($assets, $section, $providerPath . $publicPath, $priority);
@@ -161,7 +161,7 @@ class Asset
     {
         $file = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0]['file'];
 
-        $providerPath = realpath(substr($file, 0, strrpos($file, path('ds'))) . path('ds') . '..') . path('ds');
+        $providerPath = kaorealpath(substr($file, 0, strrpos($file, path('ds'))) . path('ds') . '..') . path('ds');
         $publicPath = 'public' . path('ds');
 
         $this->addAssets($assets, $section, $providerPath . $publicPath, $priority);
