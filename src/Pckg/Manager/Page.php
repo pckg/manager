@@ -1,11 +1,18 @@
 <?php namespace Pckg\Manager;
 
+use Pckg\Generic\Controller\Generic;
+
 class Page
 {
 
     public function isHomepage()
     {
         return in_array(router()->getUri(), ['/', '/dev.php', '/dev.php/']);
+    }
+
+    public function isGeneric()
+    {
+        return request()->getMatch('controller') == Generic::class && request()->getMatch('view') == 'generic';
     }
 
     public function getBreadcrumbs()
@@ -28,9 +35,10 @@ class Page
              * Check for foreign record.
              */
             if ($foreign = router()->resolved('foreign')) {
-                $breadcrumbs['/dynamic/records/view/' . $relatedTable->id . '/' . $foreign->id] = ($relatedTable->title ??
-                                                                                               $relatedTable->table) .
-                                                                                              ' #' . $foreign->id;
+                $breadcrumbs['/dynamic/records/view/' . $relatedTable->id . '/' . $foreign->id] = ($relatedTable->title
+                                                                                                   ??
+                                                                                                   $relatedTable->table) .
+                                                                                                  ' #' . $foreign->id;
             }
         }
 
