@@ -176,6 +176,8 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
                 }
             } catch (Throwable $e) {
                 if (dev()) {
+                    @rename($css, $css . '.err.' . microtime());
+                    @rename($merged, $merged . '.err.' . microtime());
                     throw $e;
                 }
                 unlink($css);
