@@ -122,7 +122,7 @@ trait BaseAssets
             [
                 'https://use.fontawesome.com/releases/v5.0.6/css/all.css',
             ],
-            'libraries'
+            'footer'
         );
 
         return $this;
