@@ -120,8 +120,9 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                "vendor/fortawesome/font-awesome/css/font-awesome.min.css",
-            ]
+                'https://use.fontawesome.com/releases/v5.0.6/css/all.css',
+            ],
+            'libraries'
         );
 
         return $this;
