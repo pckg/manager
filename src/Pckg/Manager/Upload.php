@@ -29,15 +29,15 @@ class Upload
         $file = $this->getFile();
 
         if (!$file) {
-            return 'No file uploaded';
+            return 'No file uploaded ' . $this->key;
         }
 
         if ($file['error']) {
-            return 'Error uploading file ...';
+            return 'Error uploading file ' . $this->key;
         }
 
         if (!$file['size']) {
-            return 'Empty file size ...';
+            return 'Empty file size ' . $this->key;
         }
 
         return true;
