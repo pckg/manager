@@ -65,9 +65,7 @@ class Upload
 
         move_uploaded_file($file['tmp_name'], $dir . $filename);
 
-        $this->uploadedFilename = $filename;
-
-        return $this;
+        return $this->uploadedFilename = $filename;
     }
 
     public function getUploadedFilename()
