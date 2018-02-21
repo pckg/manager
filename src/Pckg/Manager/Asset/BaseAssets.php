@@ -120,7 +120,9 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                'https://use.fontawesome.com/releases/v5.0.6/css/all.css',
+                is_file(path('root') . 'src/fontAwesome/css/fontawesome-all.min.css')
+                    ? 'src/fontAwesome/css/fontawesome-all.min.css'
+                    : 'https://use.fontawesome.com/releases/v5.0.6/css/all.css',
             ],
             'footer'
         );
