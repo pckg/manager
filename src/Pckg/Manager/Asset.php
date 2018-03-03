@@ -2,6 +2,7 @@
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
+use Assetic\Asset\StringAsset;
 use Pckg\Collection;
 use Pckg\Manager\Asset\BaseAssets;
 use Pckg\Manager\Asset\LessPckgFilter;
@@ -100,8 +101,11 @@ class Asset
             /**
              * Internal asset.
              */
-            if (strpos($asset, '@') === 0) {
+            $at = strpos($asset, '@');
+            if ($at=== 0) {
                 $this->lessVariableFiles[] = substr($asset, 1);
+            } elseif ($at) {
+                $this->collections['less'][$section][$priority][] = $asset;
             } else if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
                 $this->collections['js'][$section][$priority][] = $path . $asset;
             } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
@@ -274,7 +278,15 @@ class Asset
                         if (in_array($type, ['css', 'less'])) {
                             $filters[] = $pathPckgFilter;
                         }
-                        $assetCollection->add(new FileAsset($asset, $filters));
+                        if (strpos($asset, '@')) {
+                            list($class, $method) = explode('@', $asset);
+                            $content = resolve($class)->{$method}();
+                            $stringAsset = new StringAsset($content, $filters);
+                            $stringAsset->setLastModified(sha1($content));
+                            $assetCollection->add($stringAsset);
+                        } else {
+                            $assetCollection->add(new FileAsset($asset, $filters));
+                        }
                     }
                 }
 
@@ -304,7 +316,7 @@ class Asset
                  */
                 if ($type == 'less') {
                     $lessPath = $cachePath . '.css';
-                    if (dev() || !file_exists($lessPath)) {
+                    if (!file_exists($lessPath)) {
                         try {
                             $assetCollection = new AssetCollection([], [], $typePath);
                             $assetCollection->add(new FileAsset($cachePath, [$lessPckgFilter]));
