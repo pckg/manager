@@ -157,36 +157,65 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
         $variablesPath = $this->getVarsPath();
         $data = $source . filemtime($source) . $variablesPath;
         $sourceHash = sha1($data);
-        $css = path('tmp') . $sourceHash . '.output.css';
+        $merged = path('tmp') . $sourceHash . '.merged.less';
+        $css = path('tmp') . $sourceHash . '.parsed.css';
+        $css2 = path('tmp') . $sourceHash . '.output.css';
         $failed = false;
 
-        if (!is_file($css)) {
-            $merged = path('tmp') . $sourceHash . '.merged.less';
+        if (!is_file($css2)) {
             $mergedContent = ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source);
             file_put_contents($merged, $mergedContent);
 
-            $proc = new Process('lessc ' . $merged . ' > ' . $css);
+            $proc = new Process('lessc -x ' . $merged . ' > ' . $css);
             try {
                 startMeasure('lessc');
                 $code = $proc->run();
                 stopMeasure('lessc');
 
                 if (0 !== $code) {
-                    throw FilterException::fromProcess($proc)->setInput($asset->getContent());
+                    throw FilterException::fromProcess($proc)->setInput($merged);
                 }
             } catch (Throwable $e) {
                 if (dev()) {
-                    @rename($css, $css . '.err.' . microtime());
-                    @rename($merged, $merged . '.err.' . microtime());
+                    @rename($css, $css . '.err-less.' . microtime());
+                    @rename($merged, $merged . '.err-less.' . microtime());
                     throw $e;
                 }
-                unlink($css);
-                unlink($merged);
+                @unlink($css);
+                @unlink($merged);
                 $failed = true;
+            }
+
+            if (!$failed) {
+                if (false) {
+                    $proc = new Process('csso -i ' . $css . ' -o ' . $css2);
+                    try {
+                        startMeasure('css-purge');
+                        $code = $proc->run();
+                        stopMeasure('css-purge');
+
+                        if (0 !== $code) {
+                            throw FilterException::fromProcess($proc)->setInput($css);
+                        }
+                    } catch (Throwable $e) {
+                        if (dev()) {
+                            @rename($css, $css . '.err-purge.' . microtime());
+                            @rename($css2, $css2 . '.err-purge.' . microtime());
+                            @rename($merged, $merged . '.err-purge.' . microtime());
+                            throw $e;
+                        }
+                        @unlink($css);
+                        @unlink($css2);
+                        @unlink($merged);
+                        $failed = true;
+                    }
+                } else {
+                    $css2 = $css;
+                }
             }
         }
 
-        $content = $failed ? null : file_get_contents($css);
+        $content = $failed ? null : file_get_contents($css2);
 
         $asset->setContent($content);
     }
