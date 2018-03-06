@@ -142,7 +142,7 @@ class PathPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
                      * We have to simply prepend path.
                      */
                     if (
-                        (strpos($value, 'url("') !== false && strpos($value, 'url("/)') === false) ||
+                        (strpos($value, 'url("') !== false && strpos($value, 'url("/') === false) ||
                         (strpos($value, 'url(\'') !== false && strpos($value, 'url(\'/') === false)
                     ) {
                         $value = str_replace(
