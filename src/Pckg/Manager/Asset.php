@@ -271,6 +271,7 @@ class Asset
 
                 $typePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds');
                 $assetCollection = new AssetCollection([], [], $typePath);
+                $stringAssets = [];
 
                 foreach ($collections as $priority => $collection) {
                     foreach ($collection as $asset) {
@@ -282,7 +283,7 @@ class Asset
                             list($class, $method) = explode('@', $asset);
                             $content = resolve($class)->{$method}();
                             $stringAsset = new StringAsset($content, $filters);
-                            $stringAsset->setLastModified(sha1($content));
+                            $stringAssets[] = sha1($content);
                             $assetCollection->add($stringAsset);
                         } else {
                             $assetCollection->add(new FileAsset($asset, $filters));
@@ -295,7 +296,7 @@ class Asset
                                  function($item) {
                                      return $item->getSourcePath();
                                  }
-                             )->implode(':') . '-' . $lessPckgFilter->getVarsHash());
+                             )->implode(':') . ':' . $lessPckgFilter->getVarsHash() . ':' . implode($stringAssets));
                 $cachePath = $typePath . $section . '-' . $lastModified . '-' . $hash . '.' . $type;
                 $assetCollection->setTargetPath($cachePath);
 
