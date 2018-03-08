@@ -22,15 +22,21 @@ class Locale
         $this->locale = new PhpLocale();
     }
 
-    public function setLocale($locale)
+    public function setLocale($locale, $language = null)
     {
+        $langId = $language;
+        if (!$language) {
+            list($langId) = explode('_', $locale);
+        }
+        config()->set('pckg.locale.language', $langId);
+        config()->set('pckg.locale.default', $locale);
+
         $utf8Suffix = strpos($locale, '.utf8')
             ? ''
             : '.utf8';
         setlocale(LC_ALL, $locale . $utf8Suffix);
         setlocale(LC_TIME, $locale . $utf8Suffix);
         PhpLocale::setDefault($locale);
-        $langId = explode('_', $locale)[0];
         $this->lang->setLangId($langId);
     }
 
@@ -49,9 +55,9 @@ class Locale
         return PhpLocale::getDefault();
     }
 
-    public function setCurrent($locale)
+    public function setCurrent($locale, $language = null)
     {
-        $this->setLocale($locale);
+        $this->setLocale($locale, $language);
 
         return $this;
     }
