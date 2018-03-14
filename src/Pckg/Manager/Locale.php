@@ -1,6 +1,8 @@
 <?php namespace Pckg\Manager;
 
 use Locale as PhpLocale;
+use Pckg\Collection;
+use Pckg\Locale\Entity\Languages;
 use Pckg\Locale\LangInterface;
 
 class Locale
@@ -15,6 +17,21 @@ class Locale
      * @var LangInterface
      */
     protected $lang;
+
+    /**
+     * @var Collection
+     */
+    protected $languages;
+
+    /**
+     * @var Collection
+     */
+    protected $frontendLanguages;
+
+    /**
+     * @var Collection
+     */
+    protected $backendLanguages;
 
     public function __construct(LangInterface $lang)
     {
@@ -85,6 +102,31 @@ class Locale
     public function getDatetimeFormat()
     {
         return $this->getDateFormat() . ' ' . $this->getTimeFormat();
+    }
+
+    public function prepareLanguages()
+    {
+        if ($this->languages) {
+            return $this;
+        }
+
+        $this->languages = (new Languages())->all();
+        $this->frontendLanguages = $this->languages->filter('frontend');
+        $this->backendLanguages = $this->languages->filter('backend');
+    }
+
+    public function getFrontendLanguages()
+    {
+        $this->prepareLanguages();
+
+        return $this->frontendLanguages;
+    }
+
+    public function isMultilingual()
+    {
+        $this->prepareLanguages();
+
+        return $this->frontendLanguages->count() > 1;
     }
 
 }
