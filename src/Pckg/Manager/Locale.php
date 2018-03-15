@@ -4,6 +4,7 @@ use Locale as PhpLocale;
 use Pckg\Collection;
 use Pckg\Locale\Entity\Languages;
 use Pckg\Locale\LangInterface;
+use Pckg\Locale\Record\Language;
 
 class Locale
 {
@@ -127,6 +128,29 @@ class Locale
         $this->prepareLanguages();
 
         return $this->frontendLanguages->count() > 1;
+    }
+
+    public function getDefaultFrontendLanguage()
+    {
+        $this->prepareLanguages();
+
+        return ($this->frontendLanguages->first(function(Language $language) {
+                    return $language->frontend;
+                }) ?? $this->frontendLanguages->first()) ?? $this->languages->first();
+    }
+
+    public function getLanguages()
+    {
+        $this->prepareLanguages();
+
+        return $this->languages;
+    }
+
+    public function getLanguageBy($key, $val)
+    {
+        return $this->languages->first(function(Language $language) use ($key, $val) {
+            return $language->{$key} == $val;
+        });
     }
 
 }
