@@ -57,6 +57,15 @@ class Meta
         );
     }
 
+    public function addGoogleRecaptcha($siteKey)
+    {
+        if (!$siteKey) {
+            return;
+        }
+
+        $this->add('<script src="https://www.google.com/recaptcha/api.js" async defer></script>');
+    }
+
     public function addTawkTo($id)
     {
         if (!$id) {
