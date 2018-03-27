@@ -111,6 +111,12 @@ class Locale
             return $this;
         }
 
+        $languagesEntity = new Languages();
+        if (!$languagesEntity->getRepository()->getCache()->hasTable($languagesEntity->getTable())) {
+            $this->languages = $this->frontendLanguages = $this->backendLanguages = new Collection();
+
+            return;
+        }
         $this->languages = (new Languages())->all();
         $this->frontendLanguages = $this->languages->filter('frontend');
         $this->backendLanguages = $this->languages->filter('backend');
