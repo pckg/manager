@@ -63,7 +63,7 @@ class Meta
             return;
         }
 
-        $this->add('<script src="https://www.google.com/recaptcha/api.js" async defer></script>');
+        $this->add('<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload" async defer></script>');
     }
 
     public function addTawkTo($id)
