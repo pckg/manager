@@ -20,13 +20,6 @@ class RegisterGoogleFonts
         foreach (config('pckg.manager.asset.googleFonts', []) as $font) {
             $this->asset->addGoogleFont($font['font'], $font['weight'] ?? '400,700', $font['set'] ?? 'latin,latin-ext');
         }
-        foreach ([config('design.vars.fontFamilySFirst'), config('design.vars.fontFamilyPFirst')] as $font) {
-            if (!$font) {
-                continue;
-            }
-
-            $this->asset->addGoogleFont($font, '400,700', 'latin,latin-ext');
-        }
 
         return $next();
     }
