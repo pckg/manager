@@ -197,11 +197,11 @@ class Asset
         $return = [];
 
         foreach ($this->googleFonts as $font) {
-            $return[] = '<link href="//fonts.googleapis.com/css?family=' .
+            $return[] = '<link href="https://fonts.googleapis.com/css?family=' .
                         urlencode($font['family']) . ':' .
                         implode(',', $font['sets']) .
                         ($font['subset'] ? '&subset=' . implode(',', $font['subset']) : '')
-                        . '" rel="stylesheet" type="text/css" />';
+                        . '" rel="stylesheet" />';
         }
 
         return implode("\n", $return);

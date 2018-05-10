@@ -28,7 +28,6 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
 
     /**
      * Load Paths
-     *
      * A list of paths which less will search for includes.
      *
      * @var array
@@ -166,7 +165,7 @@ class LessPckgFilter extends BaseNodeFilter implements DependencyExtractorInterf
             $mergedContent = ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source);
             file_put_contents($merged, $mergedContent);
 
-            $proc = new Process('lessc -x ' . $merged . ' > ' . $css);
+            $proc = new Process('lessc --js -x ' . $merged . ' > ' . $css);
             try {
                 startMeasure('lessc');
                 $code = $proc->run();
