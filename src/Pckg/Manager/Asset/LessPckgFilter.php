@@ -2,11 +2,7 @@
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Exception\FilterException;
-use Assetic\Factory\AssetFactory;
-use Assetic\Filter\BaseNodeFilter;
-use Assetic\Filter\DependencyExtractorInterface;
 use Assetic\Filter\LessFilter;
-use Assetic\Util\LessUtils;
 use Pckg\Concept\Reflect;
 use Pckg\Manager\Asset;
 use Symfony\Component\Process\Process;
@@ -91,7 +87,7 @@ class LessPckgFilter extends LessFilter
             $mergedContent = ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source);
             file_put_contents($merged, $mergedContent);
 
-            $proc = new Process('lessc --js -x ' . $merged . ' > ' . $css);
+            $proc = new Process('lessc' . config('lessc', null) . ' -x ' . $merged . ' > ' . $css);
             try {
                 startMeasure('lessc');
                 $code = $proc->run();
