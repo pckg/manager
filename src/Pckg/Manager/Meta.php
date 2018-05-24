@@ -42,6 +42,7 @@ class Meta
             return;
         }
 
+        // window['ga-disable-UA-XXXXX-Y'] = true;
         $this->add(
             '<script>
   (function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){
@@ -50,6 +51,7 @@ class Meta
   })(window,document,\'script\',\'//www.google-analytics.com/analytics.js\',\'ga\');
 
   ga(\'create\', \'' . $trackingId . '\', \'auto\');
+  ga(\'set\', \'anonymizeIp\', true);
   ga(\'send\', \'pageview\');
 
 </script>',
