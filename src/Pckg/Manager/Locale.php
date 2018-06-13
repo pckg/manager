@@ -117,7 +117,7 @@ class Locale
 
             return;
         }
-        $this->languages = (new Languages())->all();
+        $this->languages = $languagesEntity->orderBy('`default` DESC')->all();
         $this->frontendLanguages = $this->languages->filter('frontend');
         $this->backendLanguages = $this->languages->filter('backend');
     }
