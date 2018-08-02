@@ -15,6 +15,22 @@ class Page
         return request()->getMatch('controller') == Generic::class && request()->getMatch('view') == 'generic';
     }
 
+    public function hasAction(array $actions)
+    {
+        $genericService = $this->getGenericService();
+
+        return $genericService && $genericService->hasAction($actions);
+    }
+
+    /**
+     * @return \Pckg\Generic\Service\Generic|null
+     * @throws \Exception
+     */
+    public function getGenericService()
+    {
+        return context()->getOrDefault(\Pckg\Generic\Service\Generic::class, null);
+    }
+
     public function getBreadcrumbs()
     {
         $breadcrumbs = [];
