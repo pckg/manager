@@ -8,6 +8,8 @@ use Assetic\Filter\JSMinPlusFilter;
 use Assetic\Filter\UglifyCssFilter;
 use Assetic\Filter\UglifyJs2Filter;
 use Assetic\Filter\UglifyJsFilter;
+use Assetic\Filter\Yui\CssCompressorFilter;
+use Assetic\Filter\Yui\JsCompressorFilter;
 use Pckg\Collection;
 use Pckg\Manager\Asset\BaseAssets;
 use Pckg\Manager\Asset\LessPckgFilter;
@@ -254,8 +256,8 @@ class Asset
 
         $lessPckgFilter = new LessPckgFilter();
         $pathPckgFilter = new PathPckgFilter();
-        //$JSMinPlusFilter = new UglifyJs2Filter(path('root') . 'node_modules/.bin/uglifyjs');
-        //$CSSMinFilter = new UglifyCssFilter(path('root') . 'node_modules/.bin/uglifycss');
+        // $jsMinFilter = new CssCompressorFilter(path('root') . 'node_modules/.bin/yuicompressor');
+        // $cssMinFilter = new JsCompressorFilter(path('root') . 'node_modules/.bin/yuicompressor');
 
         foreach ($onlyTypes as $type) {
             if (!isset($this->collections[$type])) {
@@ -285,9 +287,9 @@ class Asset
                         $filters = [];
                         if (in_array($type, ['css', 'less'])) {
                             $filters[] = $pathPckgFilter;
-                            //$filters[] = $CSSMinFilter;
+                            // $filters[] = $cssMinFilter;
                         } else if (in_array($type, ['js'])) {
-                            //$filters[] = $JSMinPlusFilter;
+                            // $filters[] = $jsMinFilter;
                         }
                         if (strpos($asset, '@')) {
                             list($class, $method) = explode('@', $asset);
