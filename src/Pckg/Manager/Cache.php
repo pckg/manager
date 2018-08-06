@@ -64,12 +64,19 @@ class Cache
         if ($handler instanceof RedisCache) {
             $redisConfig = $config['redis'] ?? ['host' => '127.0.0.1'];
             $redis = new \Redis();
-            $redis->connect($redisConfig['host']);
-            $handler->setRedis($redis);
+            try {
+                $redis->connect($redisConfig['host']);
+                $handler->setRedis($redis);
+            } catch (\Throwable $e) {
+                // cache is not available
+                $handler = null;
+            }
         }
 
-        $namespace = $this->getNamespaceByType($type);
-        $handler->setNamespace($namespace);
+        if ($handler) {
+            $namespace = $this->getNamespaceByType($type);
+            $handler->setNamespace($namespace);
+        }
 
         /**
          * Default, in-memory cache.
@@ -80,7 +87,7 @@ class Cache
         /**
          * Put actual handler after in-memory cache.
          */
-        if (get_class($handler) != get_class($arrayCache)) {
+        if ($handler && get_class($handler) != get_class($arrayCache)) {
             $cacheArray[] = $handler;
         }
 
@@ -130,6 +137,13 @@ class Cache
         $key = config('identifier', null) . ':' . $key;
 
         if (!$cache->contains($key)) {
+            /**
+             * Transform stringed time to numeric.
+             */
+            if (!is_numeric($time)) {
+                $time = strtotime('+' . $time) - time();
+            }
+
             $value = $val();
             $cache->save($key, $value, $time);
 
