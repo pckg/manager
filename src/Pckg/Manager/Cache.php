@@ -1,5 +1,9 @@
 <?php namespace Pckg\Manager;
 
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\ChainCache;
+use Doctrine\Common\Cache\RedisCache;
+
 class Cache
 {
 
@@ -12,20 +16,80 @@ class Cache
         }
     }
 
+    protected function getNamespaceByType($type)
+    {
+        $namespace = $type . '*';
+
+        if ($type == 'app') {
+            /**
+             * Cached value per application.
+             */
+            return $namespace . config('app') . '*';
+        }
+
+        if ($type == 'request') {
+            /**
+             * Cached value for current request.
+             */
+            return $namespace . microtime() . '*';
+        }
+
+        if ($type == 'session') {
+            /**
+             * Cached value for current session.
+             */
+            return $namespace . session_id() . '*';
+        }
+
+        if ($type == 'user') {
+            /**
+             * Cached value for current user.
+             */
+            return $namespace . auth()->user('id') . '*';
+        }
+
+        if ($type == 'userGroup') {
+            /**
+             * Cached value for current user group.
+             */
+            return $namespace . auth()->user('user_group_id') . '*';
+        }
+
+        return $namespace;
+    }
+
     protected function registerHandler($type, $config)
     {
         $handler = (new $config['handler']);
-        $namespace = $type . '*';
-        if ($type == 'app') {
-            $namespace .= config('app') . '*';
-        } else if ($type == 'request') {
-            $namespace .= microtime() . '*';
-        } else if ($type == 'session') {
-            $namespace .= session_id() . '*';
+        if ($handler instanceof RedisCache) {
+            $redisConfig = $config['redis'] ?? ['host' => '127.0.0.1'];
+            $redis = new \Redis();
+            $redis->connect($redisConfig['host']);
+            $handler->setRedis($redis);
         }
+
+        $namespace = $this->getNamespaceByType($type);
         $handler->setNamespace($namespace);
 
-        return $this->handlers[$type] = $handler;
+        /**
+         * Default, in-memory cache.
+         */
+        $arrayCache = new ArrayCache();
+        $cacheArray = [$arrayCache];
+
+        /**
+         * Put actual handler after in-memory cache.
+         */
+        if (get_class($handler) != get_class($arrayCache)) {
+            $cacheArray[] = $handler;
+        }
+
+        /**
+         * Create cache chain.
+         */
+        $chainCache = new ChainCache($cacheArray);
+
+        return $this->handlers[$type] = $chainCache;
     }
 
     /**
@@ -52,22 +116,37 @@ class Cache
         return $this->handlers['session'];
     }
 
-    public function cache($key, $val, $type = 'request', $time = 0)
+    public function cache($key, callable $val, $type = 'request', $time = 0)
     {
-        $cache = $this->handlers[$type];
+        $cache = $this->getHandler($type);
 
         if (is_object($key)) {
             $key = get_class($key) . '.' . $key->id . '.';
         }
 
+        /**
+         * We need to cache things per identifier.
+         */
+        $key = config('identifier', null) . ':' . $key;
+
         if (!$cache->contains($key)) {
             $value = $val();
-            $cache->save($key, $value);
+            $cache->save($key, $value, $time);
 
             return $value;
         }
 
         return $cache->fetch($key);
+    }
+
+    /**
+     * @param $type
+     *
+     * @return mixed|null|RedisCache
+     */
+    public function getHandler($type)
+    {
+        return $this->handlers[$type] ?? null;
     }
 
 }
