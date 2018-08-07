@@ -136,21 +136,24 @@ class Cache
          */
         $key = config('identifier', null) . ':' . $key;
 
-        if (!$cache->contains($key)) {
-            /**
-             * Transform stringed time to numeric.
-             */
-            if (!is_numeric($time)) {
-                $time = strtotime('+' . $time) - time();
-            }
-
-            $value = $val();
-            $cache->save($key, $value, $time);
-
-            return $value;
+        /**
+         * Return directly whenc cached.
+         */
+        if ($cache->contains($key)) {
+            return $cache->fetch($key);
         }
 
-        return $cache->fetch($key);
+        /**
+         * Transform stringed time to numeric.
+         */
+        if (!is_numeric($time)) {
+            $time = strtotime('+' . $time) - time();
+        }
+
+        $value = $val();
+        $cache->save($key, $value, $time);
+
+        return $value;
     }
 
     /**
