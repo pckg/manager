@@ -63,8 +63,8 @@ class Cache
         $handler = (new $config['handler']);
         if ($handler instanceof RedisCache) {
             $redisConfig = $config['redis'] ?? ['host' => '127.0.0.1'];
-            $redis = new \Redis();
             try {
+                $redis = new \Redis();
                 $redis->connect($redisConfig['host']);
                 $handler->setRedis($redis);
             } catch (\Throwable $e) {
@@ -123,6 +123,27 @@ class Cache
         return $this->handlers['session'];
     }
 
+    public function delete($key, $type = 'app')
+    {
+        /**
+         * Get proper handler.
+         */
+        $cache = $this->getHandler($type);
+
+        /**
+         * Prepend platform key.
+         */
+        $key = config('identifier', 'identifier') . ':' . config('database.default.db',
+                                                                 'database.default.db') . ':' . $key;
+
+        /**
+         * Delete key.
+         */
+        $cache->delete($key);
+
+        return $this;
+    }
+
     public function cache($key, callable $val, $type = 'request', $time = 0)
     {
         $cache = $this->getHandler($type);
@@ -132,9 +153,10 @@ class Cache
         }
 
         /**
-         * We need to cache things per identifier.
+         * We need to cache things per identifier ... and db connection?
          */
-        $key = config('identifier', null) . ':' . $key;
+        $key = config('identifier', 'identifier') . ':' . config('database.default.db',
+                                                                 'database.default.db') . ':' . $key;
 
         /**
          * Return directly whenc cached.

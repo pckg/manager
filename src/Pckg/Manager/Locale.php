@@ -111,13 +111,20 @@ class Locale
             return $this;
         }
 
+        $this->fetchLanguages();
+    }
+
+    public function fetchLanguages()
+    {
         $languagesEntity = new Languages();
         if (!$languagesEntity->getRepository()->getCache()->hasTable($languagesEntity->getTable())) {
             $this->languages = $this->frontendLanguages = $this->backendLanguages = new Collection();
 
             return;
         }
-        $this->languages = $languagesEntity->orderBy('`default` DESC')->all();
+        $this->languages = $languagesEntity->orderBy('`default` DESC')
+                                           ->cache('1hour', 'app', Locale::class . ':' . Languages::class)
+                                           ->all();
         $this->frontendLanguages = $this->languages->filter('frontend');
         $this->backendLanguages = $this->languages->filter('backend');
     }
