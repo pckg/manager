@@ -123,7 +123,7 @@ class Locale
             return;
         }
         $this->languages = $languagesEntity->orderBy('`default` DESC')
-                                           ->cache('1hour', 'app', Locale::class . ':' . Languages::class)
+                                           // ->cache('1hour', 'app', Locale::class . ':' . Languages::class)
                                            ->all();
         $this->frontendLanguages = $this->languages->filter('frontend');
         $this->backendLanguages = $this->languages->filter('backend');
