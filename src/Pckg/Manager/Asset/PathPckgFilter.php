@@ -39,6 +39,13 @@ class PathPckgFilter extends LessFilter
                     $value = $matches[0];
 
                     /**
+                     * Do not change inline data.
+                     */
+                    if (strpos($value, 'data:image/') >= 0) {
+                        return $value;
+                    }
+
+                    /**
                      * We have to move $dots times towards root.
                      */
                     if ($dots = substr_count($value, '../')) {
