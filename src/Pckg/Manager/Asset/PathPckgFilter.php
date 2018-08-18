@@ -41,8 +41,8 @@ class PathPckgFilter extends LessFilter
                     /**
                      * Do not change inline data.
                      */
-                    if (strpos($value, 'data:image/') >= 0) {
-                        // return $value;
+                    if (strpos($value, 'data:image/') !== false) {
+                        return $value;
                     }
 
                     /**
