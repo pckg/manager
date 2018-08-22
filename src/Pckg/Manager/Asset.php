@@ -27,7 +27,7 @@ class Asset
     protected $types = [
         "css"  => '<link defer rel="stylesheet" type="text/css" href="##LINK##" />',
         "less" => '<link defer rel="stylesheet" type="text/css" href="##LINK##" />',
-        "js"   => '<script type="text/javascript" src="##LINK##"></script>',
+        "js"   => '<script defer type="text/javascript" src="##LINK##"></script>',
     ];
 
     protected $googleFonts = [];
