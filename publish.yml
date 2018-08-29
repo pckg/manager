@@ -1,0 +1,3 @@
+__:
+  provider:
+    Pckg\Manager\Provider\Manager
