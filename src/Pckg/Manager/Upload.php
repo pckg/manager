@@ -9,7 +9,7 @@ class Upload
 
     protected $uploadedFilename = null;
 
-    public function __construct($key)
+    public function __construct($key = 'file')
     {
         $this->key = $key;
     }
