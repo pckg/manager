@@ -111,6 +111,31 @@ s0.parentNode.insertBefore(s1,s0);
         $this->add('<meta property="fb:pages" content="' . $id . '" />', 'headerLast');
     }
 
+    public function addFbChat($id)
+    {
+        if (!$id) {
+            return;
+        }
+
+        $this->add('<!-- Load Facebook SDK for JavaScript -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = \'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js#xfbml=1&version=v2.12&autoLogAppEvents=1\';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, \'script\', \'facebook-jssdk\'));</script>
+
+<!-- Your customer chat code -->
+<div class="fb-customerchat"
+  attribution=install_email
+  page_id="' . $id . '"
+  logged_in_greeting="Hi! How can we help you?"
+  logged_out_greeting="Hi! How can we help you?">
+</div>', 'body.first');
+    }
+
     public function addFbConversionPixel($id)
     {
         if (!$id) {
