@@ -73,15 +73,24 @@ class Asset
             $assets = [$assets];
         }
 
-        foreach ($assets as $asset) {
+        $i = 0;
+        foreach ($assets as $keyPriority => $asset) {
+            $realPriority = $priority;
+            if ($i === $keyPriority) {
+                $i++;
+            } else {
+                $i = null;
+                $realPriority = $keyPriority;
+            }
+
             $collection = null;
             /**
              * Callable asset.
              */
             if (is_only_callable($asset)) {
                 if ($asset = $asset()) {
-                    $this->touchAssetCollection($section, $priority);
-                    $this->assets[$section][$priority][] = $asset;
+                    $this->touchAssetCollection($section, $realPriority);
+                    $this->assets[$section][$realPriority][] = $asset;
                 }
                 continue;
             }
@@ -97,12 +106,13 @@ class Asset
             /**
              * Set default path.
              */
+            $tmpPath = $path;
             if (strpos($asset, path('root')) === 0) {
-                $path = '';
+                $tmpPath = '';
             } elseif (strpos($asset, '/') === 0) {
-                $path = substr(path('root'), 0, -1);
+                $tmpPath = substr(path('root'), 0, -1);
             } elseif (!$path) {
-                $path = path('root');
+                $tmpPath = path('root');
             }
 
             /**
@@ -112,13 +122,13 @@ class Asset
             if ($at=== 0) {
                 $this->lessVariableFiles[] = substr($asset, 1);
             } elseif ($at) {
-                $this->collections['less'][$section][$priority][] = $asset;
+                $this->collections['less'][$section][$realPriority][] = $asset;
             } else if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
-                $this->collections['js'][$section][$priority][] = $path . $asset;
+                $this->collections['js'][$section][$realPriority][] = $tmpPath . $asset;
             } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
-                $this->collections['css'][$section][$priority][] = $path . $asset;
+                $this->collections['css'][$section][$realPriority][] = $tmpPath . $asset;
             } else if (mb_strrpos($asset, '.less') == strlen($asset) - strlen('.less')) {
-                $this->collections['less'][$section][$priority][] = $path . $asset;
+                $this->collections['less'][$section][$realPriority][] = $tmpPath . $asset;
             }
         }
     }
@@ -276,7 +286,7 @@ class Asset
                 /**
                  * Sort collections by priority.
                  */
-                ksort($collections);
+                ksort($collections, SORT_NUMERIC);
 
                 $typePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds');
                 $assetCollection = new AssetCollection([], [], $typePath);
