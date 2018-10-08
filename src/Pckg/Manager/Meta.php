@@ -131,8 +131,8 @@ s0.parentNode.insertBefore(s1,s0);
 <div class="fb-customerchat"
   attribution=install_email
   page_id="' . $id . '"
-  logged_in_greeting="Hi! How can we help you?"
-  logged_out_greeting="Hi! How can we help you?">
+  logged_in_greeting="' . htmlentities(config('external.facebookChat.greetingLoggedIn', 'Hi! How can we help you?')) . '"
+  logged_out_greeting="' . htmlentities(config('external.facebookChat.greetingLoggedOut', 'Hi! How can we help you?')) . '">
 </div>', 'body.first');
     }
 
