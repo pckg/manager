@@ -276,21 +276,21 @@ class Asset
 
             $onlySections = $this->getKeysIfEmpty($this->collections[$type], $onlySections);
 
+            $typePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds');
+            $assetCollection = new AssetCollection([], [], $typePath);
+            $stringAssets = [];
+
             foreach ($onlySections as $section) {
                 if (!isset($this->collections[$type][$section])) {
                     continue;
-                } else {
-                    $collections = $this->collections[$type][$section];
                 }
+
+                $collections = $this->collections[$type][$section];
 
                 /**
                  * Sort collections by priority.
                  */
                 ksort($collections, SORT_NUMERIC);
-
-                $typePath = path('storage') . 'cache' . path('ds') . 'www' . path('ds') . $type . path('ds');
-                $assetCollection = new AssetCollection([], [], $typePath);
-                $stringAssets = [];
 
                 foreach ($collections as $priority => $collection) {
                     foreach ($collection as $asset) {
@@ -312,57 +312,57 @@ class Asset
                         }
                     }
                 }
+            }
 
-                $lastModified = $assetCollection->getLastModified();
-                $hash = sha1((new Collection($assetCollection->all()))->map(
-                                 function($item) {
-                                     return $item->getSourcePath();
-                                 }
-                             )->implode(':') . ':' . $lessPckgFilter->getVarsHash() . ':' . implode($stringAssets));
-                $cachePath = $typePath . $section . '-' . $lastModified . '-' . $hash . '.' . $type;
-                $assetCollection->setTargetPath($cachePath);
+            $lastModified = $assetCollection->getLastModified();
+            $hash = sha1((new Collection($assetCollection->all()))->map(
+                             function($item) {
+                                 return $item->getSourcePath();
+                             }
+                         )->implode(':') . ':' . $lessPckgFilter->getVarsHash() . ':' . implode($stringAssets));
+            $cachePath = $typePath . implode('-', $onlySections) . '-' . $lastModified . '-' . $hash . '.' . $type;
+            $assetCollection->setTargetPath($cachePath);
 
-                if (!file_exists($cachePath)) {
+            if (!file_exists($cachePath)) {
+                try {
+                    $dump = $assetCollection->dump();
+                    file_put_contents($cachePath, $dump);
+                } catch (Throwable $e) {
+                    if (dev()) {
+                        throw $e;
+                    }
+                    unlink($cachePath);
+                }
+            }
+
+            /**
+             * We don't want to process each files separately.
+             */
+            if ($type == 'less') {
+                $lessPath = $cachePath . '.css';
+                if (!file_exists($lessPath)) {
                     try {
+                        $assetCollection = new AssetCollection([], [], $typePath);
+                        $assetCollection->add(new FileAsset($cachePath, [$lessPckgFilter]));
+                        $assetCollection->setTargetPath($lessPath);
                         $dump = $assetCollection->dump();
-                        file_put_contents($cachePath, $dump);
+                        file_put_contents($lessPath, $dump);
                     } catch (Throwable $e) {
                         if (dev()) {
                             throw $e;
                         }
+                        unlink($lessPath);
                         unlink($cachePath);
                     }
                 }
-
-                /**
-                 * We don't want to process each files separately.
-                 */
-                if ($type == 'less') {
-                    $lessPath = $cachePath . '.css';
-                    if (!file_exists($lessPath)) {
-                        try {
-                            $assetCollection = new AssetCollection([], [], $typePath);
-                            $assetCollection->add(new FileAsset($cachePath, [$lessPckgFilter]));
-                            $assetCollection->setTargetPath($lessPath);
-                            $dump = $assetCollection->dump();
-                            file_put_contents($lessPath, $dump);
-                        } catch (Throwable $e) {
-                            if (dev()) {
-                                throw $e;
-                            }
-                            unlink($lessPath);
-                            unlink($cachePath);
-                        }
-                    }
-                    $cachePath = $lessPath;
-                }
-
-                $return[] = str_replace(
-                    '##LINK##',
-                    str_replace(path('root'), path('ds'), $cachePath),
-                    $this->types[$type]
-                );
+                $cachePath = $lessPath;
             }
+
+            $return[] = str_replace(
+                '##LINK##',
+                str_replace(path('root'), path('ds'), $cachePath),
+                $this->types[$type]
+            );
         }
 
         return $return;
