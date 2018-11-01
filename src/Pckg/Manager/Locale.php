@@ -63,9 +63,9 @@ class Locale
         date_default_timezone_set($timezone);
     }
 
-    public function getCurrent()
+    public function getCurrent($length = 5)
     {
-        return PhpLocale::getDefault();
+        return substr(PhpLocale::getDefault(), 0, $length);
     }
 
     public function getDefault()
