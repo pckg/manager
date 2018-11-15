@@ -65,7 +65,6 @@ trait BaseAssets
         $this->addAssets(
             [
                 'node_modules/moment/min/moment-with-locales.min.js',
-                'node_modules/moment-duration-format/lib/moment-duration-format.js',
                 'node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
                 'node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
             ],
@@ -95,10 +94,10 @@ trait BaseAssets
         $this->addAssets(
             [
                 "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
-                "vendor/bootstrap-select/bootstrap-select/js/bootstrap-select.js",
+                "vendor/snapappointments/bootstrap-select/dist/js/bootstrap-select.js",
                 "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
                 //"vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
-                "vendor/bootstrap-select/bootstrap-select/dist/css/bootstrap-select.css",
+                "vendor/snapappointments/bootstrap-select/dist/css/bootstrap-select.css",
             ],
             'libraries'
         );
