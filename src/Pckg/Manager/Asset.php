@@ -121,7 +121,7 @@ class Asset
             $at = strpos($asset, '@');
             if ($at=== 0) {
                 $this->lessVariableFiles[] = substr($asset, 1);
-            } elseif ($at) {
+            } elseif ($at && strpos($asset, '/@') === false) {
                 $this->collections['less'][$section][$realPriority][] = $asset;
             } else if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
                 $this->collections['js'][$section][$realPriority][] = $tmpPath . $asset;
@@ -301,7 +301,7 @@ class Asset
                         } else if (in_array($type, ['js'])) {
                             // $filters[] = $jsMinFilter;
                         }
-                        if (strpos($asset, '@')) {
+                        if (strpos($asset, '@') && !strpos($asset, '/@')) {
                             list($class, $method) = explode('@', $asset);
                             $content = resolve($class)->{$method}();
                             $stringAsset = new StringAsset($content, $filters);

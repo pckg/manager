@@ -118,14 +118,20 @@ trait BaseAssets
 
     public function fontAwesome()
     {
-        $this->addAssets(
-            [
-                is_file(path('root') . 'src/fontAwesome/css/fontawesome-all.min.css')
-                    ? 'src/fontAwesome/css/fontawesome-all.min.css'
-                    : 'https://use.fontawesome.com/releases/v5.0.6/css/all.css',
-            ],
-            'footer'
-        );
+        /**
+         * Support Font Awesome PRO.
+         */
+        $pro = 'node_modules/@fortawesome/fontawesome-pro/css/all.css';
+        if (is_file(path('root') . $pro)) {
+            $this->addAssets([$pro], 'footer');
+
+            return $this;
+        }
+
+        /**
+         * Use CDN instead.
+         */
+        $this->addAssets(['https://use.fontawesome.com/releases/v5.5.0/css/all.css'], 'footer');
 
         return $this;
     }
