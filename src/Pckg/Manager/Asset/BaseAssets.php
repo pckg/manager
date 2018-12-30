@@ -79,9 +79,10 @@ trait BaseAssets
         $this->addAssets(
             [
                 "node_modules/vue/dist/vue." . (!dev() ? 'min.' : '') . "js",
+                'node_modules/vuex/dist/vuex.js',
+                'node_modules/vue-router/dist/vue-router.js',
                 'node_modules/sortablejs/Sortable.js',
                 'node_modules/vuedraggable/dist/vuedraggable.js',
-                'node_modules/vuex/dist/vuex.js',
             ],
             'libraries'
         );
