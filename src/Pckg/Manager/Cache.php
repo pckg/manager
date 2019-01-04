@@ -148,6 +148,11 @@ class Cache
     {
         $cache = $this->getHandler($type);
 
+        if (!$cache) {
+            message('No cache defined');
+            return $val();
+        }
+
         if (is_object($key)) {
             $key = get_class($key) . '.' . $key->id . '.';
         }
