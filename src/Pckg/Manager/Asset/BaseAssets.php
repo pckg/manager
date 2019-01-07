@@ -46,7 +46,7 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                "node_modules/jquery/dist/jquery.js",
+                "components/jquery/jquery.min.js",
                 'vendor/pckg/framework/src/Pckg/Framework/public/js/serializeObject.jquery.js',
             ],
             'libraries'
