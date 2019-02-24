@@ -60,7 +60,7 @@ class Seo
     public function getOgTags()
     {
         $image = $this->image
-            ? htmlspecialchars(config('protocol', 'https') . '://' . first(config('domain'), server('HTTP_HOST')) . str_replace(' ', '%20', $this->image))
+            ? htmlspecialchars('https://' . first(config('domain'), server('HTTP_HOST')) . str_replace(' ', '%20', $this->image))
             : '';
         $title = trim(strip_tags($this->title));
         $description = trim(strip_tags($this->description));
