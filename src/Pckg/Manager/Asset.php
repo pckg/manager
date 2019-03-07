@@ -3,13 +3,6 @@
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\StringAsset;
-use Assetic\Filter\CssMinFilter;
-use Assetic\Filter\JSMinPlusFilter;
-use Assetic\Filter\UglifyCssFilter;
-use Assetic\Filter\UglifyJs2Filter;
-use Assetic\Filter\UglifyJsFilter;
-use Assetic\Filter\Yui\CssCompressorFilter;
-use Assetic\Filter\Yui\JsCompressorFilter;
 use Pckg\Collection;
 use Pckg\Manager\Asset\BaseAssets;
 use Pckg\Manager\Asset\LessPckgFilter;
@@ -26,7 +19,7 @@ class Asset
 
     protected $types = [
         "css"  => '<link defer rel="stylesheet" type="text/css" href="##LINK##" />',
-        "less" => '<link defer rel="stylesheet" type="text/css" href="##LINK##" />',
+        "less" => '<link defer rel="stylesheet" type="text/css" href="##LINK##" id="##ID##" />',
         "js"   => '<script type="text/javascript" src="##LINK##"></script>',
     ];
 
@@ -358,11 +351,10 @@ class Asset
                 $cachePath = $lessPath;
             }
 
-            $return[] = str_replace(
-                '##LINK##',
-                str_replace(path('root'), path('ds'), $cachePath),
-                $this->types[$type]
-            );
+            $return[] = str_replace(['##LINK##', '##ID##'], [
+                                                              str_replace(path('root'), path('ds'), $cachePath),
+                                                              'style-id-' . implode('-', $onlySections ?? ['all']),
+                                                          ], $this->types[$type]);
         }
 
         return $return;

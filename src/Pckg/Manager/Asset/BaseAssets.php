@@ -97,7 +97,6 @@ trait BaseAssets
                 "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
                 "vendor/snapappointments/bootstrap-select/dist/js/bootstrap-select.js",
                 "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
-                //"vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css",
                 "vendor/snapappointments/bootstrap-select/dist/css/bootstrap-select.css",
             ],
             'libraries'

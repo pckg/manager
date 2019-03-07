@@ -87,7 +87,8 @@ class LessPckgFilter extends LessFilter
             $mergedContent = ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source);
             file_put_contents($merged, $mergedContent);
 
-            $proc = new Process('lessc' . config('lessc', null) . ' -x ' . $merged . ' > ' . $css);
+            $command = 'lessc' . config('lessc', null) . ' -x ' . $merged . ' > ' . $css;
+            $proc = new Process($command);
             try {
                 startMeasure('lessc');
                 $code = $proc->run();
@@ -98,8 +99,8 @@ class LessPckgFilter extends LessFilter
                 }
             } catch (Throwable $e) {
                 if (dev()) {
-                    @rename($css, $css . '.err-less.' . microtime());
-                    @rename($merged, $merged . '.err-less.' . microtime());
+                    @rename($css, $css . '.err-less');
+                    @rename($merged, $merged . '.err-less');
                     throw $e;
                 }
                 @unlink($css);
