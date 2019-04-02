@@ -97,5 +97,10 @@ class Vue
     {
         return '';
     }
+    
+    public function getLayout()
+    {
+        return '<keep-alive><router-view></router-view></keep-alive>';
+    }
 
 }
