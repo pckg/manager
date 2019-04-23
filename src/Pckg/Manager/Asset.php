@@ -352,7 +352,7 @@ class Asset
             }
 
             $link = str_replace(path('root'), path('ds'), $cachePath);
-            if (!dotenv('DEV')) {
+            if (config('pckg.manager.cdnEnabled') && !dotenv('DEV')) {
                 $link = cdn($link);
             }
 
