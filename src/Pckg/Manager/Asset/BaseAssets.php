@@ -47,7 +47,6 @@ trait BaseAssets
         $this->addAssets(
             [
                 "vendor/components/jquery/jquery.min.js",
-                'vendor/pckg/framework/src/Pckg/Framework/public/js/serializeObject.jquery.js',
             ],
             'libraries'
         );
@@ -78,11 +77,11 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                "node_modules/vue/dist/vue." . (!dev() ? 'min.' : '') . "js",
-                'node_modules/vuex/dist/vuex.js',
-                'node_modules/vue-router/dist/vue-router.js',
-                'node_modules/sortablejs/Sortable.js',
-                'node_modules/vuedraggable/dist/vuedraggable.umd.js',
+                "node_modules/vue/dist/vue.min.js",
+                'node_modules/vuex/dist/vuex.min.js',
+                'node_modules/vue-router/dist/vue-router.min.js',
+                'node_modules/sortablejs/Sortable.min.js',
+                'node_modules/vuedraggable/dist/vuedraggable.umd.min.js',
             ],
             'libraries'
         );
@@ -95,9 +94,9 @@ trait BaseAssets
         $this->addAssets(
             [
                 "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
-                "vendor/snapappointments/bootstrap-select/dist/js/bootstrap-select.js",
+                "vendor/snapappointments/bootstrap-select/dist/js/bootstrap-select.min.js",
                 "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
-                "vendor/snapappointments/bootstrap-select/dist/css/bootstrap-select.css",
+                "vendor/snapappointments/bootstrap-select/dist/css/bootstrap-select.min.css",
             ],
             'libraries'
         );
@@ -121,7 +120,7 @@ trait BaseAssets
         /**
          * Support Font Awesome PRO.
          */
-        $pro = 'node_modules/@fortawesome/fontawesome-pro/css/all.css';
+        $pro = 'node_modules/@fortawesome/fontawesome-pro/css/all.min.css';
         if (is_file(path('root') . $pro)) {
             $this->addAssets([$pro], 'footer');
 
@@ -131,7 +130,7 @@ trait BaseAssets
         /**
          * Use CDN instead.
          */
-        $this->addAssets(['https://use.fontawesome.com/releases/v5.5.0/css/all.css'], 'footer');
+        $this->addAssets(['https://use.fontawesome.com/releases/v5.8.0/css/all.css'], 'footer');
 
         return $this;
     }
@@ -141,7 +140,7 @@ trait BaseAssets
         $this->addAssets(
             [
                 'node_modules/dropzone/dist/min/dropzone.min.css',
-                'node_modules/dropzone/dist/dropzone.js',
+                'node_modules/dropzone/dist/min/dropzone.min.js',
             ],
             'libraries'
         );

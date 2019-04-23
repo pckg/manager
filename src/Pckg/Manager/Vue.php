@@ -92,11 +92,6 @@ class Vue
 
         return $html;
     }
-
-    public function getFilters()
-    {
-        return '';
-    }
     
     public function getLayout()
     {
