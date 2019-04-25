@@ -59,9 +59,7 @@ class Seo
 
     public function getOgTags()
     {
-        $image = $this->image
-            ? htmlspecialchars('https://' . first(config('domain'), server('HTTP_HOST')) . str_replace(' ', '%20', $this->image))
-            : '';
+        $image = cdn($this->image);
         $title = trim(strip_tags($this->title));
         $description = trim(strip_tags($this->description));
 
@@ -82,11 +80,21 @@ class Seo
         return $this;
     }
 
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
     public function setDescription($description)
     {
         $this->description = trim(strip_tags($description));
 
         return $this;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     public function setKeywords($keywords)
@@ -101,6 +109,11 @@ class Seo
         $this->image = $image;
 
         return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
     }
 
     public function setFavicon($favicon)
