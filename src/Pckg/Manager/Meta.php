@@ -1,5 +1,7 @@
 <?php namespace Pckg\Manager;
 
+use Derive\Internal\Cookie\Service\Cookie;
+
 class Meta
 {
 
@@ -7,12 +9,10 @@ class Meta
 
     public function addViewport()
     {
-        $this->add(
-            [
-                'name'    => 'viewport',
-                'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
-            ]
-        );
+        $this->add([
+                       'name'    => 'viewport',
+                       'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+                   ]);
 
         return $this;
     }
@@ -26,14 +26,77 @@ class Meta
 
     public function addContentType()
     {
-        $this->add(
-            [
-                'http-equiv' => 'Content-Type',
-                'content'    => 'text/html; charset=utf-8',
-            ]
-        );
+        $this->add([
+                       'http-equiv' => 'Content-Type',
+                       'content'    => 'text/html; charset=utf-8',
+                   ]);
 
         return $this;
+    }
+
+    /**
+     * Cookies are confirmed when
+     *  - confirmed cookie exists
+     *  - cookie notice is not enabled
+     *  - cookie component is not set
+     *
+     * @return bool
+     */
+    public function hasConfirmedCookie()
+    {
+        return cookie('zekom', null) || !config('pckg.generic.modules.comms-cookie.active') ||
+            !(new Cookie())->getComponent();
+    }
+
+    public function addOnGdprAccept($script, $section = 'header')
+    {
+        if ($this->hasConfirmedCookie()) {
+            $this->add('<script>' . $script . '</script>', $section);
+
+            return;
+        }
+
+        $this->add('<script>
+$dispatcher.$on(\'pckg-cookie:accepted\', function() {
+    ' . $script . '
+});
+</script>', 'footer');
+    }
+
+    public function addHtmlOnGdprAccept($html, $section = 'header')
+    {
+        if ($this->hasConfirmedCookie()) {
+            $this->add($html, $section);
+
+            return;
+        }
+
+        $this->add('<script>
+$dispatcher.$on(\'pckg-cookie:accepted\', function() {
+    $(\'body\').append(' . json_encode($html) . ');
+});
+</script>', 'footer');
+    }
+
+    public function addExternalScriptOnGdprAccept($script, $attributes, $section)
+    {
+        $finalAttrs = [];
+        foreach ($attributes as $k => $v) {
+            if ($k === strtolower($k)) {
+                $finalAttrs[] = 's1.' . $k . ' = ' . json_encode($v) . ';';
+                continue;
+            }
+
+            $finalAttrs[] = 's1.' . $k . '(' . $v . ');';
+        }
+
+        $script = '
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+' . implode("\n", $finalAttrs) . '
+s0.parentNode.insertBefore(s1,s0);
+})();';
+        $this->addOnGdprAccept($script, 'footer');
     }
 
     public function addGoogleAnalytics($trackingId)
@@ -42,21 +105,18 @@ class Meta
             return;
         }
 
-        // window['ga-disable-UA-XXXXX-Y'] = true;
-        $this->add(
-            '<script>
-  (function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){
+        /**
+         * We want to load this only if cookie policy is disabled or confirmed.
+         * When cookie notice is enabled and not accepted we add this to cookie callback.
+         */
+        $this->addOnGdprAccept('(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,\'script\',\'//www.google-analytics.com/analytics.js\',\'ga\');
 
   ga(\'create\', \'' . $trackingId . '\', \'auto\');
   ga(\'set\', \'anonymizeIp\', true);
-  ga(\'send\', \'pageview\');
-
-</script>',
-            'footer'
-        );
+  ga(\'send\', \'pageview\');', 'footer');
     }
 
     public function addGoogleRecaptcha($siteKey)
@@ -65,7 +125,8 @@ class Meta
             return;
         }
 
-        $this->add('<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload" async defer></script>', 'footer');
+        $this->add('<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload" async defer></script>',
+                   'footer');
     }
 
     public function addTawkTo($id)
@@ -74,20 +135,14 @@ class Meta
             return;
         }
 
-        $this->add(
-            '<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src=\'https://embed.tawk.to/' . $id . '/default\';
-s1.charset=\'UTF-8\';
-s1.setAttribute(\'crossorigin\',\'*\');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>',
-            'footer'
-        );
+        $remaining = 'var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();';
+
+        $this->addOnGdprAccept('if (typeof Tawk_API === \'undefined\') { window.Tawk_API = {}; window.Tawk_LoadStart = new Date(); }');
+        $this->addExternalScriptOnGdprAccept('https://embed.tawk.to/' . $id . '/default', [
+            'async'        => true,
+            'charset'      => 'UTF-8',
+            'setAttribute' => '\'crossorigin\', \'*\'',
+        ], 'footer');
     }
 
     public function addSumoMe($id)
@@ -96,10 +151,10 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add(
-            '<script src="//load.sumome.com/" data-sumo-site-id="' . $id . '" async="async"></script>',
-            'footer'
-        );
+        $this->addExternalScriptOnGdprAccept('https://load.sumome.com/', [
+            'setAttribute' => '\'data-sumo-site-id\', \'' . $id . '\'',
+            'async'        => true,
+        ], 'footer');
     }
 
     public function addFbPages($id)
@@ -117,18 +172,17 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add('<!-- Load Facebook SDK for JavaScript -->
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
+        $this->addHtmlOnGdprAccept('<div id="fb-root"></div>', 'body.first');
+
+        $this->addOnGdprAccept('(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
   js.src = \'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js#xfbml=1&version=v2.12&autoLogAppEvents=1\';
   fjs.parentNode.insertBefore(js, fjs);
-}(document, \'script\', \'facebook-jssdk\'));</script>
+}(document, \'script\', \'facebook-jssdk\'));', 'body.first');
 
-<!-- Your customer chat code -->
-<div class="fb-customerchat"
+        $this->addHtmlOnGdprAccept('<div class="fb-customerchat"
   attribution=install_email
   page_id="' . $id . '"
   logged_in_greeting="' . htmlentities(config('external.facebookChat.greetingLoggedIn', 'Hi! How can we help you?')) . '"
@@ -142,10 +196,7 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add(
-            '<!-- Facebook Pixel Code -->
-        <script>
-            !function (f, b, e, v, n, t, s) {
+        $this->addOnGdprAccept('!function (f, b, e, v, n, t, s) {
                 if (f.fbq)return;
                 n = f.fbq = function () {
                     n.callMethod ?
@@ -165,14 +216,11 @@ s0.parentNode.insertBefore(s1,s0);
                     document, \'script\', \'//connect.facebook.net/en_US/fbevents.js\');
 
             fbq(\'init\', \'' . $id . '\');
-            fbq(\'track\', "PageView");
-        </script>
-        <noscript><img height="1" width="1" style="display:none"
+            fbq(\'track\', "PageView");', 'headerLast');
+
+        $this->addHtmlOnGdprAccept('<noscript><img height="1" width="1" style="display:none"
                        src="https://www.facebook.com/tr?id=' . $id . '&ev=PageView&noscript=1"
-            /></noscript>
-        <!-- End Facebook Pixel Code -->',
-            'headerLast'
-        );
+            /></noscript>', 'headerLast');
     }
 
     public function addGoogleTagManager($id)
@@ -181,8 +229,7 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add(
-            '<script>(function (w, d, s, l, i) {
+        $this->addOnGdprAccept('(function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({
                 \'gtm.start\': new Date().getTime(), event: \'gtm.js\'
@@ -193,17 +240,12 @@ s0.parentNode.insertBefore(s1,s0);
             j.src =
                     \'//www.googletagmanager.com/gtm.js?id=\' + i + dl;
             f.parentNode.insertBefore(j, f);
-        })(window, document, \'script\', \'dataLayer\', \'' . $id . '\');</script>',
-            'header.first'
-        );
+        })(window, document, \'script\', \'dataLayer\', \'' . $id . '\');', 'header.first');
 
-        $this->add(
-            '<noscript>
+        $this->addHtmlOnGdprAccept('<noscript>
         <iframe src="//www.googletagmanager.com/ns.html?id=' . $id . '"
                 height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>',
-            'body.first'
-        );
+    </noscript>', 'body.first');
     }
 
     public function addGoogleRemarketingTag($id)
@@ -212,26 +254,18 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add(
-            '<!-- Google Code for Remarketing Tag -->
-<script type="text/javascript">
-    /* <![CDATA[ */
-    var google_conversion_id = ' . $id . ';
+        $this->addOnGdprAccept('var google_conversion_id = ' . $id . ';
     var google_custom_params = window.google_tag_params;
-    var google_remarketing_only = true;
-    /* ]]> */
-</script>
-<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-</script>
-<noscript>
+    var google_remarketing_only = true;', 'footer');
+
+        $this->addExternalScriptOnGdprAccept('https://www.googleadservices.com/pagead/conversion.js', 'footer');
+
+        $this->addHtmlOnGdprAccept('<noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
              src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/' . $id . '/?value=0&amp;guid=ON&amp;script=0"/>
     </div>
-</noscript>
-',
-            'footer'
-        );
+</noscript>', 'footer');
     }
 
     public function addGoogleConversionPage($id)
@@ -240,28 +274,23 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        return '<!-- Google Code for rezervacija Conversion Page -->
-<script type="text/javascript">
-    /* <![CDATA[ */
-    var google_conversion_id = ' . $id . ';
+        $this->addOnGdprAccept('var google_conversion_id = ' . $id . ';
     var google_conversion_language = "sl";
 
     var google_conversion_format = "2";
     var google_conversion_color = "ffffff";
     var google_conversion_label = "Yj6qCJLQtwUQkub-8QM";
 
-    var google_conversion_value = 0;
-    /* ]]> */
-</script>
-<script type="text/javascript"
-        src="//www.googleadservices.com/pagead/conversion.js">
-</script>
-<noscript>
+    var google_conversion_value = 0;', 'footer');
+
+        $this->addExternalScriptOnGdprAccept('https://www.googleadservices.com/pagead/conversion.js', 'footer');
+
+        $this->addHtmlOnGdprAccept('<noscript>
     <div style="display:inline;">
-        <img height="1" width="1" style="border-style:none;" alt=""
+        <img height="1" width="1" style="border-style: none;" alt=""
              src="//www.googleadservices.com/pagead/conversion/' . $id . '/?value=0&amp;label=Yj6qCJLQtwUQkub-8QM&amp;guid=ON&amp;script=0"/>
     </div>
-</noscript>';
+</noscript>', 'footer');
     }
 
     public function getMeta($onlySections = [])

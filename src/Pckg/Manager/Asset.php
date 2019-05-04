@@ -214,7 +214,7 @@ class Asset
                         . '" rel="stylesheet" />';
         }
 
-        return implode("\n", $return);
+        return collect($return)->unique()->implode("\n");
     }
 
     public function getExternals()
