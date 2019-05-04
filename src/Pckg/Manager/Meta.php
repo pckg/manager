@@ -2,11 +2,22 @@
 
 use Derive\Internal\Cookie\Service\Cookie;
 
+/**
+ * Class Meta
+ *
+ * @package Pckg\Manager
+ */
 class Meta
 {
 
+    /**
+     * @var array
+     */
     protected $metas = [];
 
+    /**
+     * @return $this
+     */
     public function addViewport()
     {
         $this->add([
@@ -17,6 +28,12 @@ class Meta
         return $this;
     }
 
+    /**
+     * @param        $meta
+     * @param string $section
+     *
+     * @return $this
+     */
     public function add($meta, $section = 'header')
     {
         $this->metas[$section][] = $meta;
@@ -24,6 +41,9 @@ class Meta
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function addContentType()
     {
         $this->add([
@@ -48,6 +68,10 @@ class Meta
             !(new Cookie())->getComponent();
     }
 
+    /**
+     * @param        $script
+     * @param string $section
+     */
     public function addOnGdprAccept($script, $section = 'header')
     {
         if ($this->hasConfirmedCookie()) {
@@ -63,6 +87,10 @@ $dispatcher.$on(\'pckg-cookie:accepted\', function() {
 </script>', 'footer');
     }
 
+    /**
+     * @param        $html
+     * @param string $section
+     */
     public function addHtmlOnGdprAccept($html, $section = 'header')
     {
         if ($this->hasConfirmedCookie()) {
@@ -78,6 +106,11 @@ $dispatcher.$on(\'pckg-cookie:accepted\', function() {
 </script>', 'footer');
     }
 
+    /**
+     * @param $script
+     * @param $attributes
+     * @param $section
+     */
     public function addExternalScriptOnGdprAccept($script, $attributes, $section)
     {
         $finalAttrs = [];
@@ -99,6 +132,9 @@ s0.parentNode.insertBefore(s1,s0);
         $this->addOnGdprAccept($script, 'footer');
     }
 
+    /**
+     * @param $trackingId
+     */
     public function addGoogleAnalytics($trackingId)
     {
         if (!$trackingId) {
@@ -119,6 +155,9 @@ s0.parentNode.insertBefore(s1,s0);
   ga(\'send\', \'pageview\');', 'footer');
     }
 
+    /**
+     * @param $siteKey
+     */
     public function addGoogleRecaptcha($siteKey)
     {
         if (!$siteKey) {
@@ -129,6 +168,9 @@ s0.parentNode.insertBefore(s1,s0);
                    'footer');
     }
 
+    /**
+     * @param $id
+     */
     public function addTawkTo($id)
     {
         if (!$id) {
@@ -145,6 +187,9 @@ s0.parentNode.insertBefore(s1,s0);
         ], 'footer');
     }
 
+    /**
+     * @param $id
+     */
     public function addSumoMe($id)
     {
         if (!$id) {
@@ -157,6 +202,9 @@ s0.parentNode.insertBefore(s1,s0);
         ], 'footer');
     }
 
+    /**
+     * @param $id
+     */
     public function addFbPages($id)
     {
         if (!$id) {
@@ -166,6 +214,9 @@ s0.parentNode.insertBefore(s1,s0);
         $this->add('<meta property="fb:pages" content="' . $id . '" />', 'headerLast');
     }
 
+    /**
+     * @param $id
+     */
     public function addFbChat($id)
     {
         if (!$id) {
@@ -190,6 +241,9 @@ s0.parentNode.insertBefore(s1,s0);
 </div>', 'body.first');
     }
 
+    /**
+     * @param $id
+     */
     public function addFbConversionPixel($id)
     {
         if (!$id) {
@@ -223,6 +277,9 @@ s0.parentNode.insertBefore(s1,s0);
             /></noscript>', 'headerLast');
     }
 
+    /**
+     * @param $id
+     */
     public function addGoogleTagManager($id)
     {
         if (!$id) {
@@ -248,6 +305,9 @@ s0.parentNode.insertBefore(s1,s0);
     </noscript>', 'body.first');
     }
 
+    /**
+     * @param $id
+     */
     public function addGoogleRemarketingTag($id)
     {
         if (!$id) {
@@ -268,6 +328,9 @@ s0.parentNode.insertBefore(s1,s0);
 </noscript>', 'footer');
     }
 
+    /**
+     * @param $id
+     */
     public function addGoogleConversionPage($id)
     {
         if (!$id) {
@@ -293,6 +356,11 @@ s0.parentNode.insertBefore(s1,s0);
 </noscript>', 'footer');
     }
 
+    /**
+     * @param array $onlySections
+     *
+     * @return string
+     */
     public function getMeta($onlySections = [])
     {
         if (!is_array($onlySections)) {
@@ -318,6 +386,9 @@ s0.parentNode.insertBefore(s1,s0);
         return implode("\n", $build);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getMeta();
