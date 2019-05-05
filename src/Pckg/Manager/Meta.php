@@ -64,8 +64,7 @@ class Meta
      */
     public function hasConfirmedCookie()
     {
-        return cookie('zekom', null) || !config('pckg.generic.modules.comms-cookie.active') ||
-            !(new Cookie())->getComponent();
+        return cookie('zekom', null) || !config('pckg.generic.modules.comms-cookie.active');
     }
 
     /**
