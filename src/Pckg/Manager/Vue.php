@@ -40,8 +40,13 @@ class Vue
     {
         $html = [];
         foreach ($this->components as $component) {
-            //$html[] = ;
-            $html[] = $this->parseComponent($component);
+            try {
+                $html[] = $this->parseComponent($component);
+            } catch (\Throwable $e) {
+                if (dev()) {
+                    throw $e;
+                }
+            }
         }
 
         $html = implode($html);

@@ -134,6 +134,19 @@ s0.parentNode.insertBefore(s1,s0);
     /**
      * @param $trackingId
      */
+    public function addCdnPrefetch()
+    {
+        $host = config('storage.cdn.host', null);
+
+        if (!$host) {
+            return;
+        }
+
+        $this->add('<link rel="dns-prefetch" href="https://' . $host . '">');
+
+        return $this;
+    }
+
     public function addGoogleAnalytics($trackingId)
     {
         if (!$trackingId) {
