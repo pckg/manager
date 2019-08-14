@@ -312,7 +312,7 @@ s0.parentNode.insertBefore(s1,s0);
         })(window, document, \'script\', \'dataLayer\', \'' . $id . '\');', 'header.first');
 
         $this->addHtmlOnGdprAccept('<noscript>
-        <iframe src="//www.googletagmanager.com/ns.html?id=' . $id . '"
+        <iframe src="https://www.googletagmanager.com/ns.html?id=' . $id . '"
                 height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>', 'body.first');
     }
@@ -326,16 +326,16 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->addOnGdprAccept('var google_conversion_id = ' . $id . ';
-    var google_custom_params = window.google_tag_params;
-    var google_remarketing_only = true;', 'footer');
+        $this->addOnGdprAccept('var google_conversion_id = window.google_conversion_id = ' . $id . ';
+    var google_custom_params = window.google_custom_params = window.google_tag_params;
+    var google_remarketing_only = window.google_remarketing_only = true;', 'footer');
 
         $this->addExternalScriptOnGdprAccept('https://www.googleadservices.com/pagead/conversion.js', 'footer');
 
         $this->addHtmlOnGdprAccept('<noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
-             src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/' . $id . '/?value=0&amp;guid=ON&amp;script=0"/>
+             src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/' . $id . '/?value=0&amp;guid=ON&amp;script=0"/>
     </div>
 </noscript>', 'footer');
     }
@@ -349,14 +349,12 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->addOnGdprAccept('var google_conversion_id = ' . $id . ';
-    var google_conversion_language = "sl";
-
-    var google_conversion_format = "2";
-    var google_conversion_color = "ffffff";
-    var google_conversion_label = "Yj6qCJLQtwUQkub-8QM";
-
-    var google_conversion_value = 0;', 'footer');
+        $this->addOnGdprAccept('var google_conversion_id = window.google_conversion_id = ' . $id . ';
+    var google_conversion_language = window.google_conversion_language = "sl";
+    var google_conversion_format = window.google_conversion_format = "2";
+    var google_conversion_color = window.google_conversion_color = "ffffff";
+    var google_conversion_label = window.google_conversion_label = "Yj6qCJLQtwUQkub-8QM";
+    var google_conversion_value = window.google_conversion_value = 0;', 'footer');
 
         $this->addExternalScriptOnGdprAccept('https://www.googleadservices.com/pagead/conversion.js', 'footer');
 
