@@ -125,6 +125,7 @@ $dispatcher.$on(\'pckg-cookie:accepted\', function() {
         $script = '
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.src = ' . json_encode($script) . ';
 ' . implode("\n", $finalAttrs) . '
 s0.parentNode.insertBefore(s1,s0);
 })();';
