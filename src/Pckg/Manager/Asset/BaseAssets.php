@@ -122,7 +122,7 @@ trait BaseAssets
          */
         $pro = 'node_modules/@fortawesome/fontawesome-pro/css/all.min.css';
         if (is_file(path('root') . $pro)) {
-            $this->addAssets([$pro], 'footer');
+            // $this->addAssets([$pro], 'footer');
 
             return $this;
         }
