@@ -190,8 +190,6 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $remaining = 'var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();';
-
         $this->addOnGdprAccept('if (typeof Tawk_API === \'undefined\') { window.Tawk_API = {}; window.Tawk_LoadStart = new Date(); }');
         $this->addExternalScriptOnGdprAccept('https://embed.tawk.to/' . $id . '/default', [
             'async'        => true,
