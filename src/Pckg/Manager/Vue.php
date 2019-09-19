@@ -61,6 +61,7 @@ class Vue
     private function parseComponent($component)
     {
         $parsed = view($component)->autoparse();
+
         return $parsed;
 
         $exploded = explode('<script type="text/javascript">', $parsed);
@@ -97,10 +98,17 @@ class Vue
 
         return $html;
     }
-    
+
     public function getLayout()
     {
         return '<keep-alive><router-view></router-view></keep-alive>';
+    }
+
+    public function getLayoutCallback()
+    {
+        return function() {
+            return $this->getLayout();
+        };
     }
 
 }
