@@ -23,41 +23,6 @@ class Vue
         return $this;
     }
 
-    public function addComponent($components)
-    {
-        if (!is_array($components)) {
-            $components = [$components];
-        }
-
-        foreach ($components as $component) {
-            $this->components[$component] = $component;
-        }
-
-        return $this;
-    }
-
-    public function getComponents()
-    {
-        $html = [];
-        foreach ($this->components as $component) {
-            try {
-                $html[] = $this->parseComponent($component);
-            } catch (\Throwable $e) {
-                if (dev()) {
-                    throw $e;
-                }
-            }
-        }
-
-        $html = implode($html);
-
-        /**
-         * @T00D00 - we should parse output and cache javascript.
-         */
-
-        return $html;
-    }
-
     private function parseComponent($component)
     {
         $parsed = view($component)->autoparse();
