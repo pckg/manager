@@ -87,16 +87,17 @@ class LessPckgFilter extends LessFilter
             $mergedContent = ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source);
             file_put_contents($merged, $mergedContent);
 
-            $command = 'lessc' . config('lessc', null) . ' -x ' . $merged . ' > ' . $css;
-            $proc = new Process($command);
+            $command = 'lessc' . config('lessc', null) . ' ' . $merged . ' > ' . $css;
+            //$proc = new Process($command);
             try {
                 startMeasure('lessc');
-                $code = $proc->run();
+                exec($command);
+                // $code = $proc->run();
                 stopMeasure('lessc');
 
-                if (0 !== $code) {
+                /*if (0 !== $code) {
                     throw FilterException::fromProcess($proc)->setInput($merged);
-                }
+                }*/
             } catch (Throwable $e) {
                 if (dev()) {
                     @rename($css, $css . '.err-less');
