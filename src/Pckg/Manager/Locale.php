@@ -117,7 +117,7 @@ class Locale
     public function fetchLanguages()
     {
         $languagesEntity = new Languages();
-        if (!$languagesEntity->getRepository()->getCache()->hasTable($languagesEntity->getTable())) {
+        if (!$languagesEntity->getRepository() || !$languagesEntity->getRepository()->getCache()->hasTable($languagesEntity->getTable())) {
             $this->languages = $this->frontendLanguages = $this->backendLanguages = new Collection();
 
             return;
