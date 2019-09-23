@@ -36,6 +36,19 @@ class Meta
         return $this;
     }
 
+    public function addCdnPrefetch()
+    {
+        $host = config('storage.cdn.host', null);
+
+        if (!$host) {
+            return;
+        }
+
+        $this->add('<link rel="dns-prefetch" href="https://' . $host . '">');
+
+        return $this;
+    }
+
     public function addGoogleAnalytics($trackingId)
     {
         if (!$trackingId) {
@@ -65,7 +78,7 @@ class Meta
             return;
         }
 
-        $this->add('<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload" async defer></script>');
+        $this->add('<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload" async defer></script>', 'footer');
     }
 
     public function addTawkTo($id)

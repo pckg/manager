@@ -119,7 +119,7 @@ class Asset
             } else if (mb_strrpos($asset, '.js') == strlen($asset) - strlen('.js')) {
                 $this->collections['js'][$section][$realPriority][] = $tmpPath . $asset;
             } else if (mb_strrpos($asset, '.css') == strlen($asset) - strlen('.css')) {
-                $this->collections['css'][$section][$realPriority][] = $tmpPath . $asset;
+                $this->collections['less'][$section][$realPriority][] = $tmpPath . $asset;
             } else if (mb_strrpos($asset, '.less') == strlen($asset) - strlen('.less')) {
                 $this->collections['less'][$section][$realPriority][] = $tmpPath . $asset;
             }
@@ -236,10 +236,10 @@ class Asset
 
     public function getMeta($onlyTypes = [], $onlySections = [])
     {
-        return implode(
-            "\n",
-            array_merge($this->getAsseticAssets($onlyTypes, $onlySections), $this->getAssets($onlySections))
-        );
+        return measure('Asset manager: ' . implode(' ', $onlyTypes) . ': ' . implode(' ', $onlySections), function() use ($onlySections, $onlyTypes) {
+            return implode("\n", array_merge($this->getAsseticAssets($onlyTypes, $onlySections),
+                                             $this->getAssets($onlySections)));
+        });
     }
 
     private function getKeysIfEmpty($array, $filled)
@@ -351,8 +351,13 @@ class Asset
                 $cachePath = $lessPath;
             }
 
+            $link = str_replace(path('root'), path('ds'), $cachePath);
+            if (config('pckg.manager.cdnEnabled') && !dotenv('DEV')) {
+                $link = cdn($link);
+            }
+
             $return[] = str_replace(['##LINK##', '##ID##'], [
-                                                              str_replace(path('root'), path('ds'), $cachePath),
+                                                              $link,
                                                               'style-id-' . implode('-', $onlySections ?? ['all']),
                                                           ], $this->types[$type]);
         }
