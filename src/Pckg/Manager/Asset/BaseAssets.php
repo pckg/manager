@@ -7,7 +7,6 @@ trait BaseAssets
     {
         // dependencies
         $this->jQuery();
-        $this->jQueryDatetimePicker();
         $this->vueJS();
 
         // front framework
@@ -22,7 +21,6 @@ trait BaseAssets
     {
         // dependencies
         $this->jQuery();
-        $this->jQueryDatetimePicker();
         $this->vueJS();
 
         // front framework
@@ -54,25 +52,6 @@ trait BaseAssets
         return $this;
     }
 
-    /**
-     * @return $this
-     *
-     * bower install eonasdan-bootstrap-datetimepicker#latest --save
-     */
-    public function jQueryDatetimePicker()
-    {
-        $this->addAssets(
-            [
-                'node_modules/moment/min/moment-with-locales.min.js',
-                'node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-                'node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-            ],
-            'libraries'
-        );
-
-        return $this;
-    }
-
     public function vueJS()
     {
         $this->addAssets(
@@ -94,9 +73,7 @@ trait BaseAssets
         $this->addAssets(
             [
                 "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
-                "vendor/snapappointments/bootstrap-select/dist/js/bootstrap-select.min.js",
                 "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
-                "vendor/snapappointments/bootstrap-select/dist/css/bootstrap-select.min.css",
             ],
             'libraries'
         );
@@ -122,7 +99,7 @@ trait BaseAssets
          */
         $pro = 'node_modules/@fortawesome/fontawesome-pro/css/all.min.css';
         if (is_file(path('root') . $pro)) {
-            // $this->addAssets([$pro], 'footer');
+            // $this->addAssets([$pro], 'footer'); // it should be added with webpack
 
             return $this;
         }
@@ -130,7 +107,7 @@ trait BaseAssets
         /**
          * Use CDN instead.
          */
-        $this->addAssets(['https://use.fontawesome.com/releases/v5.8.0/css/all.css'], 'footer');
+        $this->addAssets(['https://use.fontawesome.com/releases/v5.11.1/css/all.css'], 'footer');
 
         return $this;
     }
