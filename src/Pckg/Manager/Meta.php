@@ -16,6 +16,19 @@ class Meta
     protected $metas = [];
 
     /**
+     * @param        $meta
+     * @param string $section
+     *
+     * @return $this
+     */
+    public function add($meta, $section = 'header')
+    {
+        $this->metas[$section][] = $meta;
+
+        return $this;
+    }
+
+    /**
      * @return $this
      */
     public function addViewport()
@@ -29,14 +42,13 @@ class Meta
     }
 
     /**
-     * @param        $meta
-     * @param string $section
-     *
      * @return $this
      */
-    public function add($meta, $section = 'header')
+    public function addCharset()
     {
-        $this->metas[$section][] = $meta;
+        $this->add([
+                       'charset'    => 'utf-8',
+                   ]);
 
         return $this;
     }
@@ -143,7 +155,8 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add('<link rel="dns-prefetch" href="https://' . $host . '">');
+        // $this->add('<link rel="dns-prefetch" href="https://' . $host . '" crossorigin>');
+        $this->add('<link rel="preconnect" href="https://' . $host . '" crossorigin>');
 
         return $this;
     }
@@ -308,7 +321,7 @@ s0.parentNode.insertBefore(s1,s0);
             j.src =
                     \'https://www.googletagmanager.com/gtm.js?id=\' + i + dl;
             f.parentNode.insertBefore(j, f);
-        })(window, document, \'script\', \'dataLayer\', \'' . $id . '\');', 'header.first');
+        })(window, document, \'script\', \'dataLayer\', \'' . $id . '\');', 'header');
 
         $this->addHtmlOnGdprAccept('<noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=' . $id . '"
