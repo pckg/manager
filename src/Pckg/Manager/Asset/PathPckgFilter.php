@@ -45,6 +45,10 @@ class PathPckgFilter extends LessFilter
                         return $value;
                     }
 
+                    if (strpos($value, 'https://') !== false) {
+                        return $value;
+                    }
+
                     /**
                      * We have to move $dots times towards root.
                      */

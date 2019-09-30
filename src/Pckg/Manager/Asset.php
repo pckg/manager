@@ -18,8 +18,8 @@ class Asset
     protected $collections = [];
 
     protected $types = [
-        "css"  => '<link defer rel="stylesheet" type="text/css" href="##LINK##" />',
-        "less" => '<link defer rel="stylesheet" type="text/css" href="##LINK##" id="##ID##" />',
+        "css"  => '<link rel="stylesheet" type="text/css" href="##LINK##" />',
+        "less" => '<link rel="stylesheet" type="text/css" href="##LINK##" id="##ID##" />',
         "js"   => '<script type="text/javascript" src="##LINK##"></script>',
     ];
 

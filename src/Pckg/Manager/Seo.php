@@ -30,21 +30,25 @@ class Seo
 
     public function __toString()
     {
-        return (
-               $this->title
-                   ? str_replace('##', trim(strip_tags($this->title)), $this->templates['title']) . "\n"
-                   : ''
-               ) . (
-               $this->description
-                   ? str_replace('##', trim(strip_tags($this->description)), $this->templates['description']) . "\n"
-                   : ''
-               ) . (
-               $this->keywords
-                   ? str_replace('##', trim(strip_tags($this->keywords)), $this->templates['keywords']) . "\n"
-                   : ''
-               )
+        return $this->getSeoTags()
                . $this->getOgTags()
                . $this->getFaviconTags();
+    }
+
+    public function getSeoTags() {
+        return (
+            $this->title
+                ? str_replace('##', trim(strip_tags($this->title)), $this->templates['title']) . "\n"
+                : ''
+            ) . (
+            $this->description
+                ? str_replace('##', trim(strip_tags($this->description)), $this->templates['description']) . "\n"
+                : ''
+            ) . (
+            $this->keywords
+                ? str_replace('##', trim(strip_tags($this->keywords)), $this->templates['keywords']) . "\n"
+                : ''
+            );
     }
 
     public function getFaviconTags()
@@ -53,8 +57,8 @@ class Seo
             return null;
         }
 
-        return '<link rel="icon" type="image/png" href="' . $this->favicon . '" />
-    <link rel="shortcut icon" href="' . $this->favicon . '" />';
+        return '<link defer rel="icon" type="image/png" href="' . $this->favicon . '" />
+    <link defer rel="shortcut icon" href="' . $this->favicon . '" />';
     }
 
     public function getOgTags()
