@@ -58,7 +58,7 @@ class Seo
         }
 
         return '<link defer rel="icon" type="image/png" href="' . $this->favicon . '" />
-    <link defer rel="shortcut icon" href="' . $this->favicon . '" />';
+<link defer rel="shortcut icon" href="' . $this->favicon . '" />';
     }
 
     public function getOgTags()
@@ -66,15 +66,17 @@ class Seo
         $image = cdn($this->image);
         $title = trim(strip_tags($this->title));
         $description = trim(strip_tags($this->description));
+        $appId = config('pckg.auth.provider.facebook.config.app_id');
 
         return '<meta property="og:title" content="' . $title . '" />
 <meta property="og:site_name" content="' . $title . '" />
 <meta property="og:description" content="' . $description . '" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="' . router()->getUri(false) . '" />
-<meta property="fb:admins" content="1197210626" />
-<meta property="fb:app_id" content="' . config('pckg.auth.provider.facebook.config.app_id') . '" />
-' . ($image ? '<meta property="og:image" content="' . $image . '" />' : '');
+<meta property="og:locale" content="' . localeManager()->getCurrent() . '" />
+<meta property="fb:admins" content="1197210626" />' .
+            ($appId ? "\n" . '<meta property="fb:app_id" content="' . $appId . '" />' : '') .
+            ($image ? "\n" . '<meta property="og:image" content="' . $image . '" />' : '');
     }
 
     public function setTitle($title)

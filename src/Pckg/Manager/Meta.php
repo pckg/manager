@@ -42,6 +42,14 @@ class Meta
     }
 
     /**
+     * 
+     */
+    public function addInternetExplorer()
+    {
+        $this->add(['http-equiv' => 'x-ua-compatible', 'content' => 'ie=edge']);
+    }
+
+    /**
      * @return $this
      */
     public function addCharset()
