@@ -235,7 +235,7 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add('<meta property="fb:pages" content="' . $id . '" />', 'headerLast');
+        $this->add('<meta property="fb:pages" content="' . $id . '">', 'headerLast');
     }
 
     /**
@@ -400,7 +400,7 @@ s0.parentNode.insertBefore(s1,s0);
                     foreach ($meta as $key => $value) {
                         $partial[] = $key . '="' . htmlspecialchars($value) . '"';
                     }
-                    $build[] = '<meta ' . implode(' ', $partial) . ' />';
+                    $build[] = '<meta ' . implode(' ', $partial) . '>';
                 }
             }
         }
