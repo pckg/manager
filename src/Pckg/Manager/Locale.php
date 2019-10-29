@@ -166,4 +166,21 @@ class Locale
         });
     }
 
+    /**
+     * Return timezones grouped by continents.
+     *
+     * @return array
+     */
+    public function getTimezones()
+    {
+        $tempTimezones = timezone_identifiers_list();
+        $timezones = [];
+        foreach ($tempTimezones as $timezone) {
+            $group = substr($timezone, 0, strpos($timezone, '/'));
+            $timezones[$group][$timezone] = substr($timezone, strlen($group) + 1);
+        };
+
+        return $timezones;
+    }
+
 }
