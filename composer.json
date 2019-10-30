@@ -15,7 +15,7 @@
     }
   },
   "require": {
-    "kriswallsmith/assetic": "1.4.*"
+    "kriswallsmith/assetic": "1.*"
   },
   "minimum-stability": "dev"
 }
