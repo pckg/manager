@@ -112,7 +112,7 @@ class Asset
              * Internal asset.
              */
             $at = strpos($asset, '@');
-            if ($at=== 0) {
+            if ($at === 0) {
                 $this->lessVariableFiles[] = substr($asset, 1);
             } elseif ($at && strpos($asset, '/@') === false) {
                 $this->collections['less'][$section][$realPriority][] = $asset;
