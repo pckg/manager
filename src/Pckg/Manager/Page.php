@@ -74,5 +74,12 @@ class Page
 
         return $breadcrumbs;
     }
+    
+    public function getHomepageUrl()
+    {
+        $url = config('platform.mainUrl', '/');
+
+        return $url;
+    }
 
 }
