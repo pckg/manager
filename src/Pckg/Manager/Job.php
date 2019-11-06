@@ -1,20 +1,14 @@
 <?php namespace Pckg\Manager;
 
-class Job
+use Pckg\Queue\Service\Cron\JobCollection;
+
+/**
+ * Class Job
+ *
+ * @package Pckg\Manager
+ * @deprecated Use JobCollection instead
+ */
+class Job extends JobCollection
 {
-
-    protected $jobs = [];
-
-    public function add($job)
-    {
-        $this->jobs[] = $job;
-
-        return $this;
-    }
-
-    public function all()
-    {
-        return $this->jobs;
-    }
 
 }
