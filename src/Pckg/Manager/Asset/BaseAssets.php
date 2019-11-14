@@ -7,14 +7,13 @@ trait BaseAssets
     {
         // dependencies
         $this->jQuery();
-        $this->vueJS();
+        $this->vueJSSimple();
 
         // front framework
         $this->bootstrap();
-        $this->magnific();
 
         // decoration
-        $this->fontAwesome();
+        // $this->fontAwesome();
     }
 
     public function executeCore()
@@ -61,6 +60,18 @@ trait BaseAssets
                 'node_modules/vue-router/dist/vue-router.min.js',
                 'node_modules/sortablejs/Sortable.min.js',
                 'node_modules/vuedraggable/dist/vuedraggable.umd.min.js',
+            ],
+            'libraries'
+        );
+
+        return $this;
+    }
+
+    public function vueJSSimple()
+    {
+        $this->addAssets(
+            [
+                "node_modules/vue/dist/vue.min.js",
             ],
             'libraries'
         );
