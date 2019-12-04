@@ -41,6 +41,13 @@ class Meta
         return $this;
     }
 
+    public function addNoIndex()
+    {
+        $this->add(['name' => 'robots', 'content' => 'noindex, nofollow']);
+
+        return $this;
+    }
+
     /**
      * 
      */

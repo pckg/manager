@@ -56,8 +56,8 @@ trait BaseAssets
         $this->addAssets(
             [
                 "node_modules/vue/dist/vue.min.js",
-                'node_modules/vuex/dist/vuex.min.js',
-                'node_modules/vue-router/dist/vue-router.min.js',
+                //'node_modules/vuex/dist/vuex.min.js',
+                // 'node_modules/vue-router/dist/vue-router.min.js',
                 'node_modules/sortablejs/Sortable.min.js',
                 'node_modules/vuedraggable/dist/vuedraggable.umd.min.js',
             ],
