@@ -64,15 +64,15 @@ class Vue
         return $html;
     }
 
-    public function getLayout()
+    public static function getLayout()
     {
-        return '<keep-alive><router-view></router-view></keep-alive>';
+        return '<router-view></router-view>';
     }
 
-    public function getLayoutCallback()
+    public static function getLayoutCallback()
     {
         return function() {
-            return $this->getLayout();
+            return sel::getLayout();
         };
     }
 

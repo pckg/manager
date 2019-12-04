@@ -144,6 +144,14 @@ class Cache
         return $this;
     }
 
+    /**
+     * @param          $key
+     * @param callable $val
+     * @param string   $type
+     * @param int|string      $time
+     *
+     * @return mixed
+     */
     public function cache($key, callable $val, $type = 'request', $time = 0)
     {
         $cache = $this->getHandler($type);
