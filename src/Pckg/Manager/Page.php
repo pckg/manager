@@ -28,7 +28,7 @@ class Page
      */
     public function getGenericService()
     {
-        return context()->getOrDefault(\Pckg\Generic\Service\Generic::class, null);
+        return resolve(\Pckg\Generic\Service\Generic::class);
     }
 
     public function getBreadcrumbs()
