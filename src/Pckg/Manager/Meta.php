@@ -192,6 +192,7 @@ s0.parentNode.insertBefore(s1,s0);
   })(window,document,\'script\',\'https://www.google-analytics.com/analytics.js\',\'ga\');
 
   ga(\'create\', \'' . $trackingId . '\', \'auto\');
+  ga(\'set\', \'allowAdFeatures\');
   ga(\'set\', \'anonymizeIp\', true);
   ga(\'send\', \'pageview\');', 'footer');
     }

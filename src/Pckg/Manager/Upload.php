@@ -43,7 +43,7 @@ class Upload
         return true;
     }
 
-    public function save($dir)
+    public function save($dir, $name = null)
     {
         $file = $this->getFile();
 
@@ -51,7 +51,9 @@ class Upload
             return false;
         }
 
-        $name = Convention::url(substr($file['name'], 0, strrpos($file['name'], '.')));
+        if (!$name) {
+            $name = Convention::url(substr($file['name'], 0, strrpos($file['name'], '.')));
+        }
         $extension = substr($file['name'], strrpos($file['name'], '.'));
         $i = 0;
         do {
