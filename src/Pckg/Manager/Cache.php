@@ -66,6 +66,10 @@ class Cache
             try {
                 $redis = new \Redis();
                 $redis->connect($redisConfig['host']);
+                $pass = $redisConfig['pass'] ?? null;
+                if ($pass) {
+                    $redis->auth($pass);
+                }
                 $handler->setRedis($redis);
             } catch (\Throwable $e) {
                 // cache is not available
