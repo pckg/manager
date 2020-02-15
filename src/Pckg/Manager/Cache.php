@@ -11,7 +11,7 @@ class Cache
 
     public function __construct()
     {
-        foreach (config('pckg.cache.handler') as $type => $config) {
+        foreach (config('pckg.cache.handler', []) as $type => $config) {
             $this->registerHandler($type, $config);
         }
     }
