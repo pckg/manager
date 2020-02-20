@@ -62,15 +62,16 @@ class Cache
     {
         $handler = (new $config['handler']);
         if ($handler instanceof RedisCache) {
-            $redisConfig = $config['redis'] ?? ['host' => '127.0.0.1'];
+            $redisConfig = $config['redis'] ?? [];
             try {
                 $redis = new \Redis();
                 $pass = $redisConfig['pass'] ?? null;
-                if ($pass) {
-                    $redisConfig = $pass . '@' . $redisConfig['host'];
-                    //$redis->auth($pass);
-                }
-                $redis->connect($redisConfig['host'], 6379, 5);
+                $host = $redisConfig['host'] ?? '127.0.0.1';
+                /**
+                 * First connect, then auth.
+                 */
+                $redis->connect($host, 6379, 5);
+                $redis->auth($pass);
                 $handler->setRedis($redis);
             } catch (\Throwable $e) {
                 // cache is not available
