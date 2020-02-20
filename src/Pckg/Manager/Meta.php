@@ -230,6 +230,27 @@ s0.parentNode.insertBefore(s1,s0);
     /**
      * @param $id
      */
+    public function addHotJar($id)
+    {
+        if (!$id) {
+            return;
+        }
+
+        $code = '(function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:' . $id . ',hjsv:6};
+        a=o.getElementsByTagName(\'head\')[0];
+        r=o.createElement(\'script\');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,\'https://static.hotjar.com/c/hotjar-\',\'.js?sv=\');';
+
+        $this->addOnGdprAccept($code, 'footer');
+    }
+
+    /**
+     * @param $id
+     */
     public function addSumoMe($id)
     {
         if (!$id) {
