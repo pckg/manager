@@ -9,9 +9,16 @@ class Upload
 
     protected $uploadedFilename = null;
 
-    public function __construct($key = 'file')
+    protected $mime;
+
+    const MIME_IMAGE = ['image/png', 'image/apng', 'image/gif', 'image/jpg', 'image/jpeg', 'image/svg+xml', 'image/webp'];
+
+    const MIME_PDF = ['application/pdf'];
+
+    public function __construct($key = 'file', $mime = [])
     {
-        $this->key = $key;
+        $this->key = $key ?? 'file';
+        $this->mime = $mime;
     }
 
     public function getFile()
@@ -38,6 +45,13 @@ class Upload
 
         if (!$file['size']) {
             return 'Empty file size ' . $this->key;
+        }
+
+        if ($this->mime) {
+            $mimetype = mime_content_type($this->getFile()['tmp_name']);
+            if (!in_array($mimetype, $this->mime)) {
+                return 'Invalid mime type ' . $this->key;
+            }
         }
 
         return true;
