@@ -88,6 +88,9 @@ class LessPckgFilter extends LessFilter
             file_put_contents($merged, $mergedContent);
 
             $command = 'lessc' . config('lessc', null) . ' ' . $merged . ' > ' . $css;
+            if (config('disabledless')) {
+                $command = 'cp' . config('lessc', null) . ' ' . $merged . ' ' . $css;
+            }
             //$proc = new Process($command);
             try {
                 startMeasure('lessc');

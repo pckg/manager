@@ -257,7 +257,7 @@ class Asset
 
         $onlyTypes = $this->getKeysIfEmpty($this->collections, $onlyTypes);
 
-        $lessPckgFilter = new LessPckgFilter();
+        $lessPckgFilter = config('disabledless') ? null : new LessPckgFilter();
         $pathPckgFilter = new PathPckgFilter();
         // $jsMinFilter = new CssCompressorFilter(path('root') . 'node_modules/.bin/yuicompressor');
         // $cssMinFilter = new JsCompressorFilter(path('root') . 'node_modules/.bin/yuicompressor');
@@ -312,7 +312,7 @@ class Asset
                              function($item) {
                                  return $item->getSourcePath();
                              }
-                         )->implode(':') . ':' . $lessPckgFilter->getVarsHash() . ':' . implode($stringAssets));
+                         )->implode(':') . ':' . ($lessPckgFilter ? $lessPckgFilter->getVarsHash() : null) . ':' . implode($stringAssets));
             $cachePath = $typePath . implode('-', $onlySections) . '-' . $lastModified . '-' . $hash . '.' . $type;
             $assetCollection->setTargetPath($cachePath);
 
@@ -336,7 +336,7 @@ class Asset
                 if (!file_exists($lessPath)) {
                     try {
                         $assetCollection = new AssetCollection([], [], $typePath);
-                        $assetCollection->add(new FileAsset($cachePath, [$lessPckgFilter]));
+                        $assetCollection->add(new FileAsset($cachePath, $lessPckgFilter ? [$lessPckgFilter] : []));
                         $assetCollection->setTargetPath($lessPath);
                         $dump = $assetCollection->dump();
                         file_put_contents($lessPath, $dump);
