@@ -210,8 +210,8 @@ class Asset
             $return[] = '<link href="https://fonts.googleapis.com/css?family=' .
                         urlencode($font['family']) . ':' .
                         implode(',', $font['sets']) .
-                        ($font['subset'] ? '&subset=' . implode(',', $font['subset']) : '')
-                        . '" rel="stylesheet" />';
+                        ($font['subset'] ? '&subset=' . implode(',', $font['subset']) : '') .
+                        '&display=swap' . '" rel="stylesheet" />';
         }
 
         return collect($return)->unique()->implode("\n");

@@ -172,6 +172,8 @@ s0.parentNode.insertBefore(s1,s0);
 
         // $this->add('<link rel="dns-prefetch" href="https://' . $host . '" crossorigin>');
         $this->add('<link rel="preconnect" href="https://' . $host . '" crossorigin>');
+        $this->add('<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>');
+        $this->add('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
 
         return $this;
     }
