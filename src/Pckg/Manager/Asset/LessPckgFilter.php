@@ -81,7 +81,7 @@ class LessPckgFilter extends LessFilter
         $merged = path('tmp') . $sourceHash . '.merged.less';
         $css = path('tmp') . $sourceHash . '.parsed.css';
         $css2 = path('tmp') . $sourceHash . '.output.css';
-        $failed = false;
+        $failed = true;
 
         if (!is_file($css2)) {
             $mergedContent = ($variablesPath ? file_get_contents($variablesPath) : '') . file_get_contents($source);
@@ -101,6 +101,7 @@ class LessPckgFilter extends LessFilter
                 /*if (0 !== $code) {
                     throw FilterException::fromProcess($proc)->setInput($merged);
                 }*/
+                $failed = false;
             } catch (Throwable $e) {
                 if (dev()) {
                     @rename($css, $css . '.err-less');
@@ -109,7 +110,6 @@ class LessPckgFilter extends LessFilter
                 }
                 @unlink($css);
                 @unlink($merged);
-                $failed = true;
             }
 
             if (!$failed) {
