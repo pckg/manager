@@ -38,15 +38,15 @@ class Seo
     public function getSeoTags() {
         return (
             $this->title
-                ? str_replace('##', trim(strip_tags($this->title)), $this->templates['title']) . "\n"
+                ? str_replace('##', $this->title, $this->templates['title']) . "\n"
                 : ''
             ) . (
             $this->description
-                ? str_replace('##', trim(strip_tags($this->description)), $this->templates['description']) . "\n"
+                ? str_replace('##', $this->description, $this->templates['description']) . "\n"
                 : ''
             ) . (
             $this->keywords
-                ? str_replace('##', trim(strip_tags($this->keywords)), $this->templates['keywords']) . "\n"
+                ? str_replace('##', $this->keywords, $this->templates['keywords']) . "\n"
                 : ''
             );
     }
@@ -67,7 +67,7 @@ class Seo
         $title = $this->title; // already encoded
         $description = $this->description; // already encoded
         $appId = config('pckg.auth.provider.facebook.config.app_id');
-        $siteName = config('site.contact.name');
+        $siteName = htmlspecialchars(config('site.contact.name'));
 
         $og = '<meta property="og:title" content="' . $title . '" />
 <meta property="og:description" content="' . $description . '" />
