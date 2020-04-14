@@ -64,24 +64,30 @@ class Seo
     public function getOgTags()
     {
         $image = cdn($this->image);
-        $title = trim(strip_tags($this->title));
-        $description = trim(strip_tags($this->description));
+        $title = $this->title; // already encoded
+        $description = $this->description; // already encoded
         $appId = config('pckg.auth.provider.facebook.config.app_id');
+        $siteName = config('site.contact.name');
 
-        return '<meta property="og:title" content="' . $title . '" />
-<meta property="og:site_name" content="' . $title . '" />
+        $og = '<meta property="og:title" content="' . $title . '" />
 <meta property="og:description" content="' . $description . '" />
+<meta property="og:site_name" content="' . $siteName . '" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="' . router()->getUri(false) . '" />
-<meta property="og:locale" content="' . localeManager()->getCurrent() . '" />
-<meta property="fb:admins" content="1197210626" />' .
+<meta property="og:locale" content="' . localeManager()->getCurrent() . '" />' .
             ($appId ? "\n" . '<meta property="fb:app_id" content="' . $appId . '" />' : '') .
             ($image ? "\n" . '<meta property="og:image" content="' . $image . '" />' : '');
+
+        $twitter = '<meta property="twitter:title" content="' . $title . '" />
+<meta property="twitter:description" content="' . $description . '" />' .
+            ($image ? "\n" . '<meta property="twitter:image:src" content="' . $image . '" />' : '');
+
+        return $og . $twitter;
     }
 
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = trim(htmlspecialchars(strip_tags($title)));
 
         return $this;
     }
@@ -93,7 +99,7 @@ class Seo
 
     public function setDescription($description)
     {
-        $this->description = trim(strip_tags($description));
+        $this->description = trim(htmlspecialchars(strip_tags($description)));
 
         return $this;
     }
