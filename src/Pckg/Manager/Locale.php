@@ -127,6 +127,8 @@ class Locale
                                            ->all();
         $this->frontendLanguages = $this->languages->filter('frontend');
         $this->backendLanguages = $this->languages->filter('backend');
+
+        return $this;
     }
 
     public function getFrontendLanguages()
