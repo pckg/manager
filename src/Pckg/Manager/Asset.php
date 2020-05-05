@@ -356,7 +356,7 @@ class Asset
              * @T00D00 - we CAN load it over CDN when we know user won't need to change it = most cases.
              */
             $link = str_replace(path('root'), path('ds'), $cachePath);
-            if (false && config('pckg.manager.cdnEnabled') && !dotenv('DEV')) {
+            if ($type === 'js' && config('pckg.manager.cdnEnabled') && !dotenv('DEV')) {
                 $link = cdn($link);
             }
 
