@@ -54,6 +54,34 @@ class Meta
     public function addInternetExplorer()
     {
         $this->add(['http-equiv' => 'x-ua-compatible', 'content' => 'ie=edge']);
+
+        return $this;
+    }
+
+    public function addCSRF()
+    {
+        $value = base64_encode(password_hash($this->getKeyForCSRF(), PASSWORD_DEFAULT));
+
+        $this->add(['name' => 'pckgvdth', 'content' => $value]);
+
+        return $this;
+    }
+
+    public function matchesCSRF($posted)
+    {
+        $decoded = base64_decode($posted);
+
+        return password_verify($this->getKeyForCSRF(), $decoded);
+    }
+
+    private function getKeyForCSRF()
+    {
+        $sessionId = session_id();
+        $host = $_SERVER['HTTP_HOST'] ?? 'no-host';
+        $userId = auth()->user('id') ?? 'no-user';
+        $agent = $_SERVER['HTTP_USER_AGENT'] ?? 'no-agent';
+
+        return $sessionId . ':' . $host . ':' . $userId . ':' . $agent;
     }
 
     /**
