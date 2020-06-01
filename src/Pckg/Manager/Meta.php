@@ -71,17 +71,17 @@ class Meta
     {
         $decoded = base64_decode($posted);
 
-        return password_verify($this->getKeyForCSRF(), $decoded);
+        return password_verify($this->getKeyForCSRF(), $decoded) || password_verify($this->getKeyForCSRF(true), $decoded);
     }
 
-    private function getKeyForCSRF()
+    private function getKeyForCSRF($withUser = false)
     {
         $sessionId = session_id();
         $host = $_SERVER['HTTP_HOST'] ?? 'no-host';
         $userId = auth()->user('id') ?? 'no-user';
         $agent = $_SERVER['HTTP_USER_AGENT'] ?? 'no-agent';
 
-        return $sessionId . ':' . $host . ':' . $userId . ':' . $agent;
+        return $sessionId . ':' . $host . ':' . ($withUser ? $userId . ':' : '') . $agent;
     }
 
     /**
