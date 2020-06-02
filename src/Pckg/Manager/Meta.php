@@ -236,7 +236,7 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add('<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload" async defer></script>',
+        $this->add('<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload&render=explicit" async defer></script>',
                    'footer');
     }
 
