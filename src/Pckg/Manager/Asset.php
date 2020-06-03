@@ -394,6 +394,34 @@ class Asset
         return $return;
     }
 
+    /**
+     * @param callable $callback
+     * @return string
+     */
+    public function buildAsset(callable $callback, callable $setter)
+    {
+        /**
+         * Retrieve content.
+         */
+        $string = $callback();
+
+        /**
+         * Build hash and cache.
+         */
+        $sha1 = sha1($string);
+        $file = path('cache') . 'www/js/php_' . $sha1 . '.js';
+        if (!is_file($file)) {
+            file_put_contents($file, $string);
+        }
+
+        /**
+         * Add to manager.
+         */
+        $setter($this, $file);
+
+        return $this;
+    }
+
     public function __toString()
     {
         try {
