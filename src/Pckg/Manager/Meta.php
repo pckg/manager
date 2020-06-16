@@ -478,9 +478,12 @@ s0.parentNode.insertBefore(s1,s0);
                 } else {
                     $partial = [];
                     foreach ($meta as $key => $value) {
+                        if ($key === '__tag') {
+                            continue;
+                        }
                         $partial[] = $key . '="' . htmlspecialchars($value) . '"';
                     }
-                    $build[] = '<meta ' . implode(' ', $partial) . '>';
+                    $build[] = '<' . ($meta['__tag'] ?? 'meta') . ' ' . implode(' ', $partial) . '>';
                 }
             }
         }
