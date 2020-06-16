@@ -102,9 +102,22 @@ class Meta
     public function addContentType()
     {
         $this->add([
-                       'http-equiv' => 'Content-Type',
-                       'content'    => 'text/html; charset=utf-8',
-                   ]);
+            'http-equiv' => 'Content-Type',
+            'content'    => 'text/html; charset=utf-8',
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function addContentLanguage()
+    {
+        $this->add([
+            'http-equiv' => 'Content-Language',
+            'content'    => str_replace('_', '-', strtolower(localeManager()->getCurrent())),
+        ]);
 
         return $this;
     }
