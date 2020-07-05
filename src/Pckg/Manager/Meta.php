@@ -43,7 +43,7 @@ class Meta
 
     public function addNoIndex()
     {
-        $this->add(['name' => 'robots', 'content' => 'noindex, nofollow']);
+        $this->add(['name' => 'robots', 'content' => 'noindex,nofollow']);
 
         return $this;
     }
