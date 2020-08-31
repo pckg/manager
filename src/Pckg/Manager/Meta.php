@@ -58,9 +58,14 @@ class Meta
         return $this;
     }
 
+    public function getCsrfValue()
+    {
+        return base64_encode(password_hash($this->getKeyForCSRF(), PASSWORD_DEFAULT));
+    }
+
     public function addCSRF()
     {
-        $value = base64_encode(password_hash($this->getKeyForCSRF(), PASSWORD_DEFAULT));
+        $value = $this->getCsrfValue();
 
         $this->add(['name' => 'pckgvdth', 'content' => $value]);
 

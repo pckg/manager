@@ -287,6 +287,7 @@ class Asset
 
                 foreach ($collections as $priority => $collection) {
                     foreach ($collection as $asset) {
+                        //d("asset: " . round(strlen(@file_get_contents($asset))/1000) . "KB " . $asset);
                         $filters = [];
                         if (in_array($type, ['css', 'less'])) {
                             $filters[] = $pathPckgFilter;
