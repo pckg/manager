@@ -237,8 +237,9 @@ class Asset
     public function getMeta($onlyTypes = [], $onlySections = [])
     {
         return measure('Asset manager: ' . implode(' ', $onlyTypes) . ': ' . implode(' ', $onlySections), function() use ($onlySections, $onlyTypes) {
-            return implode("\n", array_merge($this->getAsseticAssets($onlyTypes, $onlySections),
-                                             $this->getAssets($onlySections)));
+            return implode("\n", array_merge(
+                $this->getAsseticAssets($onlyTypes, $onlySections),
+                $this->getAssets($onlySections)));
         });
     }
 

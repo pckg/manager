@@ -72,7 +72,7 @@ class Vue
     public static function getLayoutCallback()
     {
         return function() {
-            return sel::getLayout();
+            return self::getLayout();
         };
     }
 
