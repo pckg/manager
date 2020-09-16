@@ -158,7 +158,7 @@ class Cache
      *
      * @return mixed
      */
-    public function cache($key, callable $val, $type = 'request', $time = 0)
+    public function cache($key, $val, $type = 'request', $time = 0)
     {
         $cache = $this->getHandler($type);
 
@@ -191,10 +191,12 @@ class Cache
             $time = strtotime('+' . $time) - time();
         }
 
-        $value = $val();
-        $cache->save($key, $value, $time);
+        if (is_only_callable($val)) {
+            $val = $val();
+        }
+        $cache->save($key, $val, $time);
 
-        return $value;
+        return $val;
     }
 
     /**
