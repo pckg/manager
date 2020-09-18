@@ -11,9 +11,6 @@ trait BaseAssets
 
         // front framework
         $this->bootstrap();
-
-        // decoration
-        // $this->fontAwesome();
     }
 
     public function executeCore()
@@ -25,9 +22,6 @@ trait BaseAssets
         // front framework
         $this->bootstrap();
         $this->magnific();
-
-        // decoration
-        $this->fontAwesome();
 
         // file upload
         $this->dropzone();
@@ -101,26 +95,6 @@ trait BaseAssets
             ],
             'libraries'
         );
-    }
-
-    public function fontAwesome()
-    {
-        /**
-         * Support Font Awesome PRO.
-         */
-        $pro = 'node_modules/@fortawesome/fontawesome-pro/css/all.min.css';
-        if (is_file(path('root') . $pro)) {
-            // $this->addAssets([$pro], 'footer'); // it should be added with webpack
-
-            return $this;
-        }
-
-        /**
-         * Use CDN instead.
-         */
-        $this->addAssets(['https://use.fontawesome.com/releases/v5.11.1/css/all.css'], 'footer');
-
-        return $this;
     }
 
     public function dropzone()
