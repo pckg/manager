@@ -52,7 +52,7 @@ trait BaseAssets
                 "node_modules/vue/dist/vue.min.js",
                 //'node_modules/vuex/dist/vuex.min.js',
                 // 'node_modules/vue-router/dist/vue-router.min.js',
-                'node_modules/sortablejs/Sortable.min.js',
+                'node_modules/sortablejs/dist/sortable.umd.js',
                 'node_modules/vuedraggable/dist/vuedraggable.umd.min.js',
             ],
             'libraries'
@@ -120,9 +120,15 @@ trait BaseAssets
 
     public function gmaps()
     {
+        $apiKey = config('external.gmaps.auth.apiKey', null);
+
+        if (!$apiKey) {
+            return;
+        }
+
         $this->addAssets(
             [
-                'https://maps.googleapis.com/maps/api/js?key=AIzaSyBCHbpY1ILUr8UxuXHVILfXbjXQ1fX7-fA&libraries=places',
+                'https://maps.googleapis.com/maps/api/js?key=' . $apiKey . '&libraries=places',
             ],
             'libraries'
         );
