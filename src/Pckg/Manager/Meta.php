@@ -230,12 +230,15 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
+
         /**
-         * This is the new GA code.
+         * New GA4.
          */
-        $this->addExternalScriptOnGdprAccept('https://www.googletagmanager.com/gtag/js?id=' . $trackingId);
-        $this->addOnGdprAccept('window.dataLayer = window.dataLayer || [];
-  window.gtag = function(){dataLayer.push(arguments);}
+        if (strpos($trackingId, 'G-') === 0) {
+            $this->addExternalScriptOnGdprAccept('https://www.googletagmanager.com/gtag/js?id=' . $trackingId);
+            $this->addOnGdprAccept('window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);};
+  
   window.oldGa = function() {
     console.log(\'Backwards compatibility GA layer activated\'); 
     if (arguments[0] === \'send\') {
@@ -248,15 +251,15 @@ s0.parentNode.insertBefore(s1,s0);
 });
     } else { console.log(\'Missing gtag-ga\', arguments) }
   }
+  
   gtag(\'js\', new Date());
   gtag(\'config\', ' . json_encode($trackingId) . ', { \'anonymize_ip\': true });
   gtag(\'set\', \'allow_google_signals\', false);
-  gtag(\'set\', \'allow_ad_personalization_signals\', false);', 'footer');
-        // add compatibility for ga(send|set|create)
-        return;
+  gtag(\'set\', \'allow_ad_personalization_signals\', false);');
+            return;
+        }
 
-
-    /**
+        /**
          * We want to load this only if cookie policy is disabled or confirmed.
          * When cookie notice is enabled and not accepted we add this to cookie callback.
          */
