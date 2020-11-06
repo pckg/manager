@@ -183,7 +183,7 @@ $dispatcher.$on(\'pckg-cookie:accepted\', function() {
      * @param $attributes
      * @param $section
      */
-    public function addExternalScriptOnGdprAccept($script, $attributes, $section)
+    public function addExternalScriptOnGdprAccept($script, $attributes = ['async' => true], $section = 'footer')
     {
         $finalAttrs = [];
         foreach ($attributes as $k => $v) {
@@ -202,7 +202,7 @@ s1.src = ' . json_encode($script) . ';
 ' . implode("\n", $finalAttrs) . '
 s0.parentNode.insertBefore(s1,s0);
 })();';
-        $this->addOnGdprAccept($script, 'footer');
+        $this->addOnGdprAccept($script, $section);
     }
 
     /**
@@ -231,6 +231,32 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         /**
+         * This is the new GA code.
+         */
+        $this->addExternalScriptOnGdprAccept('https://www.googletagmanager.com/gtag/js?id=' . $trackingId);
+        $this->addOnGdprAccept('window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){dataLayer.push(arguments);}
+  window.oldGa = function() {
+    console.log(\'Backwards compatibility GA layer activated\'); 
+    if (arguments[0] === \'send\') {
+        gtag(\'event\', arguments[1]);
+    } else if (arguments[0] === \'set\') {
+    gtag(\'event\', \'page_view\', {
+  page_title: \'\',
+  page_location: location.origin + arguments[2],
+  page_path: arguments[2]
+});
+    } else { console.log(\'Missing gtag-ga\', arguments) }
+  }
+  gtag(\'js\', new Date());
+  gtag(\'config\', ' . json_encode($trackingId) . ', { \'anonymize_ip\': true });
+  gtag(\'set\', \'allow_google_signals\', false);
+  gtag(\'set\', \'allow_ad_personalization_signals\', false);', 'footer');
+        // add compatibility for ga(send|set|create)
+        return;
+
+
+    /**
          * We want to load this only if cookie policy is disabled or confirmed.
          * When cookie notice is enabled and not accepted we add this to cookie callback.
          */
@@ -272,7 +298,7 @@ s0.parentNode.insertBefore(s1,s0);
             'async'        => true,
             'charset'      => 'UTF-8',
             'setAttribute' => '\'crossorigin\', \'*\'',
-        ], 'footer');
+        ]);
     }
 
     /**
@@ -308,7 +334,7 @@ s0.parentNode.insertBefore(s1,s0);
         $this->addExternalScriptOnGdprAccept('https://load.sumome.com/', [
             'setAttribute' => '\'data-sumo-site-id\', \'' . $id . '\'',
             'async'        => true,
-        ], 'footer');
+        ]);
     }
 
     /**
@@ -427,7 +453,7 @@ s0.parentNode.insertBefore(s1,s0);
     var google_custom_params = window.google_custom_params = window.google_tag_params;
     var google_remarketing_only = window.google_remarketing_only = true;', 'footer');
 
-        $this->addExternalScriptOnGdprAccept('https://www.googleadservices.com/pagead/conversion.js', 'footer');
+        $this->addExternalScriptOnGdprAccept('https://www.googleadservices.com/pagead/conversion.js');
 
         $this->addHtmlOnGdprAccept('<noscript>
     <div style="display:inline;">
@@ -453,7 +479,7 @@ s0.parentNode.insertBefore(s1,s0);
     var google_conversion_label = window.google_conversion_label = "Yj6qCJLQtwUQkub-8QM";
     var google_conversion_value = window.google_conversion_value = 0;', 'footer');
 
-        $this->addExternalScriptOnGdprAccept('https://www.googleadservices.com/pagead/conversion.js', 'footer');
+        $this->addExternalScriptOnGdprAccept('https://www.googleadservices.com/pagead/conversion.js');
 
         $this->addHtmlOnGdprAccept('<noscript>
     <div style="display:inline;">
