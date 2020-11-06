@@ -234,7 +234,7 @@ s0.parentNode.insertBefore(s1,s0);
          * New GA4.
          */
         if (strpos($trackingId, 'G-') === 0) {
-            $this->addExternalScriptOnGdprAccept('https://www.googletagmanager.com/gtag/js?id=' . $trackingId);
+            $this->addExternalScriptOnGdprAccept('https://www.googletagmanager.com/gtag/js?id=' . $trackingId, ['async' => true], 'footer');
             $this->addOnGdprAccept('window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag(\'js\', new Date());
