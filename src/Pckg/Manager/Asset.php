@@ -410,8 +410,8 @@ class Asset
         /**
          * Build hash and cache.
          */
-        $sha1 = sha1($string);
-        $file = path('cache') . 'www/js/php_' . $sha1 . '.js';
+        $hash = sha1($string) . md5($string);
+        $file = path('cache') . 'www/js/php_' . $hash . '.js';
         if (!is_file($file)) {
             file_put_contents($file, $string);
         }
