@@ -37,7 +37,7 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                "node_modules/jquery/dist/jquery.min.js",
+                "vendor/components/jquery/jquery.min.js",
             ],
             'libraries'
         );
