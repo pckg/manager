@@ -211,7 +211,7 @@ class Asset
                         urlencode($font['family']) . ':' .
                         implode(',', $font['sets']) .
                         ($font['subset'] ? '&subset=' . implode(',', $font['subset']) : '') .
-                        '&display=swap' . '" rel="stylesheet" />';
+                        '&display=swap' . '" rel="stylesheet" media="print" onload="this.media=\'all\'" />';
         }
 
         return collect($return)->unique()->implode("\n");
@@ -226,7 +226,8 @@ class Asset
                 if (mb_strrpos($external, '.' . $type) == strlen($external) - strlen('.' . $type) ||
                     strpos($external, '.' . $type . '?') || strpos($external, '/' . $type . '?')
                 ) {
-                    $return[] = str_replace('##LINK##', $external, $html);
+                    // async/defer
+                    $return[] = str_replace('"text/javascript"', '"text/javascript" async', str_replace('##LINK##', $external, $html));
                 }
             }
         }
