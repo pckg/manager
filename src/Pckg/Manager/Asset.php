@@ -79,12 +79,13 @@ class Asset
             $collection = null;
             /**
              * Callable asset.
+             * Should we execute this at the end of request?
              */
             if (is_only_callable($asset)) {
-                if ($asset = $asset()) {
+                //if ($asset = $asset()) {
                     $this->touchAssetCollection($section, $realPriority);
                     $this->assets[$section][$realPriority][] = $asset;
-                }
+                //}
                 continue;
             }
 
@@ -388,7 +389,7 @@ class Asset
 
             foreach ($assets as $priority => $realAssets) {
                 foreach ($realAssets as $asset) {
-                    $return[] = $asset;
+                    $return[] = is_only_callable($asset) ? $asset() : $asset;
                 }
             }
         }
@@ -400,7 +401,7 @@ class Asset
      * @param callable $callback
      * @return string
      */
-    public function buildAsset(callable $callback, callable $setter)
+    public function buildAsset(callable $callback, callable $setter = null)
     {
         /**
          * Retrieve content.
@@ -414,6 +415,10 @@ class Asset
         $file = path('cache') . 'www/js/php_' . $sha1 . '.js';
         if (!is_file($file)) {
             file_put_contents($file, $string);
+        }
+
+        if (!$setter) {
+            return str_replace('##LINK##', str_replace('/var/www/html/', '/', $file), $this->types['js']);
         }
 
         /**
