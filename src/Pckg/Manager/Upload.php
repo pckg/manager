@@ -15,6 +15,8 @@ class Upload
 
     const MIME_PDF = ['application/pdf'];
 
+    const MIME_ZIP = ['application/zip'];
+
     public function __construct($key = 'file', $mime = [])
     {
         $this->key = $key ?? 'file';
