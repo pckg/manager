@@ -16,7 +16,7 @@ class Manager extends Provider
     {
         return [
             '_assetManager'  => Asset::class,
-            '_vueManager'    => Vue::class,
+            //'_vueManager'    => Vue::class,
             '_metaManager'   => Meta::class,
             '_seoManager'    => Seo::class,
             '_pckg'          => Pckg::class,
