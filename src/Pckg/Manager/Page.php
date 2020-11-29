@@ -51,7 +51,7 @@ class Page
              * Check for foreign record.
              */
             if ($foreign = router()->resolved('foreign')) {
-                $breadcrumbs['/dynamic/records/view/' . $relatedTable->id . '/' . $foreign->id] = ($relatedTable->title
+                $breadcrumbs['/dynamic/records/' . $relatedTable->id . '/' . $foreign->id . '/view'] = ($relatedTable->title
                                                                                                    ??
                                                                                                    $relatedTable->table) .
                                                                                                   ' #' . $foreign->id;
