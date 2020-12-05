@@ -412,13 +412,14 @@ class Asset
          * Build hash and cache.
          */
         $hash = sha1($string) . md5($string);
-        $file = path('cache') . 'www/js/php_' . $hash . '.js';
+        $cachePath = path('cache');
+        $file = $cachePath . 'www/js/php_' . $hash . '.js';
         if (!is_file($file)) {
             file_put_contents($file, $string);
         }
 
         if (!$setter) {
-            return str_replace('##LINK##', str_replace('/var/www/html/', '/', $file), $this->types['js']);
+            return str_replace('##LINK##', str_replace(path('root'), '/', $file), $this->types['js']);
         }
 
         /**
