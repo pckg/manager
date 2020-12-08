@@ -38,7 +38,7 @@ class Page
         /**
          * Dashboard is always displayed.
          */
-        $breadcrumbs['/maestro'] = __('breadcrumbs.dashboard');
+        $breadcrumbs['/maestro'] = 'Dashboard';
 
         /**
          * Check for related table.
@@ -69,7 +69,7 @@ class Page
          * Add current page.
          */
         if (!array_key_exists(router()->getUri(), $breadcrumbs)) {
-            $breadcrumbs[router()->getUri()] = __('breadcrumbs.current');
+            $breadcrumbs[router()->getUri()] = 'Current page';
         }
 
         return $breadcrumbs;
