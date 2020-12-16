@@ -60,7 +60,7 @@ class Cache
 
     protected function registerHandler($type, $config)
     {
-        $handler = (new $config['handler']);
+        $handler = is_only_callable($config['handler']) ? $config['handler']() : new $config['handler'];
         if ($handler instanceof RedisCache) {
             $redisConfig = $config['redis'] ?? [];
             try {
