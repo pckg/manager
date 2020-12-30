@@ -98,7 +98,7 @@ class Upload
          */
         $dateTreeDir = '';
         if ($mode === static::MODE_DATE_TREE) {
-            $dateTreeDir .= date('Y/m/d/');
+            $dateTreeDir = date('Y/m/d/');
             $dir .= $dateTreeDir;
         }
 
