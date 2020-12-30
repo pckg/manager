@@ -17,6 +17,10 @@ class Upload
 
     const MIME_ZIP = ['application/zip'];
 
+    const MIME_EXCEL = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+
+    const MODE_DATE_TREE = 'date:tree';
+
     public function __construct($key = 'file', $mime = [])
     {
         $this->key = $key ?? 'file';
@@ -68,7 +72,7 @@ class Upload
         return substr($file, strrpos($file, '.'));
     }
 
-    public function save($dir, $name = null)
+    public function save($dir, $name = null, $mode = null)
     {
         $file = $this->getFile();
 
@@ -86,6 +90,16 @@ class Upload
             throw new \Exception('Invalid filename');
         } else if ($this->getExtension($file['name']) !== $this->getExtension($name)) {
             throw new \Exception('Invalid extension');
+        }
+
+        /**
+         * Check for dated mode.
+         * Add Y/m/d/ structure.
+         */
+        $dateTreeDir = '';
+        if ($mode === static::MODE_DATE_TREE) {
+            $dateTreeDir .= date('Y/m/d/');
+            $dir .= $dateTreeDir;
         }
 
         /**
@@ -136,7 +150,7 @@ class Upload
         /**
          * Set and return uploaded filename.
          */
-        return $this->uploadedFilename = $filename;
+        return $this->uploadedFilename = $dateTreeDir . $filename;
     }
 
     public function getUploadedFilename()
