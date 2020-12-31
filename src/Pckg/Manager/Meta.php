@@ -63,11 +63,16 @@ class Meta
         return base64_encode(password_hash($this->getKeyForCSRF(), PASSWORD_DEFAULT));
     }
 
-    public function addCSRF()
+    public function addCSRF($name = null)
     {
         $value = $this->getCsrfValue();
 
-        $this->add(['name' => 'pckgvdth', 'content' => $value]);
+        foreach (['pckgvdth', $name] as $key) {
+            if (!$key) {
+                continue;
+            }
+            $this->add(['name' => $key, 'content' => $value]);
+        }
 
         return $this;
     }
@@ -213,7 +218,7 @@ s0.parentNode.insertBefore(s1,s0);
         $host = config('storage.cdn.host', null);
 
         if (!$host) {
-            return;
+            return $this;
         }
 
         // $this->add('<link rel="dns-prefetch" href="https://' . $host . '" crossorigin>');
