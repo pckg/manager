@@ -217,12 +217,17 @@ s0.parentNode.insertBefore(s1,s0);
     {
         $host = config('storage.cdn.host', null);
 
-        if (!$host) {
-            return $this;
+        /**
+         * CDN host.
+         */
+        if ($host) {
+            // $this->add('<link rel="dns-prefetch" href="https://' . $host . '" crossorigin>');
+            $this->add('<link rel="preconnect" href="https://' . $host . '" crossorigin>');
         }
 
-        // $this->add('<link rel="dns-prefetch" href="https://' . $host . '" crossorigin>');
-        $this->add('<link rel="preconnect" href="https://' . $host . '" crossorigin>');
+        /**
+         * Google fonts, maps and other APIs.
+         */
         $this->add('<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>');
         $this->add('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
 
