@@ -27,7 +27,7 @@ trait BaseAssets
         $this->dropzone();
 
         // editor
-        $this->tinymce();
+        // $this->tinymce();
 
         // gmaps
         $this->gmaps();
