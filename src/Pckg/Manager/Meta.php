@@ -228,9 +228,15 @@ s0.parentNode.insertBefore(s1,s0);
         /**
          * Google fonts, maps and other APIs.
          */
-        $this->add('<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>');
-        $this->add('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
+        $this->addPreconnect('https://fonts.googleapis.com');
+        $this->addPreconnect('https://fonts.gstatic.com');
 
+        return $this;
+    }
+
+    public function addPreconnect($url)
+    {
+        $this->add('<link rel="preconnect" href="' . $url . '" crossorigin>');
         return $this;
     }
 
