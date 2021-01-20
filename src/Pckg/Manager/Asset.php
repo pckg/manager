@@ -132,7 +132,7 @@ class Asset
         return $this->lessVariableFiles;
     }
 
-    public function addAppAssets($assets, $section = 'main', $app, $priority = 90)
+    public function addAppAssets($assets, $section = 'main', $app = null, $priority = 90)
     {
         if (is_object($app)) {
             $app = strtolower(get_class($app));
@@ -144,7 +144,7 @@ class Asset
         $this->addAssets($assets, $section, $appPath . $publicPath, $priority);
     }
 
-    public function addAppProviderAssets($assets, $section = 'main', $app, $provider, $priority = 80)
+    public function addAppProviderAssets($assets, $section = 'main', $app = null, $provider = null, $priority = 80)
     {
         if (is_object($app)) {
             $app = strtolower(get_class($app));
@@ -161,7 +161,7 @@ class Asset
         $this->addAssets($assets, $section, $appPath . $providerPath . $publicPath, $priority);
     }
 
-    public function addProviderAssets($assets, $section = 'main', $provider, $priority = 70)
+    public function addProviderAssets($assets, $section = 'main', $provider = null, $priority = 70)
     {
         $reflector = new ReflectionClass(is_object($provider) ? get_class($provider) : $provider);
         $file = $reflector->getFileName();
@@ -182,7 +182,7 @@ class Asset
         $this->addAssets($assets, $section, $providerPath . $publicPath, $priority);
     }
 
-    public function addVendorProviderAsset($assets, $section = 'main', $vendor, $relative = '', $priority = 60)
+    public function addVendorProviderAsset($assets, $section = 'main', $vendor = null, $relative = '', $priority = 60)
     {
         $vendorPath = 'vendor' . path('ds') . $vendor . path('ds');
         $relativePath = $relative
