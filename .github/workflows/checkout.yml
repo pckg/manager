@@ -1,4 +1,4 @@
-name: Pckg Framework CI
+name: Pckg Manager CI
 
 on:
   push:
