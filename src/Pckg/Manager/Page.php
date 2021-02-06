@@ -2,6 +2,11 @@
 
 use Pckg\Generic\Controller\Generic;
 
+/**
+ * Class Page
+ * @package Pckg\Manager
+ * @T00D00 - move to pckg/generic
+ */
 class Page
 {
 
@@ -12,6 +17,9 @@ class Page
 
     public function isGeneric()
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         return request()->getMatch('controller') == Generic::class && request()->getMatch('view') == 'generic';
     }
 
@@ -28,6 +36,9 @@ class Page
      */
     public function getGenericService()
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         return resolve(\Pckg\Generic\Service\Generic::class);
     }
 
