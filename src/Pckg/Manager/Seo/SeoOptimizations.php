@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Seo;
+<?php
+
+namespace Pckg\Manager\Seo;
 
 trait SeoOptimizations
 {
@@ -17,5 +19,4 @@ trait SeoOptimizations
     {
         return $this->image;
     }
-
 }

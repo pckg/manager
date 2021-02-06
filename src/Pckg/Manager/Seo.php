@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 use Pckg\Manager\Seo\SeoOptimized;
 
@@ -35,7 +37,8 @@ class Seo
                . $this->getFaviconTags();
     }
 
-    public function getSeoTags() {
+    public function getSeoTags()
+    {
         return (
             $this->title
                 ? str_replace('##', $this->title, $this->templates['title']) . "\n"
@@ -149,5 +152,4 @@ class Seo
 
         return $this;
     }
-
 }

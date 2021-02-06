@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 use Derive\Internal\Cookie\Service\Cookie;
 
@@ -49,7 +51,7 @@ class Meta
     }
 
     /**
-     * 
+     *
      */
     public function addInternetExplorer()
     {
@@ -299,8 +301,10 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-        $this->add('<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload&render=explicit" async defer></script>',
-                   'footer');
+        $this->add(
+            '<script src="https://www.google.com/recaptcha/api.js?onload=googleRecaptchaOnload&render=explicit" async defer></script>',
+            'footer'
+        );
     }
 
     /**
@@ -548,5 +552,4 @@ s0.parentNode.insertBefore(s1,s0);
     {
         return $this->getMeta();
     }
-
 }

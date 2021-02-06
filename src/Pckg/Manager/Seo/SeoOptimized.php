@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Seo;
+<?php
+
+namespace Pckg\Manager\Seo;
 
 interface SeoOptimized
 {
@@ -8,5 +10,4 @@ interface SeoOptimized
     public function getSeoDescription();
 
     public function getSeoImage();
-
 }

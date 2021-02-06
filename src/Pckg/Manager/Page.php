@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 use Pckg\Generic\Controller\Generic;
 
@@ -85,12 +87,11 @@ class Page
 
         return $breadcrumbs;
     }
-    
+
     public function getHomepageUrl()
     {
         $url = config('platform.mainUrl', '/');
 
         return $url;
     }
-
 }

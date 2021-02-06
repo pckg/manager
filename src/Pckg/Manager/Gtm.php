@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 use Throwable;
 
@@ -31,5 +33,4 @@ class Gtm
             return '';
         }
     }
-
 }

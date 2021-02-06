@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Provider;
+<?php
+
+namespace Pckg\Manager\Provider;
 
 use Pckg\Framework\Provider;
 use Pckg\Manager\Asset;
@@ -25,7 +27,6 @@ class Manager extends Provider
             '_gtmManager'    => Gtm::class,
         ];
     }
-
 }
 
 class Pckg
@@ -39,5 +40,4 @@ class Pckg
 
         return chain($chain);
     }
-
 }

@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Asset;
+<?php
+
+namespace Pckg\Manager\Asset;
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Exception\FilterException;

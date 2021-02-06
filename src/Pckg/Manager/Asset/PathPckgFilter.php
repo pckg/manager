@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Asset;
+<?php
+
+namespace Pckg\Manager\Asset;
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Filter\BaseNodeFilter;
@@ -35,7 +37,7 @@ class PathPckgFilter extends LessFilter
              */
             $content = preg_replace_callback(
                 '/url\(([\s])?([\"|\'])?(.*?)([\"|\'])?([\s])?\)/i',
-                function($matches) use ($sourceDir, $rootDir, $dirDiff) {
+                function ($matches) use ($sourceDir, $rootDir, $dirDiff) {
                     $value = $matches[0];
 
                     /**
@@ -58,11 +60,13 @@ class PathPckgFilter extends LessFilter
                          */
                         //$resourcePathResolved = realpath($sourceDir . path('ds') . str_repeat('..' . path('ds'), $dots));
                         $resourcePathUnresolved = implode(
-                            path('ds'), array_slice(
-                                          explode(path('ds'), $sourceDir), 0,
-                                          substr_count($sourceDir, path('ds')) -
+                            path('ds'),
+                            array_slice(
+                                explode(path('ds'), $sourceDir),
+                                0,
+                                substr_count($sourceDir, path('ds')) -
                                           $dots + 1
-                                      )
+                            )
                         );
                         $relativeDir = str_replace($rootDir, path('ds'), $resourcePathUnresolved) . path('ds');
 

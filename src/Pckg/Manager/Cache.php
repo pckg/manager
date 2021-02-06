@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
@@ -60,7 +62,7 @@ class Cache
 
     protected function registerHandler($type, $config)
     {
-        $handler = is_only_callable($config['handler']) ? $config['handler']() : new $config['handler'];
+        $handler = is_only_callable($config['handler']) ? $config['handler']() : new $config['handler']();
         if ($handler instanceof RedisCache) {
             $redisConfig = $config['redis'] ?? [];
             try {
@@ -139,8 +141,10 @@ class Cache
         /**
          * Prepend platform key.
          */
-        $key = config('identifier', 'identifier') . ':' . config('database.default.db',
-                                                                 'database.default.db') . ':' . $key;
+        $key = config('identifier', 'identifier') . ':' . config(
+            'database.default.db',
+            'database.default.db'
+        ) . ':' . $key;
 
         /**
          * Delete key.
@@ -174,8 +178,10 @@ class Cache
         /**
          * We need to cache things per identifier ... and db connection?
          */
-        $key = config('identifier', 'identifier') . ':' . config('database.default.db',
-                                                                 'database.default.db') . ':' . $key;
+        $key = config('identifier', 'identifier') . ':' . config(
+            'database.default.db',
+            'database.default.db'
+        ) . ':' . $key;
 
         /**
          * Return directly whenc cached.
@@ -208,5 +214,4 @@ class Cache
     {
         return $this->handlers[$type] ?? null;
     }
-
 }

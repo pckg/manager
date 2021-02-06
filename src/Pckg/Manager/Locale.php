@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 use Locale as PhpLocale;
 use Pckg\Collection;
@@ -149,9 +151,9 @@ class Locale
     {
         $this->prepareLanguages();
 
-        return ($this->frontendLanguages->first(function(Language $language) {
+        return ($this->frontendLanguages->first(function (Language $language) {
                     return $language->frontend;
-                }) ?? $this->frontendLanguages->first()) ?? $this->languages->first();
+        }) ?? $this->frontendLanguages->first()) ?? $this->languages->first();
     }
 
     public function getLanguages()
@@ -163,7 +165,7 @@ class Locale
 
     public function getLanguageBy($key, $val)
     {
-        return $this->languages->first(function(Language $language) use ($key, $val) {
+        return $this->languages->first(function (Language $language) use ($key, $val) {
             return $language->{$key} == $val;
         });
     }
@@ -184,5 +186,4 @@ class Locale
 
         return $timezones;
     }
-
 }

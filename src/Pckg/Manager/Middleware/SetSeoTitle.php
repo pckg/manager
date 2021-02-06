@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Middleware;
+<?php
+
+namespace Pckg\Manager\Middleware;
 
 class SetSeoTitle
 {
@@ -13,5 +15,4 @@ class SetSeoTitle
 
         return $next();
     }
-
 }

@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Middleware;
+<?php
+
+namespace Pckg\Manager\Middleware;
 
 use Pckg\Manager\Asset;
 
@@ -21,5 +23,4 @@ class RegisterCoreAssets
 
         return $next();
     }
-
 }

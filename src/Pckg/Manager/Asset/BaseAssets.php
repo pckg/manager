@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Asset;
+<?php
+
+namespace Pckg\Manager\Asset;
 
 trait BaseAssets
 {
@@ -133,5 +135,4 @@ trait BaseAssets
             'libraries'
         );
     }
-
 }

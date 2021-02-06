@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Service;
+<?php
+
+namespace Pckg\Manager\Service;
 
 class Domain
 {
@@ -23,5 +25,4 @@ class Domain
             return implode($value['entries'] ?? []);
         })->removeEmpty()->values();
     }
-
 }

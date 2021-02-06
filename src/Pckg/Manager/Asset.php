@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
@@ -12,7 +14,6 @@ use Throwable;
 
 class Asset
 {
-
     use BaseAssets;
 
     protected $collections = [];
@@ -224,7 +225,8 @@ class Asset
 
         foreach ($this->types as $type => $html) {
             foreach ($this->externals as $external) {
-                if (mb_strrpos($external, '.' . $type) == strlen($external) - strlen('.' . $type) ||
+                if (
+                    mb_strrpos($external, '.' . $type) == strlen($external) - strlen('.' . $type) ||
                     strpos($external, '.' . $type . '?') || strpos($external, '/' . $type . '?')
                 ) {
                     $return[] = str_replace('##LINK##', $external, $html);
@@ -237,10 +239,11 @@ class Asset
 
     public function getMeta($onlyTypes = [], $onlySections = [])
     {
-        return measure('Asset manager: ' . implode(' ', $onlyTypes) . ': ' . implode(' ', $onlySections), function() use ($onlySections, $onlyTypes) {
+        return measure('Asset manager: ' . implode(' ', $onlyTypes) . ': ' . implode(' ', $onlySections), function () use ($onlySections, $onlyTypes) {
             return implode("\n", array_merge(
                 $this->getAsseticAssets($onlyTypes, $onlySections),
-                $this->getAssets($onlySections)));
+                $this->getAssets($onlySections)
+            ));
         });
     }
 
@@ -312,10 +315,10 @@ class Asset
 
             $lastModified = $assetCollection->getLastModified();
             $hash = sha1((new Collection($assetCollection->all()))->map(
-                             function($item) {
-                                 return $item->getSourcePath();
-                             }
-                         )->implode(':') . ':' . ($lessPckgFilter ? $lessPckgFilter->getVarsHash() : null) . ':' . implode($stringAssets));
+                function ($item) {
+                    return $item->getSourcePath();
+                }
+            )->implode(':') . ':' . ($lessPckgFilter ? $lessPckgFilter->getVarsHash() : null) . ':' . implode($stringAssets));
             $cachePath = $typePath . implode('-', $onlySections) . '-' . $lastModified . '-' . $hash . '.' . $type;
             $assetCollection->setTargetPath($cachePath);
 
@@ -438,5 +441,4 @@ class Asset
             return exception($e);
         }
     }
-
 }

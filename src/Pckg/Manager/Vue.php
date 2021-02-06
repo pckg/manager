@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 class Vue
 {
@@ -71,9 +73,8 @@ class Vue
 
     public static function getLayoutCallback()
     {
-        return function() {
+        return function () {
             return self::getLayout();
         };
     }
-
 }

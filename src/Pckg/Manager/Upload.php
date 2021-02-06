@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager;
+<?php
+
+namespace Pckg\Manager;
 
 use Pckg\Database\Helper\Convention;
 
@@ -157,5 +159,4 @@ class Upload
     {
         return $this->uploadedFilename;
     }
-
 }

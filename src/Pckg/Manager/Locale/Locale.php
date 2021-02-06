@@ -1,4 +1,6 @@
-<?php namespace Pckg\Manager\Locale;
+<?php
+
+namespace Pckg\Manager\Locale;
 
 use NumberFormatter;
 
@@ -20,5 +22,4 @@ class Locale
 
         return $formatter->format($number);
     }
-
 }
