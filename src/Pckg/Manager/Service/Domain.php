@@ -9,7 +9,7 @@ class Domain
 
     protected $domain;
 
-    function __construct(string $domain)
+    public function __construct(string $domain)
     {
         $this->domain = $domain;
     }
