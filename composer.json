@@ -15,7 +15,7 @@
     }
   },
   "require": {
-    "kriswallsmith/assetic": "1.4.*"
+    "assetic/framework": "1.*"
   },
   "require-dev": {
     "pckg-app/frontend-dev": "dev-master",
