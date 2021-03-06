@@ -62,7 +62,12 @@ class Meta
 
     public function getCsrfValue()
     {
-        return base64_encode(password_hash($this->getKeyForCSRF(), PASSWORD_DEFAULT));
+        /**
+         * Min cost is 4.
+         * Max cost is 31.
+         * Default cost is 10.
+         */
+        return base64_encode(password_hash($this->getKeyForCSRF(), PASSWORD_DEFAULT, ['cost' => 5]));
     }
 
     public function addCSRF($name = null)
