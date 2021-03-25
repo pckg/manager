@@ -39,6 +39,15 @@ class Locale
     public function __construct(LangInterface $lang)
     {
         $this->lang = $lang;
+        $this->createLocale();
+    }
+
+    public function createLocale()
+    {
+        if (!class_exists(PhpLocale::class)) {
+            error_log('Class ' . PhpLocale::class . ' does not exist');
+            return;
+        }
         $this->locale = new PhpLocale();
     }
 
@@ -56,7 +65,9 @@ class Locale
             : '.utf8';
         setlocale(LC_ALL, $locale . $utf8Suffix);
         setlocale(LC_TIME, $locale . $utf8Suffix);
-        PhpLocale::setDefault($locale);
+        if ($this->locale) {
+            PhpLocale::setDefault($locale);
+        }
         $this->lang->setLangId($langId);
     }
 
