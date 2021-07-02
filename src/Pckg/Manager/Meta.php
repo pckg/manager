@@ -253,7 +253,6 @@ s0.parentNode.insertBefore(s1,s0);
             return;
         }
 
-
         /**
          * New GA4.
          */
@@ -279,6 +278,12 @@ s0.parentNode.insertBefore(s1,s0);
   gtag(\'config\', ' . json_encode($trackingId) . ', { \'anonymize_ip\': true });
   gtag(\'set\', \'allow_google_signals\', false);
   gtag(\'set\', \'allow_ad_personalization_signals\', false);');
+
+            $this->addOnGdprAccept('(function(){
+        $dispatcher.$on(\'extension:third-party:google:analytics\', function(payload) {
+            gtag(...payload);
+        });
+        })()', 'footer');
             return;
         }
 
@@ -295,6 +300,12 @@ s0.parentNode.insertBefore(s1,s0);
   ga(\'set\', \'allowAdFeatures\');
   ga(\'set\', \'anonymizeIp\', true);
   ga(\'send\', \'pageview\');', 'footer');
+
+        $this->addOnGdprAccept('(function(){
+        $dispatcher.$on(\'extension:third-party:google:analytics\', function(payload) {
+            ga(...payload);
+        });
+        })()', 'footer');
     }
 
     /**
