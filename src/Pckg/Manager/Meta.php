@@ -398,21 +398,28 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         $this->addHtmlOnGdprAccept('<div id="fb-root"></div>', 'body.first');
+        $this->addHtmlOnGdprAccept('<div class="fb-customerchat"
+  attribution="biz_inbox"
+  page_id="' . $id . '"
+  logged_in_greeting="' . htmlentities(config('external.facebookChat.greetingLoggedIn', 'Hi! How can we help you?')) . '"
+  logged_out_greeting="' . htmlentities(config('external.facebookChat.greetingLoggedOut', 'Hi! How can we help you?')) . '">
+</div>', 'body.first');
 
-        $this->addOnGdprAccept('(function(d, s, id) {
+        $this->addOnGdprAccept('
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : \'v11.0\'
+        });
+      };
+        
+        (function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
   js.src = \'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js\';
   fjs.parentNode.insertBefore(js, fjs);
 }(document, \'script\', \'facebook-jssdk\'));', 'body.first');
-
-        $this->addHtmlOnGdprAccept('<div class="fb-customerchat"
-  attribution=install_email
-  page_id="' . $id . '"
-  logged_in_greeting="' . htmlentities(config('external.facebookChat.greetingLoggedIn', 'Hi! How can we help you?')) . '"
-  logged_out_greeting="' . htmlentities(config('external.facebookChat.greetingLoggedOut', 'Hi! How can we help you?')) . '">
-</div>', 'body.first');
     }
 
     /**
