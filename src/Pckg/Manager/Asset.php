@@ -362,8 +362,11 @@ class Asset
              * @T00D00 - we CAN load it over CDN when we know user won't need to change it = most cases.
              */
             $link = str_replace(path('root'), path('ds'), $cachePath);
-            if ($type === 'js' && config('pckg.manager.cdnEnabled') && !dotenv('DEV')) {
-                $link = cdn($link);
+            if (config('pckg.manager.cdnEnabled')) {
+                $extensions = config('pckg.manager.cdnExtensions', ['js']);
+                if (in_array($type, $extensions)) {
+                    $link = cdn($link);
+                }
             }
 
             $return[] = str_replace(['##LINK##', '##ID##'], [
@@ -422,7 +425,7 @@ class Asset
         }
 
         if (!$setter) {
-            return str_replace('##LINK##', str_replace(path('root'), '/', $file), $this->types['js']);
+            return str_replace('##LINK##', cdn(str_replace(path('root'), '/', $file)), $this->types['js']);
         }
 
         /**
