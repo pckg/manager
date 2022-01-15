@@ -91,7 +91,7 @@ class Upload
         } else if (strpos($name, '..') !== false) {
             throw new \Exception('Invalid filename');
         } else if ($this->getExtension($file['name']) !== $this->getExtension($name)) {
-            throw new \Exception('Invalid extension');
+            //throw new \Exception('Invalid extension');
         }
 
         /**
