@@ -3,6 +3,8 @@
 namespace Pckg\Manager;
 
 use Pckg\Database\Helper\Convention;
+use Pckg\Manager\Upload\Filesystem;
+use Pckg\Manager\Upload\Standard;
 
 class Upload
 {
@@ -69,7 +71,7 @@ class Upload
      * @param $file
      * @return false|string
      */
-    private function getExtension($file)
+    public function getExtension($file)
     {
         return substr($file, strrpos($file, '.'));
     }
@@ -91,68 +93,15 @@ class Upload
         } else if (strpos($name, '..') !== false) {
             throw new \Exception('Invalid filename');
         } else if ($this->getExtension($file['name']) !== $this->getExtension($name)) {
-            //throw new \Exception('Invalid extension');
+            // throw new \Exception('Invalid extension'); // why commented out? lowercase/uppercase?
         }
 
-        /**
-         * Check for dated mode.
-         * Add Y/m/d/ structure.
-         */
-        $dateTreeDir = '';
-        if ($mode === static::MODE_DATE_TREE) {
-            $dateTreeDir = date('Y/m/d/');
-            $dir .= $dateTreeDir;
-        }
+        return $this->uploadedFilename = $this->getHandler()->process($dir, $name, $mode, $fixedName);
+    }
 
-        /**
-         * Check that file does not exist.
-         */
-        if (!$fixedName) {
-            $extension = $this->getExtension($file['name']);
-            $i = 0;
-            do {
-                $filename = $name . ($i ? '_' . $i : '') . $extension;
-                $i++;
-            } while (is_file($dir . $filename));
-        } else {
-            $filename = $name;
-        }
-
-        /**
-         * Make sure that uploads dir exists.
-         */
-        if (!is_dir($dir)) {
-            mkdir($dir, 0777, true);
-        }
-
-        /**
-         * Make sure that custom dir exists.
-         */
-        if (strpos($filename, '/') !== false) {
-            $exploded = explode('/', $filename);
-            $dirs = implode('/', array_slice($exploded, 0, -1));
-            $realdir = $dir . $dirs;
-            if (!is_dir($realdir)) {
-                mkdir($realdir, 0777, true);
-            }
-        }
-
-        /**
-         * Save file to final dir.
-         */
-        if (!file_exists($dir . $filename)) {
-            $okay = move_uploaded_file($file['tmp_name'], $dir . $filename);
-            if (!$okay) {
-                throw new \Exception('Error moving uploaded file');
-            }
-        } elseif (false && sha1(file_get_contents($dir . $filename)) !== sha1(file_get_contents($file['tmp_name']))) {
-            throw new \Exception('Delete existing file first');
-        }
-
-        /**
-         * Set and return uploaded filename.
-         */
-        return $this->uploadedFilename = $dateTreeDir . $filename;
+    public function getHandler(): Standard|Filesystem
+    {
+        return resolve(config('pckg.manager.upload.handler', Standard::class));
     }
 
     public function getUploadedFilename()
