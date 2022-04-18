@@ -2516,12 +2516,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pckg/framework.git",
-                "reference": "c02fd50b04b64e6e9b3dcb202e631f308e64793b"
+                "reference": "14126ca6a4a0a01221a35c0049cd3764f7709723"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pckg/framework/zipball/c02fd50b04b64e6e9b3dcb202e631f308e64793b",
-                "reference": "c02fd50b04b64e6e9b3dcb202e631f308e64793b",
+                "url": "https://api.github.com/repos/pckg/framework/zipball/14126ca6a4a0a01221a35c0049cd3764f7709723",
+                "reference": "14126ca6a4a0a01221a35c0049cd3764f7709723",
                 "shasum": ""
             },
             "require": {
@@ -2582,7 +2582,7 @@
                 "issues": "https://github.com/pckg/framework/issues",
                 "source": "https://github.com/pckg/framework/tree/next-8.0"
             },
-            "time": "2022-04-18T07:03:34+00:00"
+            "time": "2022-04-18T11:59:59+00:00"
         },
         {
             "name": "pckg/locale",
