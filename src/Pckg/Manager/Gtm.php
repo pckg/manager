@@ -6,7 +6,6 @@ use Throwable;
 
 class Gtm
 {
-
     protected $dataLayer = [];
 
     public function addDataLayer($layer)

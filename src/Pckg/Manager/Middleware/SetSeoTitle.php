@@ -4,7 +4,6 @@ namespace Pckg\Manager\Middleware;
 
 class SetSeoTitle
 {
-
     public function execute(callable $next)
     {
         /**

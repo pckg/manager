@@ -4,7 +4,6 @@ namespace Pckg\Manager\Asset;
 
 trait BaseAssets
 {
-
     public function execute()
     {
         // dependencies

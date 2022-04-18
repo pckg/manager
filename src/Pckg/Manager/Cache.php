@@ -8,7 +8,6 @@ use Doctrine\Common\Cache\RedisCache;
 
 class Cache
 {
-
     protected $handlers = [];
 
     public function __construct()

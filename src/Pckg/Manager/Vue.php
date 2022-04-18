@@ -4,7 +4,6 @@ namespace Pckg\Manager;
 
 class Vue
 {
-
     protected $components = [];
 
     protected $views = [];

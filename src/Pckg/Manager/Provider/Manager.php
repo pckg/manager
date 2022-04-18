@@ -13,7 +13,6 @@ use Pckg\Manager\Vue;
 
 class Manager extends Provider
 {
-
     public function viewObjects()
     {
         return [

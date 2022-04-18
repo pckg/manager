@@ -10,7 +10,6 @@ use Assetic\Util\LessUtils;
 
 class PathPckgFilter extends LessFilter
 {
-
     public function filterLoad(AssetInterface $asset)
     {
         $source = $asset->getSourceRoot() . path('ds') . $asset->getSourcePath();

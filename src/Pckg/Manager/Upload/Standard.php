@@ -8,6 +8,8 @@ class Standard
 {
     public function process($dir, $name, $mode, $fixedName, Upload $upload)
     {
+        $file = $upload->getFile();
+
         /**
          * Check for dated mode.
          * Add Y/m/d/ structure.

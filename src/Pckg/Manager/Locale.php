@@ -10,7 +10,6 @@ use Pckg\Locale\Record\Language;
 
 class Locale
 {
-
     /**
      * @var PhpLocale
      */

@@ -4,7 +4,6 @@ namespace Pckg\Manager\Service;
 
 class Domain
 {
-
     const NAME_SERVERS = ['1.1.1.1', '8.8.8.8', '8.8.4.4'];
 
     protected $domain;

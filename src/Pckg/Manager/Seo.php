@@ -6,7 +6,6 @@ use Pckg\Manager\Seo\SeoOptimized;
 
 class Seo
 {
-
     protected $templates = [
         'title'       => '<title>##</title>',
         'description' => '<meta name="description" content="##" />',

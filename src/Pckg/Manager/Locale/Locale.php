@@ -6,7 +6,6 @@ use NumberFormatter;
 
 class Locale
 {
-
     protected $locale;
 
     public function __construct($locale)

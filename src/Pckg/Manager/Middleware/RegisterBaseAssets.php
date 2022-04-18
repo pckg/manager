@@ -6,7 +6,6 @@ use Pckg\Manager\Asset;
 
 class RegisterBaseAssets
 {
-
     /**
      * @var Asset
      */

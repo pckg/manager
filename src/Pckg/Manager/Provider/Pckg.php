@@ -4,7 +4,6 @@ namespace Pckg\Manager\Provider;
 
 class Pckg
 {
-
     public function chain($chain)
     {
         if (!is_array($chain)) {

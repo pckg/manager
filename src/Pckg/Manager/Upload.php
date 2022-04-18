@@ -8,7 +8,6 @@ use Pckg\Manager\Upload\Standard;
 
 class Upload
 {
-
     protected $key;
 
     protected $uploadedFilename = null;
@@ -96,7 +95,7 @@ class Upload
             // throw new \Exception('Invalid extension'); // why commented out? lowercase/uppercase?
         }
 
-        return $this->uploadedFilename = $this->getHandler()->process($dir, $name, $mode, $fixedName);
+        return $this->uploadedFilename = $this->getHandler()->process($dir, $name, $mode, $fixedName, $this);
     }
 
     public function getHandler(): Standard|Filesystem

@@ -12,5 +12,4 @@ use Pckg\Queue\Service\Cron\JobCollection;
  */
 class Job extends JobCollection
 {
-
 }

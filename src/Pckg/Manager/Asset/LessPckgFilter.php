@@ -12,7 +12,6 @@ use Throwable;
 
 class LessPckgFilter extends LessFilter
 {
-
     protected $varsHash = null;
 
     protected $varsPath = null;

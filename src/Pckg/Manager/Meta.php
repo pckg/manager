@@ -11,7 +11,6 @@ use Derive\Internal\Cookie\Service\Cookie;
  */
 class Meta
 {
-
     /**
      * @var array
      */

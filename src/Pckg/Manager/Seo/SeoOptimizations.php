@@ -4,7 +4,6 @@ namespace Pckg\Manager\Seo;
 
 trait SeoOptimizations
 {
-
     public function getSeoTitle()
     {
         return config('site.title') . ' - ' . $this->title;
