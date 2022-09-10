@@ -50,7 +50,7 @@ class Page
         /**
          * Dashboard is always displayed.
          */
-        $breadcrumbs['/maestro'] = __('breadcrumbs.dashboard');
+        $breadcrumbs['/maestro'] = 'Dashboard';
 
         /**
          * Check for related table.
@@ -63,7 +63,7 @@ class Page
              * Check for foreign record.
              */
             if ($foreign = router()->resolved('foreign')) {
-                $breadcrumbs['/dynamic/records/view/' . $relatedTable->id . '/' . $foreign->id] = ($relatedTable->title
+                $breadcrumbs['/dynamic/records/' . $relatedTable->id . '/' . $foreign->id . '/view'] = ($relatedTable->title
                                                                                                    ??
                                                                                                    $relatedTable->table) .
                                                                                                   ' #' . $foreign->id;
@@ -81,7 +81,7 @@ class Page
          * Add current page.
          */
         if (!array_key_exists(router()->getUri(), $breadcrumbs)) {
-            $breadcrumbs[router()->getUri()] = __('breadcrumbs.current');
+            $breadcrumbs[router()->getUri()] = 'Current page';
         }
 
         return $breadcrumbs;

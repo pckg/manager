@@ -25,7 +25,7 @@ trait BaseAssets
         $this->magnific();
 
         // file upload
-        $this->dropzone();
+        //$this->dropzone();
 
         // editor
         // $this->tinymce();
@@ -38,7 +38,7 @@ trait BaseAssets
     {
         $this->addAssets(
             [
-                "vendor/components/jquery/jquery.min.js",
+                "node_modules/jquery/dist/jquery.min.js",
             ],
             'libraries'
         );
@@ -79,7 +79,7 @@ trait BaseAssets
         $this->addAssets(
             [
                 "vendor/twbs/bootstrap/dist/js/bootstrap.min.js",
-                "vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
+                //"vendor/twbs/bootstrap/dist/css/bootstrap.min.css",
             ],
             'libraries'
         );
