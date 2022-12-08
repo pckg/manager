@@ -545,7 +545,7 @@ s0.parentNode.insertBefore(s1,s0);
             $onlySections = [$onlySections];
         }
 
-        $onlySections = $onlySections ?? array_keys($this->metas);
+        $onlySections = $onlySections ?: array_keys($this->metas);
         $build = [];
         foreach ($onlySections as $section) {
             foreach ($this->metas[$section] ?? [] as $meta) {

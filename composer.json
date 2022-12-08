@@ -18,10 +18,12 @@
     "assetic/framework": "1.*"
   },
   "require-dev": {
-    "pckg-app/frontend-dev": "dev-next-8.0 as master",
-    "pckg/framework": "dev-next-8.0 as master",
-    "pckg/database": "dev-next-8.0 as master",
-    "pckg/collection": "dev-next-8.0 as master",
+    "pckg-app/frontend-dev": "dev-next-8.0 as dev-master",
+    "pckg/framework": "dev-next-8.0 as dev-master",
+    "pckg/database": "dev-next-8.0 as dev-master",
+    "pckg/collection": "dev-next-8.0 as dev-master",
+    "pckg/locale": "dev-next-8.0 as dev-master",
+    "pckg/cache": "dev-next-8.0 as dev-master",
     "pckg/storage": "dev-master",
     "pckg/queue": "dev-master"
   },
